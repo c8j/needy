@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_in_need">
+
+    <fragment
+        android:id="@+id/nav_in_need"
+        android:name="com.android_group10.needy.ui.InNeed.InNeedFragment"
+        android:label="In Need"
+        tools:layout="@layout/fragment_in_need" />
+
+    <fragment
+        android:id="@+id/nav_needs_and_deeds"
+        android:name="com.android_group10.needy.ui.NeedsAndDeeds.NeedsAndDeedsFragment"
+        android:label="Need And Deed"
+        tools:layout="@layout/fragment_needs_and_deeds" />
+
+    <fragment
+        android:id="@+id/nav_to_do"
+        android:name="com.android_group10.needy.ui.ToDo.ToDoFragment"
+        android:label="To Do"
+        tools:layout="@layout/fragment_to_do" />
+</navigation>

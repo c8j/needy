@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_in_need"
+            android:icon="@drawable/ic_in_need"
+            android:title="In need" />
+
+        <item
+            android:id="@+id/nav_needs_and_deeds"
+            android:icon="@drawable/ic_needs_and_deeds"
+            android:title="Need And Deeds" />
+
+        <item
+            android:id="@+id/nav_to_do"
+            android:icon="@drawable/ic_to_do"
+            android:title="To Do" />
+
+
+    </group>
+
+    <item android:title="Profile">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_log_in"
+                    android:icon="@drawable/ic_log_in"
+                    android:title="@string/log_in" />
+
+                <item
+                    android:id="@+id/nav_profile"
+                    android:icon="@drawable/ic_profile"
+                    android:title="@string/profile" />
+
+                <item
+                    android:id="@+id/log_out"
+                    android:icon="@drawable/ic_log_out"
+                    android:title="@string/menu_log_out" />
+            </group>
+        </menu>
+
+    </item>
+
+</menu>
