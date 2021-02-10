@@ -81,12 +81,6 @@ public class Post {
 
     @Override
     public String toString() {
-        return "Post{" +
-                "postStatus=" + postStatus +
-                ", description='" + description + '\'' +
-                ", serviceType=" + serviceType +
-                ", city='" + city + '\'' +
-                ", zipCode='" + zipCode + '\'' +
-                '}';
+        return description;
     }
 }
