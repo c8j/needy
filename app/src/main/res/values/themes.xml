@@ -25,17 +25,12 @@
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor" tools:targetApi="l">@android:color/transparent</item>
     </style>
-
-    <style name="Theme.Needy_UItest.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.Needy_UItest.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
-
-    <style name="MyTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor" >@android:color/transparent</item>
-
+    <style name="loginTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/dark_grey_elements</item>
+        <item name="colorPrimaryDark">@color/dark_grey_elements</item>
+        <item name="colorPrimaryVariant">@color/darker_grey_elements</item>
+        <item name="colorAccent">@color/dark_grey_elements</item>
+        <item name="android:navigationBarColor">@color/dark_grey_elements</item>
     </style>
 
 </resources>

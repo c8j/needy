@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darker_yellow"
+    android:orientation="vertical"
+    tools:context=".ui.LogInAndRegistration.Register">
+
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="120dp"
+        android:layout_height="108dp"
+        android:layout_gravity="center|center_horizontal"
+        android:layout_marginTop="10dp"
+        app:srcCompat="@drawable/needy_logo"
+        android:contentDescription="@string/need_logo" />
+
+    <EditText
+        android:id="@+id/registerEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="50dp"
+        android:ems="10"
+        android:hint="E-mail"
+        android:textColorHint="@color/dark_grey_elements"
+        android:textColor="@color/dark_grey_elements"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/registerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="50dp"
+        android:ems="10"
+        android:hint="Full Name"
+        android:textColorHint="@color/dark_grey_elements"
+        android:textColor="@color/dark_grey_elements"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/registerPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="50dp"
+        android:ems="10"
+        android:hint="Phone Number"
+        android:textColorHint="@color/dark_grey_elements"
+        android:textColor="@color/dark_grey_elements"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/registerAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="50dp"
+        android:ems="10"
+        android:hint="Address"
+        android:textColorHint="@color/dark_grey_elements"
+        android:textColor="@color/dark_grey_elements"
+        android:inputType="textPersonName" />
+
+
+    <EditText
+        android:id="@+id/registerPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="50dp"
+        android:ems="10"
+        android:hint="Password"
+        android:textColorHint="@color/dark_grey_elements"
+        android:textColor="@color/dark_grey_elements"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/registerConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="50dp"
+        android:ems="10"
+        android:hint="Confirm Password"
+        android:textColorHint="@color/dark_grey_elements"
+        android:textColor="@color/dark_grey_elements"
+        android:inputType="textPassword" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/registerButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="70dp"
+        android:background="@drawable/button_design"
+        android:text="Register"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+</LinearLayout>
