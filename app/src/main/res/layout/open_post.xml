@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_background"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/imageView_author"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="start"
+        android:layout_marginTop="20dp"
+        android:contentDescription="author's picture"
+        android:src="@drawable/anonymous_mask" />
+
+    <TextView
+        android:id="@+id/author_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/author_rating"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@id/imageView_author"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements"
+        />
+
+    <TextView
+        android:id="@+id/author_rating"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/post_zip"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@id/imageView_author"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements"
+        />
+    <TextView
+        android:id="@+id/post_zip"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/text_description"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@id/imageView_author"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements"
+        />
+    <TextView
+        android:id="@+id/post_city"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/text_description"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@id/post_zip"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements"
+        />
+
+
+    <TextView
+        android:id="@+id/post_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/text_description"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:ems="10"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements" />
+
+    <TextView
+        android:id="@+id/text_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView_author"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:text="@string/description_text"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements" />
+
+
+    <TextView
+        android:id="@+id/post_incentive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@id/text_incentive"
+        android:layout_below="@id/post_description"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements" />
+
+    <TextView
+        android:id="@+id/text_incentive"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="@string/incentive_text"
+        android:layout_below="@id/post_description"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements" />
+
+    <TextView
+        android:id="@+id/author_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@id/text_phone"
+        android:layout_marginStart="5dp"
+        android:layout_below="@id/post_incentive"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements" />
+
+    <TextView
+        android:id="@+id/text_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/post_incentive"
+        android:layout_marginBottom="5dp"
+        android:text="@string/phone_text"
+        android:textSize="14sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/accept"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/author_phone"
+        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="false"
+        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_design"
+        android:text="@string/button_accept"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/contact_author"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/author_phone"
+        android:layout_alignStart="@id/accept"
+        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="false"
+        android:layout_margin="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_design"
+        android:text="@string/button_contact"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

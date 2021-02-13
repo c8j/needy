@@ -2,12 +2,13 @@ package com.android_group10.needy;
 
 public class Post {
     private int postId;
-    private int postStatus;
+    private int postStatus;  // 1=Active, 2=In progress, 3=Finished
     private User user;
     private String description;
     private ServiceType serviceType;
     private String city;
     private String zipCode;
+    private String incentive;
 
     public Post(int postId, User user, String description, ServiceType serviceType, String city, String zipCode){
         this.postId = postId;
@@ -17,6 +18,7 @@ public class Post {
         this.serviceType = serviceType;
         this.description = description;
         this.city = city;
+
         //   new City(city, zipCode);   //this might be changed if data is put into DB
     }
 
@@ -30,6 +32,13 @@ public class Post {
         return postStatus;
     }
 
+    public void setIncentive(String incentive) {
+        this.incentive = incentive;
+    }
+
+    public String getIncentive() {
+        return incentive;
+    }
 
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
