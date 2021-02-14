@@ -19,7 +19,8 @@ import java.util.ArrayList;
 public class OpenPostRecordFragment extends Fragment{
         View root;
         ArrayList<Post> dataList;
-        private InNeedViewModel inNeedViewModel;
+        Post currentPositioned;
+      //  private InNeedViewModel inNeedViewModel;
         private ImageView authorPicture;
         private TextView authorName;
         private TextView authorRating;
@@ -28,8 +29,13 @@ public class OpenPostRecordFragment extends Fragment{
         private TextView postCity;
         private TextView authorPhone;
         private TextView postIncentive;
+        private TextView textPhone;
         private Button acceptPost;
         private Button contactAuthor;
+
+        public OpenPostRecordFragment(Post currentPositioned){
+            this.currentPositioned = currentPositioned;
+        }
 
         public View onCreateView(@NonNull LayoutInflater inflater,
                                  ViewGroup container, Bundle savedInstanceState) {
@@ -47,12 +53,42 @@ public class OpenPostRecordFragment extends Fragment{
             postIncentive = root.findViewById(R.id.post_incentive);
             acceptPost = root.findViewById(R.id.accept);
             contactAuthor = root.findViewById(R.id.contact_author);
+            textPhone = root.findViewById(R.id.text_phone);
+
+         //   authorPhone.setVisibility(View.INVISIBLE);
+         //   textPhone.setVisibility(View.INVISIBLE);
+
 
             acceptPost.setOnClickListener(v -> {
                 Toast.makeText(getContext(), "change Post status to 2, remove from the list of active", Toast.LENGTH_SHORT).show();
+                textPhone.setVisibility(View.VISIBLE);
+                authorPhone.setVisibility(View.VISIBLE);
+                currentPositioned.setPostStatus(2);
                 acceptPost.setClickable(false);
             });
             contactAuthor.setOnClickListener(v ->Toast.makeText(getContext(), "send request to chat to the author", Toast.LENGTH_SHORT).show());
+
+            if (!currentPositioned.getUser().getFirstName().isEmpty()) {
+                authorName.setText(currentPositioned.getUser().getFirstName());
+            }
+            if (currentPositioned.getUser().getImage() != 0) {
+                authorPicture.setImageResource(currentPositioned.getUser().getImage());
+            }
+            if(currentPositioned.getUser().getAuthorRating() !=0) {
+                authorRating.setText(String.format("%.1f", currentPositioned.getUser().getAuthorRating()));
+            }
+            if(!currentPositioned.getDescription().isEmpty()) {
+                postDescription.setText(currentPositioned.getDescription());
+            }
+            if(!currentPositioned.getIncentive().isEmpty()) {
+                postIncentive.setText(currentPositioned.getIncentive());
+            }
+            if(!currentPositioned.getZipCode().isEmpty()) {
+                postZipCode.setText(currentPositioned.getZipCode());
+            }
+            if(!currentPositioned.getCity().isEmpty()) {
+                postCity.setText(currentPositioned.getCity());
+            }
 
             return root;
         }

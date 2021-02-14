@@ -15,6 +15,8 @@ public class User {
         this.email = email;
         this.firstName = firstName;
         this.phone = phone;
+        this.authorRating = 5.0;
+        this.volunteerRating = 5.0;
     }
 
     public void setEmail(String email) {
