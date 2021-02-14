@@ -19,8 +19,6 @@ public class Post {
         this.description = description;
         this.city = city;
         this.incentive = incentive;
-
-        //   new City(city, zipCode);   //this might be changed if data is put into DB
     }
 
 

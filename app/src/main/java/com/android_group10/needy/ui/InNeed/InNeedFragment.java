@@ -69,14 +69,12 @@ public class InNeedFragment extends Fragment implements PostAdapter.OnItemClickL
 
 
     @Override
-    //public void onItemClick(int position, Post currentPositionedPost) {
     public void onItemClick(int position) {
         Post clickedItem = dataList.get(position);
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(getId(), new OpenPostRecordFragment(clickedItem));
+        fragmentTransaction.replace(R.id.layout_in_need_fragment, new OpenPostRecordFragment(clickedItem));  // CRASH on clicking 'back'. getID() makes app crash at start
         fragmentTransaction.commit();
-//R.id.layout_in_need_fragment
     }
 
     private ArrayList<Post> generateData(){

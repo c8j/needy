@@ -18,9 +18,7 @@ import java.util.ArrayList;
 
 public class OpenPostRecordFragment extends Fragment{
         View root;
-        ArrayList<Post> dataList;
         Post currentPositioned;
-      //  private InNeedViewModel inNeedViewModel;
         private ImageView authorPicture;
         private TextView authorName;
         private TextView authorRating;
@@ -55,16 +53,14 @@ public class OpenPostRecordFragment extends Fragment{
             contactAuthor = root.findViewById(R.id.contact_author);
             textPhone = root.findViewById(R.id.text_phone);
 
-         //   authorPhone.setVisibility(View.INVISIBLE);
-         //   textPhone.setVisibility(View.INVISIBLE);
-
 
             acceptPost.setOnClickListener(v -> {
                 Toast.makeText(getContext(), "change Post status to 2, remove from the list of active", Toast.LENGTH_SHORT).show();
                 textPhone.setVisibility(View.VISIBLE);
                 authorPhone.setVisibility(View.VISIBLE);
+                authorPhone.setText(currentPositioned.getUser().getPhone());
                 currentPositioned.setPostStatus(2);
-                acceptPost.setClickable(false);
+                acceptPost.setVisibility(View.INVISIBLE);
             });
             contactAuthor.setOnClickListener(v ->Toast.makeText(getContext(), "send request to chat to the author", Toast.LENGTH_SHORT).show());
 
@@ -82,7 +78,7 @@ public class OpenPostRecordFragment extends Fragment{
             }
             if(!currentPositioned.getIncentive().isEmpty()) {
                 postIncentive.setText(currentPositioned.getIncentive());
-            }
+            } else postIncentive.setText("-");
             if(!currentPositioned.getZipCode().isEmpty()) {
                 postZipCode.setText(currentPositioned.getZipCode());
             }
