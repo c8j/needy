@@ -5,8 +5,9 @@ public class User {
     private String lastName;
     private int image;
     private String email;
-//    private City city;
     private String phone;
+    private double authorRating;
+    private double volunteerRating;
 
     public User(){}
 
@@ -15,10 +16,6 @@ public class User {
         this.firstName = firstName;
         this.phone = phone;
     }
-
- //   public void setCity(City city) {
- //       this.city = city;
- //   }
 
     public void setEmail(String email) {
         this.email = email;
@@ -60,9 +57,25 @@ public class User {
         return image;
     }
 
-//    public City getCity() {
-//        return city;
-//    }
+    public double getAuthorRating() {
+       // authorRating = "request to database"
+        return authorRating;
+    }
+
+    public double getVolunteerRating() {
+        //volunteerRating = "request to database"
+        return volunteerRating;
+    }
+
+    public void setAuthorRating(double authorRating) {
+        ///send data to the DB and make a new calculation
+        this.authorRating = authorRating;
+    }
+
+    public void setVolunteerRating(double volunteerRating) {
+        ///send data to the DB and make a new calculation
+        this.volunteerRating = volunteerRating;
+    }
 
     @Override
     public String toString() {
@@ -70,7 +83,6 @@ public class User {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-               // ", city=" + city +
                 ", phone='" + phone + '\'' +
                 '}';
     }
