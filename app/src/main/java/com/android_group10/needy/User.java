@@ -5,6 +5,8 @@ public class User {
     private int image;
     //    private City city;
     private String phone, city, email, lastName, firstName, password;
+    private double authorRating;
+    private double volunteerRating;
 
     public String getCity() {
         return city;
@@ -13,6 +15,7 @@ public class User {
     public void setCity(String city) {
         this.city = city;
     }
+
 
     public int getZipCode() {
         return zipCode;
@@ -44,11 +47,14 @@ public class User {
         this.lastName = lastName;
         this.firstName = firstName;
         this.zipCode = zipCode;
+        this.authorRating = 5.0;
+        this.volunteerRating = 5.0;
     }
 
 //   public void setCity(City city) {
     //       this.city = city;
     //   }
+
 
     public void setEmail(String email) {
         this.email = email;
@@ -90,9 +96,25 @@ public class User {
         return image;
     }
 
-//    public City getCity() {
-//        return city;
-//    }
+    public double getAuthorRating() {
+        // authorRating = "request to database"
+        return authorRating;
+    }
+
+    public double getVolunteerRating() {
+        //volunteerRating = "request to database"
+        return volunteerRating;
+    }
+
+    public void setAuthorRating(double authorRating) {
+        ///send data to the DB and make a new calculation
+        this.authorRating = authorRating;
+    }
+
+    public void setVolunteerRating(double volunteerRating) {
+        ///send data to the DB and make a new calculation
+        this.volunteerRating = volunteerRating;
+    }
 
     @Override
     public String toString() {
@@ -100,7 +122,9 @@ public class User {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+
                 // ", city=" + city +
+
                 ", phone='" + phone + '\'' +
                 '}';
     }

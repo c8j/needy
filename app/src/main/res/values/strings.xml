@@ -24,4 +24,12 @@
     <string name="user_email_user_email_com">user_email@.user_email.com</string>
     <string name="user_name">User_name</string>
     <string name="about_needy">About Needy</string>
+
+    <string name="button_accept">offer help</string>
+    <string name="button_contact">contact author</string>
+    <string name="phone_text">Contact phone#: </string>
+    <string name="description_text">I would like to get help with the following: </string>
+    <string name="incentive_text">Offered incentive: </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

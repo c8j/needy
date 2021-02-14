@@ -18,6 +18,8 @@
         <item name="colorPrimary">@color/dark_grey_elements</item>
         <item name="colorPrimaryDark">@color/dark_grey_elements</item>
         <item name="colorPrimaryVariant">@color/darker_grey_elements</item>
+        <item name="colorSecondary">@color/light_yello_background</item>   // LA added
+        <item name="colorOnBackground">@color/light_yello_background</item>  //LA added
         <item name="colorAccent">@color/dark_grey_elements</item>
         <item name="android:navigationBarColor">@color/dark_grey_elements</item>
         <item name="windowActionBar">false</item>
