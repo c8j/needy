@@ -4,16 +4,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android_group10.needy.Post;
 import com.android_group10.needy.PostAdapter;
@@ -26,12 +22,10 @@ import java.util.List;
 
 public class InNeedFragment extends Fragment {
     View root;
-    private InNeedViewModel inNeedViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        inNeedViewModel =
-                new ViewModelProvider(this).get(InNeedViewModel.class);
+       // InNeedViewModel inNeedViewModel = new ViewModelProvider(this).get(InNeedViewModel.class);
         root = inflater.inflate(R.layout.fragment_in_need, container, false);
         loadData();
 
@@ -46,9 +40,9 @@ public class InNeedFragment extends Fragment {
         return root;
     }
 
-    private List<Post> generateData(){
+    private List<Post> generateData() {
         ArrayList<Post> dataList = new ArrayList<>();
-        User one = new User("Liliia", "07653248601", "blah-blah@mail.com");
+        User one = new User("blah-blah@mail.com", "Liliia", "Liliia", "Liliia", "07653248601", "Osby", 29133);
         one.setImage(R.mipmap.ic_launcher);
         dataList.add(new Post(1, one, "buy me food", ServiceType.SHOPPING, "Kristianstad", "23001"));
         dataList.add(new Post(2, one, "clean my apartment", ServiceType.CLEANING, "Kristianstad", "23951"));
@@ -57,7 +51,7 @@ public class InNeedFragment extends Fragment {
         return dataList;
     }
 
-    private void loadData(){
+    private void loadData() {
         RecyclerView recycler = root.findViewById(R.id.postRecyclerView_in_need);
         PostAdapter myPostAdapter = new PostAdapter(generateData());
         recycler.setAdapter(myPostAdapter);

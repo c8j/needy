@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -43,7 +44,8 @@ android {
         jvmTarget = '1.8'
     }
 }
-
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -62,6 +64,8 @@ dependencies {
     implementation 'androidx.databinding:databinding-runtime:4.1.2'
     implementation 'com.android.databinding:baseLibrary:4.1.2'
     implementation 'com.android.databinding:library:4.1.2'
+    implementation 'com.google.firebase:firebase-database:19.6.0'
+
     kapt 'com.android.databinding:compiler:3.1.4'
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
@@ -71,6 +75,13 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     // For control over item selection of both touch and mouse driven selection
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
+
+    implementation 'com.google.firebase:firebase-analytics'
+    implementation platform('com.google.firebase:firebase-bom:26.5.0')
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+
+
 
 
 }

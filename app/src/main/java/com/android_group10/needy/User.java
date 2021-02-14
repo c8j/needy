@@ -1,24 +1,54 @@
 package com.android_group10.needy;
 
 public class User {
-    private String firstName;
-    private String lastName;
+
     private int image;
-    private String email;
-//    private City city;
-    private String phone;
+    //    private City city;
+    private String phone, city, email, lastName, firstName, password;
 
-    public User(){}
-
-    public User(String firstName, String phone, String email){
-        this.email = email;
-        this.firstName = firstName;
-        this.phone = phone;
+    public String getCity() {
+        return city;
     }
 
- //   public void setCity(City city) {
- //       this.city = city;
- //   }
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public int getZipCode() {
+        return zipCode;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setZipCode(int zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    private int zipCode;
+
+    public User() {
+
+    }
+
+    public User(String email, String password, String firstName, String lastName, String phone, String city, int zipCode) {
+        this.password = password;
+        this.phone = phone;
+        this.city = city;
+        this.email = email;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.zipCode = zipCode;
+    }
+
+//   public void setCity(City city) {
+    //       this.city = city;
+    //   }
 
     public void setEmail(String email) {
         this.email = email;
@@ -70,7 +100,7 @@ public class User {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-               // ", city=" + city +
+                // ", city=" + city +
                 ", phone='" + phone + '\'' +
                 '}';
     }

@@ -26,23 +26,33 @@
     <item android:title="Profile">
         <menu>
             <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/nav_log_in"
-                    android:icon="@drawable/ic_log_in"
-                    android:title="@string/log_in" />
+
 
                 <item
                     android:id="@+id/nav_profile"
                     android:icon="@drawable/ic_profile"
                     android:title="@string/profile" />
 
-                <item
-                    android:id="@+id/log_out"
-                    android:icon="@drawable/ic_log_out"
-                    android:title="@string/menu_log_out" />
+
             </group>
         </menu>
 
+    </item>
+
+    <item android:title="">
+
+        <menu>
+            <item
+                android:id="@+id/nav_log_in"
+                android:icon="@drawable/ic_share"
+                android:title="Share" />
+
+
+            <item
+                android:id="@+id/log_out"
+                android:icon="@drawable/ic_log_out"
+                android:title="@string/menu_log_out" />
+        </menu>
     </item>
 
 </menu>

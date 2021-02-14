@@ -15,8 +15,8 @@
         android:layout_height="108dp"
         android:layout_gravity="center|center_horizontal"
         android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/needy_logo"
-        android:contentDescription="@string/need_logo" />
+        android:contentDescription="@string/need_logo"
+        app:srcCompat="@drawable/needy_logo" />
 
     <EditText
         android:id="@+id/registerEmail"
@@ -28,12 +28,12 @@
         android:layout_marginRight="50dp"
         android:ems="10"
         android:hint="E-mail"
-        android:textColorHint="@color/dark_grey_elements"
+        android:inputType="textPersonName"
         android:textColor="@color/dark_grey_elements"
-        android:inputType="textPersonName" />
+        android:textColorHint="@color/dark_grey_elements" />
 
     <EditText
-        android:id="@+id/registerName"
+        android:id="@+id/registerFirstName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -41,10 +41,24 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="50dp"
         android:ems="10"
-        android:hint="Full Name"
-        android:textColorHint="@color/dark_grey_elements"
+        android:hint="First Name"
+        android:inputType="textPersonName"
         android:textColor="@color/dark_grey_elements"
-        android:inputType="textPersonName" />
+        android:textColorHint="@color/dark_grey_elements" />
+
+    <EditText
+        android:id="@+id/registerLastName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="50dp"
+        android:ems="10"
+        android:hint="Last Name"
+        android:inputType="textPersonName"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements" />
 
     <EditText
         android:id="@+id/registerPhone"
@@ -56,12 +70,12 @@
         android:layout_marginRight="50dp"
         android:ems="10"
         android:hint="Phone Number"
-        android:textColorHint="@color/dark_grey_elements"
+        android:inputType="phone"
         android:textColor="@color/dark_grey_elements"
-        android:inputType="textPersonName" />
+        android:textColorHint="@color/dark_grey_elements" />
 
     <EditText
-        android:id="@+id/registerAddress"
+        android:id="@+id/registerCity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -69,10 +83,24 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="50dp"
         android:ems="10"
-        android:hint="Address"
-        android:textColorHint="@color/dark_grey_elements"
+        android:hint="City "
+        android:inputType="textPersonName"
         android:textColor="@color/dark_grey_elements"
-        android:inputType="textPersonName" />
+        android:textColorHint="@color/dark_grey_elements" />
+
+    <EditText
+        android:id="@+id/zip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="50dp"
+        android:ems="10"
+        android:hint="Zip"
+        android:inputType="number"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements" />
 
 
     <EditText
@@ -85,23 +113,10 @@
         android:layout_marginRight="50dp"
         android:ems="10"
         android:hint="Password"
-        android:textColorHint="@color/dark_grey_elements"
+        android:inputType="textPassword"
         android:textColor="@color/dark_grey_elements"
-        android:inputType="textPassword" />
+        android:textColorHint="@color/dark_grey_elements" />
 
-    <EditText
-        android:id="@+id/registerConfirmPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="50dp"
-        android:ems="10"
-        android:hint="Confirm Password"
-        android:textColorHint="@color/dark_grey_elements"
-        android:textColor="@color/dark_grey_elements"
-        android:inputType="textPassword" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/registerButton"
