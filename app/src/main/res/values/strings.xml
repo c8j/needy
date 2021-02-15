@@ -32,4 +32,11 @@
     <string name="incentive_text">Offered incentive: </string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="your_profile">Your profile information</string>
+    <string name="name">Name</string>
+    <string name="profile_address">Address</string>
+    <string name="profile_zipcode">Zipcode</string>
+    <string name="profile_phone_number">Phone number</string>
+    <string name="profile_email">Email id</string>
+    <string name="profile_edit">Edit</string>
 </resources>

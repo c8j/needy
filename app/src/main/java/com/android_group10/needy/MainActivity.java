@@ -1,13 +1,10 @@
 package com.android_group10.needy;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
 import androidx.annotation.NonNull;
@@ -27,6 +24,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.android_group10.needy.ui.InNeed.InNeedFragment;
 import com.android_group10.needy.ui.LogInAndRegistration.LogIn;
 import com.android_group10.needy.ui.NeedsAndDeeds.NeedsAndDeedsFragment;
+import com.android_group10.needy.ui.Profile.ProfileFragment;
 import com.android_group10.needy.ui.ToDo.ToDoFragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -34,11 +32,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -121,6 +115,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentTransaction.replace(R.id.fragment_container, new ToDoFragment());
                 fragmentTransaction.commit();
                 break;
+            case R.id.nav_profile:
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, new ProfileFragment());
+                fragmentTransaction.commit();
+                break;
+
             case R.id.log_out:
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(this, LogIn.class));

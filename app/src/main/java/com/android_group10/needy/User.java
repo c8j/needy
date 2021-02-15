@@ -7,6 +7,7 @@ public class User {
     private String phone, city, email, lastName, firstName, password;
     private double authorRating;
     private double volunteerRating;
+    private int zipCode;
 
     public String getCity() {
         return city;
@@ -31,12 +32,6 @@ public class User {
 
     public void setZipCode(int zipCode) {
         this.zipCode = zipCode;
-    }
-
-    private int zipCode;
-
-    public User() {
-
     }
 
     public User(String email, String password, String firstName, String lastName, String phone, String city, int zipCode) {
