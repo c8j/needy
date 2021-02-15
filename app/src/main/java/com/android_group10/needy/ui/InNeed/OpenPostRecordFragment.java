@@ -38,7 +38,6 @@ public class OpenPostRecordFragment extends Fragment{
         public View onCreateView(@NonNull LayoutInflater inflater,
                                  ViewGroup container, Bundle savedInstanceState) {
 
-
             root = inflater.inflate(R.layout.open_post, container, false);
 
             authorPicture = root.findViewById(R.id.author_image);
@@ -61,6 +60,7 @@ public class OpenPostRecordFragment extends Fragment{
                 authorPhone.setText(currentPositioned.getUser().getPhone());
                 currentPositioned.setPostStatus(2);
                 acceptPost.setVisibility(View.INVISIBLE);
+                //currentPositioned.setVolunteer(current logged in user);
             });
             contactAuthor.setOnClickListener(v ->Toast.makeText(getContext(), "send request to chat to the author", Toast.LENGTH_SHORT).show());
 
