@@ -2,6 +2,7 @@ package com.android_group10.needy;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
+        fab.setImageResource(R.drawable.add_icon);
 
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,
@@ -108,18 +110,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, new NeedsAndDeedsFragment());
                 fragmentTransaction.commit();
+                fab.hide(); //Hide the round plus icon at the bottom right corner for all fragments other than "In need"
                 break;
             case R.id.nav_to_do:
                 fragmentManager = getSupportFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, new ToDoFragment());
                 fragmentTransaction.commit();
+                fab.hide();
                 break;
             case R.id.nav_profile:
                 fragmentManager = getSupportFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, new ProfileFragment());
                 fragmentTransaction.commit();
+                fab.hide();
                 break;
 
             case R.id.log_out:

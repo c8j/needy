@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/profileNameTextView"
         android:layout_width="143dp"
         android:layout_height="23dp"
         android:layout_marginStart="24dp"
@@ -31,7 +31,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/profileAddressTextView"
         android:layout_width="243dp"
         android:layout_height="46dp"
         android:layout_marginStart="24dp"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/profileZipcodeTextView"
         android:layout_width="143dp"
         android:layout_height="23dp"
         android:layout_marginStart="24dp"
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/profilePhoneNumTextView"
         android:layout_width="143dp"
         android:layout_height="23dp"
         android:layout_marginStart="24dp"
@@ -64,7 +64,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/profileEmailTextView"
         android:layout_width="143dp"
         android:layout_height="23dp"
         android:layout_marginStart="24dp"
@@ -75,7 +75,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/profilePicimageView"
         android:layout_width="100dp"
         android:layout_height="103dp"
         android:layout_marginTop="12dp"
@@ -85,12 +85,12 @@
         app:srcCompat="@drawable/anonymous_mask" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/profileEditButton"
         android:layout_width="80dp"
         android:layout_height="37dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:text="@string/profile_edit"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/profileEmailTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

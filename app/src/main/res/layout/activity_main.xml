@@ -23,5 +23,7 @@
         app:arc_width="150dp"
         app:arc_cropDirection="cropInside"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        app:menu="@menu/activity_main_drawer" >
+
+    </com.rom4ek.arcnavigationview.ArcNavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>
