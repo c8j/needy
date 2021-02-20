@@ -69,7 +69,7 @@ public class Register extends AppCompatActivity {
             startActivity(new Intent(this, MainActivity.class));
 
         } else {
-            Toast.makeText(this, "U Didnt signed in", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You haven't signed in", Toast.LENGTH_LONG).show();
         }
 
     }
