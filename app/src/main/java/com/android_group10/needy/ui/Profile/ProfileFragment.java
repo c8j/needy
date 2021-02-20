@@ -6,16 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.android_group10.needy.ImageHelper;
 import com.android_group10.needy.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import static com.android_group10.needy.ImageHelper.decodeSampledBitmapFromPath;
 
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
@@ -43,6 +47,11 @@ public class ProfileFragment extends Fragment {
                     emailIdText.setText(ds.child("email").getValue(String.class));
                     phNumText.setText(ds.child("phone").getValue(String.class));
                     cityText.setText(ds.child("city").getValue(String.class));
+                    int profilePic = ds.child("image").getValue(Integer.class);
+                    if(profilePic != 0){
+                        decodeSampledBitmapFromPath("", profilePicture.getWidth(), profilePicture.getHeight());
+                        //profilePicture.setImageDrawable(profilePic);
+                    }
                 }
             }
 
