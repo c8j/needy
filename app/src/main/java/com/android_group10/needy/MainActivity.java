@@ -52,7 +52,7 @@ import com.android_group10.needy.ui.LogInAndRegistration.LogIn;
 import com.android_group10.needy.ui.NeedsAndDeeds.NeedsAndDeedsFragment;
 
 import com.android_group10.needy.ui.Profile.ProfileFragment;
-import com.android_group10.needy.ui.ToDo.ToDoFragment;
+import com.android_group10.needy.ui.toDo.ToDoFragment;
 import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
