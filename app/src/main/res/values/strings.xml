@@ -90,4 +90,6 @@
         <item>@string/btn5</item>
     </string-array>
 
+<!--messaging related-->
+    <string name="conversation_label_post">Post:</string>
 </resources>
