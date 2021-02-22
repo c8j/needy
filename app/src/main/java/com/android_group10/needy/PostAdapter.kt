@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android_group10.needy.ui.InNeed.OpenPostRecordFragment
+import com.google.firebase.auth.FirebaseAuth
 import java.security.AccessController.getContext
 import java.util.*
 
@@ -31,15 +32,12 @@ class PostAdapter(
             Log.d("PostAdapter", "$position")
             if (position != RecyclerView.NO_POSITION) {
                 listener.onItemClick(position)
-               // listener.onItemClick(position, detailList[position])
             }
         }
     }
 
     interface OnItemClickListener{
         fun onItemClick(position: Int)
-        //fun onItemClick(position: Int,  currentPositionedPost: Post)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
@@ -57,17 +55,8 @@ class PostAdapter(
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val currentItem = detailList[position]
         holder.lineView1.text = currentItem.description
-        holder.photoView1.setImageResource(currentItem.user.image)
+     //   holder.photoView1.setImageResource(FirebaseAuth.getInstance().currentUser.image)
         //add stars here
-     /*   holder.itemView.setOnClickListener {
-            fun onClick(v: View) {
-                val activity: AppCompatActivity = v.context as AppCompatActivity
-                val newFragment = OpenPostRecordFragment()
-                activity.supportFragmentManager.beginTransaction()
-                    .replace(R.id.layout_in_need_fragment, newFragment).addToBackStack(null)
-                    .commit()
-            }
-        }*/
     }
 
 }

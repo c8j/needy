@@ -2,10 +2,13 @@ package com.android_group10.needy;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+
+
 import android.os.Bundle;
-import android.text.TextUtils;
+
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +34,7 @@ import com.android_group10.needy.ui.InNeed.InNeedFragment;
 import com.android_group10.needy.ui.LogInAndRegistration.LogIn;
 import com.android_group10.needy.ui.NeedsAndDeeds.NeedsAndDeedsFragment;
 
+import com.android_group10.needy.ui.Profile.ProfileFragment;
 import com.android_group10.needy.ui.ToDo.ToDoFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show());
+        floatingActionButton.setImageResource(R.drawable.add_icon);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar
                 , R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -116,13 +121,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, new NeedsAndDeedsFragment());
                 fragmentTransaction.commit();
+                floatingActionButton.hide(); //Hide the round plus icon at the bottom right corner for all fragments other than "In need"
                 break;
             case R.id.nav_to_do:
                 fragmentManager = getSupportFragmentManager();
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, new ToDoFragment());
                 fragmentTransaction.commit();
+                floatingActionButton.hide();
                 break;
+            case R.id.nav_profile:
+                fragmentManager = getSupportFragmentManager();
+                fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, new ProfileFragment());
+                fragmentTransaction.commit();
+                floatingActionButton.hide();
+                break;
+
             case R.id.log_out:
                 FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(this, LogIn.class));

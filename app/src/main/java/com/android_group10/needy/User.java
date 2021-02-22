@@ -1,12 +1,11 @@
 package com.android_group10.needy;
 
 public class User {
-
     private int image;
-    //    private City city;
     private String phone, city, email, lastName, firstName, password;
     private double authorRating;
     private double volunteerRating;
+    private int zipCode;
 
     public String getCity() {
         return city;
@@ -15,7 +14,6 @@ public class User {
     public void setCity(String city) {
         this.city = city;
     }
-
 
     public int getZipCode() {
         return zipCode;
@@ -33,10 +31,8 @@ public class User {
         this.zipCode = zipCode;
     }
 
-    private int zipCode;
-
     public User() {
-
+        
     }
 
     public User(String email, String password, String firstName, String lastName, String phone, String city, int zipCode) {
@@ -50,11 +46,6 @@ public class User {
         this.authorRating = 5.0;
         this.volunteerRating = 5.0;
     }
-
-//   public void setCity(City city) {
-    //       this.city = city;
-    //   }
-
 
     public void setEmail(String email) {
         this.email = email;
@@ -122,9 +113,6 @@ public class User {
                 "firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-
-                // ", city=" + city +
-
                 ", phone='" + phone + '\'' +
                 '}';
     }
