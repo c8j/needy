@@ -39,6 +39,10 @@ public class User implements Serializable {
         this.zipCode = zipCode;
     }
 
+    public User() {
+        
+    }
+
     public User(String email, String password, String firstName, String lastName, String phone, String city, int zipCode) {
         this.password = password;
         this.phone = phone;
