@@ -191,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 changeFragment(new NeedsAndDeedsFragment());
                 floatingActionButton.hide();
                 break;
-            case R.id.nav_to_do:
+            case R.id.nav_conversations:
                 changeFragment(new ConversationsFragment());
                 floatingActionButton.hide();
                 break;

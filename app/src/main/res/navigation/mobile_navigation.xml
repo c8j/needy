@@ -18,9 +18,9 @@
         tools:layout="@layout/fragment_needs_and_deeds" />
 
     <fragment
-        android:id="@+id/nav_to_do"
+        android:id="@+id/nav_conversations"
         android:name="com.android_group10.needy.ui.messaging.ConversationsFragment"
-        android:label="To do"
+        android:label="Conversations"
         tools:layout="@layout/fragment_conversations" />
 
 </navigation>
