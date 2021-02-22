@@ -14,7 +14,7 @@
         android:layout_width="120dp"
         android:layout_height="108dp"
         android:layout_gravity="center|center_horizontal"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="20dp"
         android:contentDescription="@string/need_logo"
         app:srcCompat="@drawable/needy_logo" />
 
@@ -38,13 +38,22 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="50dp"
         android:ems="10"
         android:hint="@string/password"
         android:inputType="textPassword"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements" />
+
+    <CheckBox
+        android:id="@+id/remeberMe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:text="Remember Me"
+        android:layout_marginTop="5dp"
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/forgetPassword"
@@ -71,6 +80,15 @@
         android:textColor="@color/dark_grey_elements"
         android:textSize="16sp"
         android:textStyle="bold" />
+
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/facebook_login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
