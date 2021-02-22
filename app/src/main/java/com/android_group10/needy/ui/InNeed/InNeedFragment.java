@@ -45,9 +45,9 @@ public class InNeedFragment extends Fragment implements PostAdapter.OnItemClickL
     private View root;
     private static ArrayList<Post> dataList = new ArrayList<>();
     private PostAdapter myPostAdapter;
-    private final String firebaseAuthUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+ //   private final String firebaseAuthUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
-    private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+ //   private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
 
 
 
@@ -66,6 +66,8 @@ public class InNeedFragment extends Fragment implements PostAdapter.OnItemClickL
                         dataList.clear();
                         for (DataSnapshot child : snapshot.getChildren()) {
                             Post object = child.getValue(Post.class);
+                            assert object != null;
+                            object.setAuthorUID(String.valueOf(child.child("author").getValue()));
                             dataList.add(object);
                             count++;
                         }

@@ -33,7 +33,7 @@ import static com.android_group10.needy.ImageHelper.decodeSampledBitmapFromPath;
 
 public class OpenPostRecordFragment extends Fragment{
         View root;
-        private Post currentPositioned;
+        private final Post currentPositioned;
         private ImageView authorPicture;
         private TextView authorName;
         private TextView authorRating;
@@ -46,7 +46,7 @@ public class OpenPostRecordFragment extends Fragment{
         private Button acceptPost;
         private Button contactAuthor;
     private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-    private FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private final FirebaseDatabase db = FirebaseDatabase.getInstance();
 
         public OpenPostRecordFragment(Post currentPositioned){
             this.currentPositioned = currentPositioned;
@@ -76,8 +76,6 @@ public class OpenPostRecordFragment extends Fragment{
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     Post post = snapshot.getValue(Post.class);
-                    String result = (post== null) ? "yes": "no";
-                  //  Log.e("POST obj", post.toString());
 
                     if(!currentPositioned.getDescription().isEmpty()) {
                         postDescription.setText(currentPositioned.getDescription());
@@ -93,22 +91,19 @@ public class OpenPostRecordFragment extends Fragment{
                         postCity.setText(currentPositioned.getCity());
                     }
 
-                    Log.e("Author ID", (authorUID == null) ? "null": "not null" );
-
-// authorUID never returns any value! thats why child("Users").child("B6kNxxJhtib9jffD0830r1uPixg2") has been hardcoded!
-                    db.getReference().child("Users").child("B6kNxxJhtib9jffD0830r1uPixg2").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    assert authorUID != null;
+                    db.getReference().child("Users").child(authorUID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DataSnapshot> task) {
                             if (!task.isSuccessful()) {
                                 Log.e("firebase", "Error getting data", task.getException());
                             }
                             else {
-                               // Log.e("firebase", String.valueOf(task.getResult().getValue()));
                                 HashMap<String, Object> authorObject = (HashMap<String, Object>) task.getResult().getValue();
                                 //authorPicture.setImageBitmap(); ;
                                 assert authorObject != null;
                                 if (authorObject.get("firstName") != null || authorObject.get("lastName") != null) {
-                                    String fullName = authorObject.get("firstName").toString().concat(" ").concat(authorObject.get("lastName").toString());
+                                    String fullName = String.valueOf(authorObject.get("firstName")).concat(" ").concat(String.valueOf(authorObject.get("lastName")));
                                     authorName.setText(fullName);
                                 }
                                 if (authorObject.get("authorRating") != null) {
