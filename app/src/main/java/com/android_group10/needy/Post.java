@@ -69,6 +69,10 @@ public class Post implements Serializable {
         return authorUID;
     }
 
+    public void setAuthorUID(String authorUID) {
+        this.authorUID = authorUID;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }
@@ -103,15 +107,25 @@ public class Post implements Serializable {
 
     @Override
     public String toString() {
-        return description;
+        return "Post{" +
+                "postStatus=" + getPostStatus() +
+                ", authorUID='" + getAuthorUID() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                ", serviceType=" + getServiceType() +
+                ", city='" + getCity() + '\'' +
+                ", zipCode='" + getZipCode() + '\'' +
+                ", incentive='" + getIncentive() + '\'' +
+                ", volunteerUID='" + getVolunteer() + '\'' +
+                ", postUID='" + getPostUID() + '\'' +
+                '}';
     }
 
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
+        result.put("postStatus", postStatus);
         result.put("author", authorUID);
         result.put("description", description);
-        result.put("postStatus", postStatus);
         result.put("serviceType", serviceType);
         result.put("city", city);
         result.put("zipCode", zipCode);
