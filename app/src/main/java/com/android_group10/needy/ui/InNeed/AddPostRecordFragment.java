@@ -7,15 +7,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.android_group10.needy.DAO;
 import com.android_group10.needy.Post;
 import com.android_group10.needy.R;
+import com.android_group10.needy.ServiceType;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,11 +32,12 @@ import java.util.Objects;
 public class AddPostRecordFragment extends Fragment{
 
         View root;
-        private ScrollView scrollView;
+        private Spinner spinner;
         private EditText zipCode;
         private EditText city;
         private EditText description;
         private EditText incentive;
+        private TextView hiddenText;
 
     private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         private final FirebaseDatabase db = FirebaseDatabase.getInstance();
@@ -41,12 +47,34 @@ public class AddPostRecordFragment extends Fragment{
 
             root = inflater.inflate(R.layout.add_post, container, false);
 
-            scrollView = root.findViewById(R.id.scroll);
+            spinner = root.findViewById(R.id.spinner);
             zipCode = root.findViewById(R.id.post_zip1);
             city = root.findViewById(R.id.post_city1);
             description = root.findViewById(R.id.post_description1);
             incentive = root.findViewById(R.id.post_incentive1);
+            hiddenText = root.findViewById(R.id.hidden_textView);
             Button savePost = root.findViewById(R.id.save1);
+
+
+            String[] items = {ServiceType.WALK_A_DOG.toString(), ServiceType.SHOPPING.toString(), ServiceType.TRANSPORTATION.toString(), ServiceType.CLEANING.toString(), ServiceType.OTHER.toString()};
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.simple_spinner_item, items);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+            spinner.setAdapter(adapter);
+
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view,
+                                           int position, long id) {
+
+                    hiddenText.setText(String.valueOf(parent.getItemIdAtPosition(position)));
+                    Log.v("item id", String.valueOf(parent.getItemIdAtPosition(position)));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+                }
+            });
+
 
 
             description.setOnFocusChangeListener((v, hasFocus) -> {
@@ -93,13 +121,13 @@ public class AddPostRecordFragment extends Fragment{
                                     }
                                 }
                                 DAO dataStore = new DAO();
-                                dataStore.writeNewPost(new Post(authorUID, 1, descr, 2, c, z, incentive.getText().toString()));
+                                dataStore.writeNewPost(new Post(authorUID, 1, descr, Integer.parseInt(hiddenText.getText().toString()), c, z, incentive.getText().toString()));
                                 requireActivity().onBackPressed();
                             }
                         });
                     } else {
                         DAO dataStore = new DAO();
-                        dataStore.writeNewPost(new Post(authorUID, 1, descr, 2, cityStr, zipStr, incentive.getText().toString()));
+                        dataStore.writeNewPost(new Post(authorUID, 1, descr, Integer.parseInt(hiddenText.getText().toString()), cityStr, zipStr, incentive.getText().toString()));
                         requireActivity().onBackPressed();
                     }
                 } else {
