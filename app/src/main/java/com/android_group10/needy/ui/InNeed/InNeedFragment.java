@@ -75,21 +75,12 @@ public class InNeedFragment extends Fragment implements PostAdapter.OnItemClickL
         return root;
     }
 
-    private void loadData() {
-        RecyclerView recycler = root.findViewById(R.id.postRecyclerView_in_need);
-        recycler.setAdapter(myPostAdapter);
-        recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recycler.setHasFixedSize(true);
-        recycler.setItemAnimator(new DefaultItemAnimator());
-    }
-
-
     @Override
     public void onItemClick(int position) {
         Post clickedItem = dataList.get(position);
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.layout_in_need_fragment, new OpenPostRecordFragment(clickedItem));  // CRASH on clicking 'back'. getID() makes app crash at start
+        fragmentTransaction.replace(R.id.layout_in_need_fragment, new OpenPostRecordFragment(clickedItem));  
         fragmentTransaction.commit();
     }
 }
