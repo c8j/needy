@@ -51,16 +51,7 @@ public class InNeedViewModel extends ViewModel {
         return generateData();
     }
 
-    private ArrayList<Post> generateData(){
-        ArrayList<Post> data = new ArrayList<>();
-        User one = new User("Liliia", "07653248601", "blah-blah@mail.com");
-        one.setImage(R.mipmap.ic_launcher);
-        data.add(new Post(1, one, "buy me food", ServiceType.SHOPPING, "Kristianstad", "23001"));
-        data.add(new Post(2, one, "clean my apartment", ServiceType.CLEANING, "Kristianstad", "23951"));
-        data.add(new Post(3, one, "give me a break", ServiceType.OTHER, "Malmö", "24834"));
-        data.add(new Post(3, one, "a ride to the hospital", ServiceType.TRANSPORTATION, "Jävle", "20634"));
-        return data;
-    }
+
 }
 
  class RecyclerViewFragment extends Fragment {

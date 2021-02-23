@@ -67,9 +67,12 @@ public class InNeedFragment extends Fragment implements PostAdapter.OnItemClickL
                         for (DataSnapshot child : snapshot.getChildren()) {
                             Post object = child.getValue(Post.class);
                             assert object != null;
-                            object.setAuthorUID(String.valueOf(child.child("author").getValue()));
-                            dataList.add(object);
-                            count++;
+                            if (object.getPostStatus() == 1) {
+                                object.setAuthorUID(String.valueOf(child.child("author").getValue()));
+                                dataList.add(object);
+                            }
+                                count++;
+
                         }
                     }
                 }
