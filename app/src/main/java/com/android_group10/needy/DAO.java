@@ -22,10 +22,11 @@ public class DAO {
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/Posts/" + key, postValues);
-        childUpdates.put("/User-posts/" + post.getAuthorUID() + "/" + key, postValues);
-        childUpdates.put("/Services/" + post.getServiceType() + "/" + key, postValues);
-        childUpdates.put("/Zip-codes/" + post.getZipCode() + "/" + key, postValues);
-        childUpdates.put("/Cities/" + post.getCity() + "/" + key, postValues);
+        //  temporarily commented
+  //      childUpdates.put("/User-posts/" + post.getAuthorUID() + "/" + key, postValues);
+  //      childUpdates.put("/Services/" + post.getServiceType() + "/" + key, postValues);
+  //      childUpdates.put("/Zip-codes/" + post.getZipCode() + "/" + key, postValues);
+  //      childUpdates.put("/Cities/" + post.getCity() + "/" + key, postValues);
 
         db.getReference().updateChildren(childUpdates);
     }

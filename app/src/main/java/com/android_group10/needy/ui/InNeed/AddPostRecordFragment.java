@@ -1,22 +1,18 @@
 package com.android_group10.needy.ui.InNeed;
 
+import android.content.Context;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import com.android_group10.needy.DAO;
 import com.android_group10.needy.Post;
 import com.android_group10.needy.R;
@@ -47,14 +43,28 @@ public class AddPostRecordFragment extends Fragment{
 
             scrollView = root.findViewById(R.id.scroll);
             zipCode = root.findViewById(R.id.post_zip1);
-            zipCode.setInputType(InputType.TYPE_NULL);
             city = root.findViewById(R.id.post_city1);
-            city.setInputType(InputType.TYPE_NULL);
             description = root.findViewById(R.id.post_description1);
-            description.setInputType(InputType.TYPE_NULL);
             incentive = root.findViewById(R.id.post_incentive1);
-            incentive.setInputType(InputType.TYPE_NULL);
             Button savePost = root.findViewById(R.id.save1);
+
+
+            description.setOnFocusChangeListener((v, hasFocus) -> {
+                hideKeyboard(v, description, hasFocus);
+            });
+
+            zipCode.setOnFocusChangeListener((v, hasFocus) -> {
+                hideKeyboard(v, zipCode, hasFocus);
+            });
+
+            city.setOnFocusChangeListener((v, hasFocus) -> {
+                hideKeyboard(v, city, hasFocus);
+            });
+
+            incentive.setOnFocusChangeListener((v, hasFocus) -> {
+                hideKeyboard(v, incentive, hasFocus);
+            });
+
 
             String authorUID = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
 
@@ -100,4 +110,16 @@ public class AddPostRecordFragment extends Fragment{
             return root;
         }
 
+        // this will make sure Soft Keyboard disappears
+        private void hideKeyboard(View v, EditText field, boolean hasFocus){
+            if (v == field) {
+                if (hasFocus) {
+                    // Open keyboard
+                    ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).showSoftInput(field, InputMethodManager.SHOW_FORCED);
+                } else {
+                    // Close keyboard
+                    ((InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(field.getWindowToken(), 0);
+                }
+            }
+        }
 }
