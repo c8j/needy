@@ -13,6 +13,9 @@ import androidx.fragment.app.Fragment;
 
 import com.android_group10.needy.ImageHelper;
 import com.android_group10.needy.R;
+import com.android_group10.needy.User;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,24 +38,26 @@ public class ProfileFragment extends Fragment {
         TextView emailIdText = view.findViewById(R.id.profileEmailTextView);
         ImageView profilePicture = view.findViewById(R.id.profilePicimageView);
 
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users");
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) { //.child(uid)
                 for (DataSnapshot ds : snapshot.getChildren()){
-                    firstNameText.setText(ds.child("firstName").getValue(String.class));
-                    lastNameText.setText(ds.child("lastName").getValue(String.class));
-                    int zipCode = ds.child("zipCode").getValue(Integer.class);
-                    zipcodeText.setText(Integer.toString(zipCode));
-                    emailIdText.setText(ds.child("email").getValue(String.class));
-                    phNumText.setText(ds.child("phone").getValue(String.class));
-                    cityText.setText(ds.child("city").getValue(String.class));
-                    int profilePic = ds.child("image").getValue(Integer.class);
-                    if(profilePic != 0){
-                        decodeSampledBitmapFromPath("", profilePicture.getWidth(), profilePicture.getHeight());
-                        //profilePicture.setImageDrawable(profilePic);
-                    }
                 }
+                firstNameText.setText(snapshot.child("firstName").getValue(String.class));
+                lastNameText.setText(snapshot.child("lastName").getValue(String.class));
+                int zipCode = snapshot.child("zipCode").getValue(Integer.class);
+                zipcodeText.setText(Integer.toString(zipCode));
+                emailIdText.setText(snapshot.child("email").getValue(String.class));
+                phNumText.setText(snapshot.child("phone").getValue(String.class));
+                cityText.setText(snapshot.child("city").getValue(String.class));
+                int profilePic = snapshot.child("image").getValue(Integer.class);
+                if(profilePic != 0){
+                    decodeSampledBitmapFromPath("", profilePicture.getWidth(), profilePicture.getHeight());
+                    //profilePicture.setImageDrawable(profilePic);
+                }
+
             }
 
             @Override
