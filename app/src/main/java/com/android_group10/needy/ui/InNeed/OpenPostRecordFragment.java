@@ -116,19 +116,23 @@ public class OpenPostRecordFragment extends Fragment{
                         }
                     });
 
-                    acceptPost.setOnClickListener(v -> {
-                        Toast.makeText(getContext(), "change Post status to 2, remove from the list of active", Toast.LENGTH_SHORT).show();
-                        textPhone.setVisibility(View.VISIBLE);
-                        authorPhone.setVisibility(View.VISIBLE);
-                        currentPositioned.setPostStatus(2);
-                        assert post != null;
-                        post.setPostStatus(2);
-                        currentPostRef.child("postStatus").setValue(2);
-                        currentPostRef.child("volunteer").setValue(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid());
+                    if (!authorUID.equals(firebaseAuth.getUid())) {
+                        acceptPost.setOnClickListener(v -> {
+                            Toast.makeText(getContext(), "change Post status to 2, remove from the list of active", Toast.LENGTH_SHORT).show();
+                            textPhone.setVisibility(View.VISIBLE);
+                            authorPhone.setVisibility(View.VISIBLE);
+                            currentPositioned.setPostStatus(2);
+                            assert post != null;
+                            post.setPostStatus(2);
+                            currentPostRef.child("postStatus").setValue(2);
+                            currentPostRef.child("volunteer").setValue(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid());
+                            acceptPost.setVisibility(View.INVISIBLE);
+                        });
+                        contactAuthor.setOnClickListener(v -> Toast.makeText(getContext(), "send request to chat to the author", Toast.LENGTH_SHORT).show());
+                    } else {
                         acceptPost.setVisibility(View.INVISIBLE);
-                    });
-                    contactAuthor.setOnClickListener(v ->Toast.makeText(getContext(), "send request to chat to the author", Toast.LENGTH_SHORT).show());
-
+                        contactAuthor.setVisibility(View.INVISIBLE);
+                    }
                 }
 
                 @Override
