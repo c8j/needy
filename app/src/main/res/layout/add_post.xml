@@ -4,35 +4,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/light_yello_background"
-    tools:context=".ui.InNeed.OpenPostRecordFragment"
+    tools:context=".ui.InNeed.AddPostRecordFragment"
     android:padding="10dp">
+
+    <TextView
+        android:id="@+id/text_serviceType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:text="@string/service_type_text"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
 
     <ScrollView
         android:id="@+id/scroll"
+        android:layout_below="@id/text_serviceType"
         android:layout_width="match_parent"
         android:layout_height="30dp">
 
         <LinearLayout
             android:id="@+id/scrl_serviceType"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
+            android:minHeight="19sp"
             android:orientation="vertical" />
     </ScrollView>
 
     <TextView
-        android:id="@+id/post_zip1"
+        android:id="@+id/text_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/scroll"
+        android:layout_marginBottom="5dp"
+        android:text="@string/address_text"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+    <EditText
+        android:id="@+id/post_zip1"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:minHeight="19sp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/text_address"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements"
         android:textSize="18sp" />
 
-    <TextView
+    <EditText
         android:id="@+id/post_city1"
         android:layout_width="wrap_content"
+        android:minWidth="280dp"
         android:layout_height="wrap_content"
-        android:layout_below="@id/scroll"
+        android:minHeight="19sp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/text_address"
         android:layout_marginStart="5dp"
         android:layout_toEndOf="@id/post_zip1"
         android:textColor="@color/dark_grey_elements"
@@ -46,19 +78,22 @@
         android:layout_below="@id/post_zip1"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="5dp"
-        android:text="@string/description_text"
+        android:text="@string/description_text1"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements"
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <TextView
+    <EditText
         android:id="@+id/post_description1"
         android:layout_width="match_parent"
+        android:minHeight="80dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/text_description1"
         android:layout_marginBottom="20dp"
         android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements"
         android:textSize="18sp" />
@@ -69,21 +104,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/post_description1"
         android:layout_marginBottom="5dp"
-        android:text="@string/incentive_text"
+        android:text="@string/motivation_text"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements"
         android:textSize="18sp"
         android:textStyle="bold"
         android:visibility="visible" />
 
-    <TextView
+    <EditText
         android:id="@+id/post_incentive1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/post_description1"
-        android:layout_marginStart="5dp"
+        android:minHeight="19sp"
+        android:layout_below="@id/text_incentive1"
         android:layout_marginBottom="5dp"
-        android:layout_toEndOf="@id/text_incentive1"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements"
         android:textSize="18sp" />
@@ -105,6 +139,7 @@
         android:textColor="@color/dark_grey_elements"
         android:textSize="16sp"
         android:textStyle="bold" />
+
 
 
 </RelativeLayout>

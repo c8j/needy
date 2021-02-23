@@ -47,7 +47,6 @@ public class InNeedFragment extends Fragment implements PostAdapter.OnItemClickL
                                 dataList.add(object);
                             }
                                 count++;
-
                         }
                     }
                 }
@@ -80,7 +79,8 @@ public class InNeedFragment extends Fragment implements PostAdapter.OnItemClickL
         Post clickedItem = dataList.get(position);
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.layout_in_need_fragment, new OpenPostRecordFragment(clickedItem));  
+        fragmentTransaction.replace(R.id.layout_in_need_fragment, new OpenPostRecordFragment(clickedItem));
         fragmentTransaction.commit();
     }
+
 }

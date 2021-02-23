@@ -134,7 +134,7 @@ public class User implements Serializable {
         result.put("email", email);
         result.put("lastName", lastName);
         result.put("zipCode", zipCode);
-        result.put("FirstName", firstName);
+        result.put("firstName", firstName);
         result.put("authorRating", authorRating);
         result.put("volunteerRating", volunteerRating);
         return result;
