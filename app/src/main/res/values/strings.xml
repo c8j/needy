@@ -26,6 +26,9 @@
     <string name="about_needy">About Needy</string>
 
     <string name="button_accept">offer help</string>
+    <string name="button_save">save</string>
+    <string name="button_report">report</string>
+    <string name="button_rate">rate</string>
     <string name="button_contact">contact author</string>
     <string name="phone_text">Contact phone#: </string>
     <string name="description_text">I would like to get help with the following: </string>
