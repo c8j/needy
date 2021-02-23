@@ -37,13 +37,17 @@
     <string name="fb_login_protocol_scheme">fb138417034808418</string>
 
 
-    <string name="your_profile">Your profile information</string>
+    <string name="your_profile">Your profile</string>
     <string name="profile_firstName">First Name</string>
     <string name="profile_address">City</string>
     <string name="profile_zipcode">Zipcode</string>
     <string name="profile_phone_number">Phone number</string>
     <string name="profile_email">Email id</string>
     <string name="profile_edit">Edit profile</string>
-    <string name="profile_lastName">LastName</string>
+    <string name="profile_lastName">Last Name</string>
+    <string name="edit_picture">Edit picture</string>
+    <string name="profile_update">Update</string>
+    <string name="edit_firstName">First Name: </string>
+    <string name="edit_lastName">Last Name: </string>
 
 </resources>
