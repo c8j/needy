@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.fragment_container, new InNeedFragment());
                 fragmentTransaction.commit();
+                floatingActionButton.show(); //force to show the round plus icon at the bottom right corner again
                 break;
             case R.id.nav_needs_and_deeds:
                 fragmentManager = getSupportFragmentManager();
