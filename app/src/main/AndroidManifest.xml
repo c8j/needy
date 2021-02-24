@@ -3,9 +3,7 @@
     package="com.android_group10.needy">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <uses-permission android:name="android.permission.INTERNET" />
-
 
     <application
         android:allowBackup="true"
@@ -14,10 +12,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
+        <activity android:name=".ui.Profile.EditProfileActivity">
+
+        </activity>
+
         <activity
             android:name=".ui.LogInAndRegistration.Register"
             android:theme="@style/loginTheme">
-
         </activity>
         <activity
             android:name=".ui.LogInAndRegistration.LogIn"
@@ -31,7 +32,6 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/Needy">
-
         </activity>
 
         <meta-data

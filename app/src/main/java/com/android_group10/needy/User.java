@@ -128,15 +128,12 @@ public class User implements Serializable {
     @Exclude
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("image", image);
-        result.put("phone", phone);
+        result.put("firstName", firstName);
+        result.put("lastName", lastName);
         result.put("city", city);
         result.put("email", email);
-        result.put("lastName", lastName);
         result.put("zipCode", zipCode);
-        result.put("firstName", firstName);
-        result.put("authorRating", authorRating);
-        result.put("volunteerRating", volunteerRating);
+        result.put("picture", image);
         return result;
     }
 }
