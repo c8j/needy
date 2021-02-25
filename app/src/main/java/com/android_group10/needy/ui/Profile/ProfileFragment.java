@@ -20,6 +20,7 @@ import com.android_group10.needy.ImageHelper;
 import com.android_group10.needy.R;
 import com.android_group10.needy.User;
 import com.android_group10.needy.ui.InNeed.InNeedFragment;
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -37,6 +38,7 @@ import static com.android_group10.needy.ImageHelper.decodeSampledBitmapFromPath;
 
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
+    final User[] currentUser = new User[1];
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,13 +52,12 @@ public class ProfileFragment extends Fragment {
         ImageView profilePicture = view.findViewById(R.id.profilePicimageView);
         Button editButton = view.findViewById(R.id.profileEditButton);
 
-        final User[] currentUser = new User[1];
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                //currentUser[0] = snapshot.getValue(User.class);
+                currentUser[0] = snapshot.getValue(User.class);
                 //firstNameText.setText(currentUser[0].getFirstName());
 
                 firstNameText.setText(snapshot.child("firstName").getValue(String.class));
@@ -66,10 +67,11 @@ public class ProfileFragment extends Fragment {
                 emailIdText.setText(snapshot.child("email").getValue(String.class));
                 phNumText.setText(snapshot.child("phone").getValue(String.class));
                 cityText.setText(snapshot.child("city").getValue(String.class));
-                int profilePic = snapshot.child("image").getValue(Integer.class);
-                if(profilePic != 0){
+                Uri profilePic = currentUser[0].getImgUri();
+                if(profilePic != null){
                     //decodeSampledBitmapFromPath("", profilePicture.getWidth(), profilePicture.getHeight());
                     //profilePicture.setImageURI(profilePic);
+                    showPicture(profilePicture);
                 }
             }
 
@@ -86,5 +88,9 @@ public class ProfileFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    public void showPicture(ImageView imgView){
+        Glide.with(this).load(currentUser[0].getImgUri()).centerCrop().placeholder(R.drawable.anonymous_mask).into(imgView);
     }
 }

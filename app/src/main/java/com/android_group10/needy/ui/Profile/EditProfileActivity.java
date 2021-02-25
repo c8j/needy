@@ -81,9 +81,9 @@ public class EditProfileActivity extends AppCompatActivity {
                 zipcodeText.setText(Integer.toString(zipCode));
                 phNumText.setText(snapshot.child("phone").getValue(String.class));
                 cityText.setText(snapshot.child("city").getValue(String.class));
-                int profilePic = currentUser[0].getImage();
-                if(profilePic != 0){
-                    showPicture();
+                Uri profilePic = currentUser[0].getImgUri();
+                if(profilePic != null){
+                    showPicture(profilePicture);
                 }
             }
 
@@ -120,8 +120,8 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     }
 
-    private void showPicture(){
-        //Glide.with(this).load(imageURI).centerCrop().placeholder(R.drawable.anonymous_mask).into(profilePicture);
+    public void showPicture(ImageView imgView){
+        Glide.with(this).load(currentUser[0].getImgUri()).centerCrop().placeholder(R.drawable.anonymous_mask).into(imgView);
     }
 
     private void updateProfile(){
@@ -132,8 +132,7 @@ public class EditProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Please provide a valid Zip-code", Toast.LENGTH_SHORT).show();
         else{
             currentUser[0].setZipCode(Integer.parseInt(newZip));
-            //currentUser[0].setImage(imageURI);
-            //Glide.with(this).load(currentUser[0].getImage()).into(profilePicture);
+            //currentUser[0].setImgUri(imageURI);
             Map<String, Object> postValues = currentUser[0].toMap();
             userRef.updateChildren(postValues);
             Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();

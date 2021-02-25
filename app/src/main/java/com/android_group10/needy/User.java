@@ -11,11 +11,12 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class User implements Serializable {
-    private Uri image;
+    private int image;
     private String phone, city, email, lastName, firstName, password;
     private double authorRating;
     private double volunteerRating;
     private int zipCode;
+    private Uri imgUri;
 
     public String getCity() {
         return city;
@@ -65,7 +66,7 @@ public class User implements Serializable {
         this.firstName = firstName;
     }
 
-    public void setImage(Uri image) {
+    public void setImage(int image) {
         this.image = image;
     }
 
@@ -93,8 +94,16 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
-    public Uri getImage() {
+    public int getImage() {
         return image;
+    }
+
+    public void setImgUri(Uri uri){
+        imgUri = uri;
+    }
+
+    public Uri getImgUri(){
+        return imgUri;
     }
 
     public double getAuthorRating() {
@@ -135,7 +144,7 @@ public class User implements Serializable {
         result.put("city", city);
         result.put("email", email);
         result.put("zipCode", zipCode);
-        result.put("picture", image);
+        result.put("picture", imgUri);
         return result;
     }
 }
