@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android_group10.needy.Post;
@@ -44,8 +45,7 @@ public class NeedsAndDeedsFragment extends Fragment implements PostAdapter.OnIte
             public void onChanged(@Nullable ArrayList s) {
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setAdapter(myPostAdapter);
-                RecyclerView.LayoutManager lm = new GridLayoutManager(getContext(), 1);
-                recyclerView.setLayoutManager(lm);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
             }
         });
