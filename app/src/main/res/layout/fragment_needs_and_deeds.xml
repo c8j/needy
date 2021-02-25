@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darker_yellow"
+    android:id="@+id/layout_needs_n_deeds_fragment"
     tools:context=".ui.NeedsAndDeeds.NeedsAndDeedsFragment">
 
     <TextView

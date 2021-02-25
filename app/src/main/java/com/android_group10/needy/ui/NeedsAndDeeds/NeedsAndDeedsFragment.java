@@ -57,7 +57,7 @@ public class NeedsAndDeedsFragment extends Fragment implements PostAdapter.OnIte
         Post clickedItem = dataList.get(position);
         FragmentManager fm = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.layout_in_need_fragment, new OpenPostRecordFragment(clickedItem));
+        fragmentTransaction.replace(R.id.layout_needs_n_deeds_fragment, new OpenPostRecordFragment(clickedItem));
         fragmentTransaction.commit();
     }
 }
