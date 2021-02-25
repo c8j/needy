@@ -1,6 +1,7 @@
 package com.android_group10.needy.ui.Profile;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,8 +68,8 @@ public class ProfileFragment extends Fragment {
                 cityText.setText(snapshot.child("city").getValue(String.class));
                 int profilePic = snapshot.child("image").getValue(Integer.class);
                 if(profilePic != 0){
-                    decodeSampledBitmapFromPath("", profilePicture.getWidth(), profilePicture.getHeight());
-                    //profilePicture.setImageDrawable(profilePic);
+                    //decodeSampledBitmapFromPath("", profilePicture.getWidth(), profilePicture.getHeight());
+                    //profilePicture.setImageURI(profilePic);
                 }
             }
 
@@ -85,8 +86,5 @@ public class ProfileFragment extends Fragment {
             }
         });
         return view;
-    }
-
-    public void onEditClick(){
     }
 }

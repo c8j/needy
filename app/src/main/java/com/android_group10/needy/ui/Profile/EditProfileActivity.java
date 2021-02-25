@@ -1,19 +1,27 @@
 package com.android_group10.needy.ui.Profile;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android_group10.needy.ImageHelper;
 import com.android_group10.needy.R;
 import com.android_group10.needy.User;
 import com.android_group10.needy.ui.ToDo.ToDoFragment;
@@ -37,10 +45,14 @@ public class EditProfileActivity extends AppCompatActivity {
     EditText zipcodeText;
     TextView phNumText;
     ImageView profilePicture;
+    ImageButton editPic;
+    Uri imageURI;
     Button updateButton;
     String uid;
     DatabaseReference userRef;
     private final User[] currentUser = new User[1];
+    private static final int GALLERY_REQ_CODE = 10;
+    private static final String TAG = "EditProfileActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +65,7 @@ public class EditProfileActivity extends AppCompatActivity {
         zipcodeText = findViewById(R.id.zipEditText);
         phNumText = findViewById(R.id.editPhoneTextView);
         profilePicture = findViewById(R.id.editPicImageView);
+        editPic = findViewById(R.id.editPicimageButton);
         updateButton = findViewById(R.id.updateButton);
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
@@ -67,11 +80,10 @@ public class EditProfileActivity extends AppCompatActivity {
                 int zipCode = snapshot.child("zipCode").getValue(Integer.class);
                 zipcodeText.setText(Integer.toString(zipCode));
                 phNumText.setText(snapshot.child("phone").getValue(String.class));
-                cityText.setHint(snapshot.child("city").getValue(String.class));
-                int profilePic = snapshot.child("image").getValue(Integer.class);
+                cityText.setText(snapshot.child("city").getValue(String.class));
+                int profilePic = currentUser[0].getImage();
                 if(profilePic != 0){
-                    decodeSampledBitmapFromPath("", profilePicture.getWidth(), profilePicture.getHeight());
-                    //profilePicture.setImageDrawable(profilePic);
+                    showPicture();
                 }
             }
 
@@ -88,6 +100,30 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
+    public void onEditImageClick(View view){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, GALLERY_REQ_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == GALLERY_REQ_CODE){
+            if(resultCode == Activity.RESULT_OK){
+                imageURI = data.getData();
+                //Log.i(TAG, "Image URI : " + imageURI);
+                //String imageURL = imageURI.getPath();
+                //Bitmap imageBitmap = ImageHelper.decodeSampledBitmapFromPath(imageURI.toString(), profilePicture.getWidth(), profilePicture.getHeight());
+                //profilePicture.setImageURI(imageURI);
+                Glide.with(this).load(imageURI).centerCrop().placeholder(R.drawable.anonymous_mask).into(profilePicture);
+            }
+        }
+    }
+
+    private void showPicture(){
+        //Glide.with(this).load(imageURI).centerCrop().placeholder(R.drawable.anonymous_mask).into(profilePicture);
+    }
+
     private void updateProfile(){
         String newCity = cityText.getText().toString();
         String newZip = zipcodeText.getText().toString();
@@ -96,6 +132,7 @@ public class EditProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Please provide a valid Zip-code", Toast.LENGTH_SHORT).show();
         else{
             currentUser[0].setZipCode(Integer.parseInt(newZip));
+            //currentUser[0].setImage(imageURI);
             //Glide.with(this).load(currentUser[0].getImage()).into(profilePicture);
             Map<String, Object> postValues = currentUser[0].toMap();
             userRef.updateChildren(postValues);

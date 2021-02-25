@@ -1,5 +1,7 @@
 package com.android_group10.needy;
 
+import android.net.Uri;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -9,7 +11,7 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class User implements Serializable {
-    private int image;
+    private Uri image;
     private String phone, city, email, lastName, firstName, password;
     private double authorRating;
     private double volunteerRating;
@@ -63,7 +65,7 @@ public class User implements Serializable {
         this.firstName = firstName;
     }
 
-    public void setImage(int image) {
+    public void setImage(Uri image) {
         this.image = image;
     }
 
@@ -91,7 +93,7 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
-    public int getImage() {
+    public Uri getImage() {
         return image;
     }
 
