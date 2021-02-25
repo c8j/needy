@@ -22,6 +22,10 @@ import com.android_group10.needy.Post;
 import com.android_group10.needy.PostAdapter;
 import com.android_group10.needy.R;
 import com.android_group10.needy.ui.InNeed.OpenPostRecordFragment;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -30,6 +34,40 @@ public class NeedsAndDeedsFragment extends Fragment implements PostAdapter.OnIte
     private NeedsAndDeedsViewModel needsAndDeedsViewModel;
     private static ArrayList<Post> dataList = new ArrayList<>();
     private PostAdapter myPostAdapter;
+    private FirebaseDatabase db = FirebaseDatabase.getInstance();
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ValueEventListener listListener = new ValueEventListener(){
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if (snapshot.hasChildren()) {
+                    int count = 0;
+
+                    if (snapshot.getChildrenCount() != count) {
+                        dataList.clear();
+                        for (DataSnapshot child : snapshot.getChildren()) {
+                            Post object = child.getValue(Post.class);
+                            assert object != null;
+                            if (object.getPostStatus() == 1) {
+                                object.setAuthorUID(String.valueOf(child.child("author").getValue()));
+                                dataList.add(object);
+                            }
+                            count++;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        db.getReference().child("Posts").addValueEventListener(listListener);
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
