@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="100dp"
-    android:padding="5dp">
+    android:padding="10dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/ivConversationAvatar"
@@ -23,7 +23,7 @@
         android:id="@+id/tvLabelAssociatedPost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/conversation_label_post"
+        android:text="@string/conversations_conversation_label_post"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
         app:layout_constraintBottom_toTopOf="@+id/tvContactName"
         app:layout_constraintStart_toStartOf="@+id/tvContactName"
@@ -31,43 +31,52 @@
 
     <TextView
         android:id="@+id/tvAssociatedPostTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:ellipsize="end"
-        android:maxLength="15"
         android:maxLines="1"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
         app:layout_constraintBaseline_toBaselineOf="@+id/tvLabelAssociatedPost"
+        app:layout_constraintEnd_toEndOf="@+id/tvContactName"
         app:layout_constraintStart_toEndOf="@+id/tvLabelAssociatedPost"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="post_title" />
 
     <TextView
         android:id="@+id/tvContactName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:ellipsize="end"
-        android:maxLength="30"
         android:maxLines="1"
         android:textAppearance="?attr/textAppearanceHeadline5"
-        app:layout_constraintBottom_toTopOf="@+id/tvMessagePreview"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline2"
         app:layout_constraintStart_toEndOf="@+id/ivConversationAvatar"
         app:layout_constraintTop_toBottomOf="@+id/tvLabelAssociatedPost"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="contact_name" />
 
-    <TextView
-        android:id="@+id/tvMessagePreview"
+    <ImageButton
+        android:id="@+id/iBtnChoiceMenu"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="?android:selectableItemBackgroundBorderless"
+        android:contentDescription="@string/conversations_request_imageDescription"
+        android:tint="?attr/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_conversations_request_menu" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:maxLength="30"
-        android:maxLines="1"
-        android:textAppearance="?attr/textAppearanceSubtitle1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tvContactName"
-        app:layout_constraintTop_toBottomOf="@+id/tvContactName"
-        tools:text="message_preview" />
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.85" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

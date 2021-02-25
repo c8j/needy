@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/messaging.request.menu.accept"
+        android:title="@string/conversations_request_accept" />
+    <item
+        android:id="@+id/messaging.request.menu.ignore"
+        android:title="@string/conversations_request_ignore" />
+</menu>

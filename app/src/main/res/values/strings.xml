@@ -91,5 +91,10 @@
     </string-array>
 
 <!--messaging related-->
-    <string name="conversation_label_post">Post:</string>
+    <string name="conversations_tab_label_requests">Requests</string>
+    <string name="conversations_tab_label_messages">Messages</string>
+    <string name="conversations_conversation_label_post">Post:</string>
+    <string name="conversations_request_imageDescription">Request menu</string>
+    <string name="conversations_request_accept">Accept request</string>
+    <string name="conversations_request_ignore">Ignore request</string>
 </resources>
