@@ -1,6 +1,7 @@
 package com.android_group10.needy.ui.InNeed;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +67,7 @@ public class InNeedFragment extends Fragment implements PostAdapter.OnItemClickL
         root = inflater.inflate(R.layout.fragment_in_need, container, false);
 
         RecyclerView recycler = root.findViewById(R.id.postRecyclerView_in_need);
+        Log.e("list size", String.valueOf(dataList.size()));
         myPostAdapter = new PostAdapter(dataList, this);
         recycler.setAdapter(myPostAdapter);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
