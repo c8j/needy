@@ -34,7 +34,7 @@ import java.util.ArrayList;
 public class NeedsAndDeedsFragment extends Fragment {
 
     private NeedsAndDeedsViewModel needsAndDeedsViewModel;
-    private static ArrayList<Post> dataList2 = new ArrayList<>();
+    public static ArrayList<Post> dataList2 = new ArrayList<>();
     private PostAdapter myPostAdapter;
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
     private final String firebaseUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -80,40 +80,8 @@ public class NeedsAndDeedsFragment extends Fragment {
         needsAndDeedsViewModel =
                 new ViewModelProvider(this).get(NeedsAndDeedsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_needs_and_deeds, container, false);
-        ValueEventListener listListener = new ValueEventListener(){
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if (snapshot.hasChildren()) {
-                    int count = 0;
-
-                    if (snapshot.getChildrenCount() != count) {
-                        dataList2.clear();
-                        for (DataSnapshot child : snapshot.getChildren()) {
-                            Post object = child.getValue(Post.class);
-                            assert object != null;
-                            if (object.getPostStatus() != 1) {
-                                object.setAuthorUID(String.valueOf(child.child("author").getValue()));
-                                if(object.getAuthorUID().equals(firebaseUser) || object.getVolunteer().equals(firebaseUser)) {
-                                    dataList2.add(object);
-                                }
-                            }
-                            count++;
-                        }
-                    }
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-        db.getReference().child("Posts").addValueEventListener(listListener);
         final RecyclerView recyclerView = root.findViewById(R.id.postRecyclerView_needs_and_deeds);
-     //   Log.e("list size2", String.valueOf(dataList2.size()));
-      //  myPostAdapter = new PostAdapter(dataList2, this);
 
         needsAndDeedsViewModel.getList().observe(getViewLifecycleOwner(), new Observer<ArrayList>() {
             @Override
