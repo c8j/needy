@@ -6,6 +6,6 @@
     </style>
 
     <style name="RequestMenuVariant" parent="Widget.MaterialComponents.PopupMenu">
-        <item name="colorSurface">@color/light_yello_background</item>
+        <item name="colorSurface">?attr/colorSecondary</item>
     </style>
 </resources>

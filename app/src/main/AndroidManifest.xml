@@ -30,17 +30,14 @@
 
         </provider>
 
-        <activity android:name=".ui.Profile.EditProfileActivity">
-
-        </activity>
-
-
+        <activity
+            android:name=".ui.messaging.ChatActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".ui.Profile.EditProfileActivity"></activity>
         <activity
 
             android:name=".ui.LogInAndRegistration.Register"
-            android:theme="@style/loginTheme">
-        </activity>
-
+            android:theme="@style/loginTheme"></activity>
         <activity
 
             android:name=".ui.LogInAndRegistration.LogIn"
@@ -55,9 +52,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/Needy"
-            >
-        </activity>
+            android:label="@string/Needy"></activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

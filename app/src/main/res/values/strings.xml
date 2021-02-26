@@ -97,4 +97,6 @@
     <string name="conversations_request_imageDescription">Request menu</string>
     <string name="conversations_request_accept">Accept request</string>
     <string name="conversations_request_ignore">Ignore request</string>
+    <string name="conversations_chat_hint">Type message here…</string>
+    <string name="conversations_chat_send_description">Send message</string>
 </resources>
