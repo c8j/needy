@@ -20,51 +20,6 @@ class ConversationsFragmentViewModel : ViewModel() {
         _pagerFragments = listOf(RequestsFragment(), MessagesFragment())
 
         //TODO: replace dummy data with actual data
-        repeat(5) {
-            (conversationList as MutableList).add(
-                Conversation(
-                    Post(
-                        "test@email.com",
-                        1,
-                        "Need help with groceriesasdasdasdasdasdasdasdasdasd",
-                        1,
-                        "Kristianstad",
-                        "29137",
-                        "money"
-                    ),
-                    User(
-                        "test@email.com",
-                        "123456",
-                        "John",
-                        "Doeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                        "123857612",
-                        "Kristianstad",
-                        29137
-                    )
-                )
-            )
-            (requestList as MutableList).add(
-                Request(
-                    Post(
-                        "test@email.com",
-                        1,
-                        "Need help with groceriesasdasdasdasdasdasdasd",
-                        1,
-                        "Kristianstad",
-                        "29137",
-                        "money"
-                    ),
-                    User(
-                        "test@email.com",
-                        "123456",
-                        "John",
-                        "Doeaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-                        "123857612",
-                        "Kristianstad",
-                        29137
-                    )
-                )
-            )
-        }
+
     }
 }

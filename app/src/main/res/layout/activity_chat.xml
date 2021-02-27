@@ -27,6 +27,7 @@
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:padding="5dp"
+        android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/etMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -39,7 +40,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
-        android:padding="8dp"
         android:background="@drawable/rect_oval_shape"
         android:elevation="1dp"
         android:hint="@string/conversations_chat_hint"
@@ -47,6 +47,7 @@
         android:maxHeight="105dp"
         android:maxLength="1500"
         android:minHeight="35dp"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent" />

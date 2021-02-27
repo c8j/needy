@@ -4,6 +4,6 @@ import com.android_group10.needy.Post
 import com.android_group10.needy.User
 
 data class Request(
-    val associatedPost: Post,
-    val communicationPartner: User
+    val associatedPostUID: String,
+    val communicationPartnerUID: String
 )

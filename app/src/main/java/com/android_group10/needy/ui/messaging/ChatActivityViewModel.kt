@@ -10,9 +10,5 @@ class ChatActivityViewModel : ViewModel() {
 
     fun retrieveMessages(){
         //Dummy data
-        _messageList = listOf(
-            Message("PXqE1mbZzOP1035eTnlrJmz5Iay1", "Hello", ZonedDateTime.now()),
-            Message("asdasdasdasd", "Yo", ZonedDateTime.now())
-        )
     }
 }

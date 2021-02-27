@@ -10,6 +10,7 @@ import com.android_group10.needy.databinding.ItemMessagingMessageBinding
 import com.android_group10.needy.ui.messaging.data.Message
 import com.google.android.material.color.MaterialColors
 import com.google.firebase.auth.FirebaseAuth
+import java.time.Instant
 import java.time.ZoneId
 import java.time.chrono.IsoChronology
 import java.time.format.DateTimeFormatter
@@ -44,30 +45,62 @@ class ChatMessageAdapter(private val messageList: List<Message>) :
                 shortPattern = shortPattern.replace("yy", "yyyy")
             }
 
-            val localZonedDateTime = message.timestamp.withZoneSameInstant(ZoneId.systemDefault())
+            val timestamp = message.timestamp
+            val localZonedDateTime =
+                Instant.ofEpochSecond(timestamp.seconds, timestamp.nanoseconds.toLong()).atZone(
+                    ZoneId.systemDefault()
+                )
             return localZonedDateTime.format(
                 DateTimeFormatter.ofPattern(shortPattern, locale)
             )
         }
 
-        private fun setMessageSide(message: Message){
-            if (message.senderUid == FirebaseAuth.getInstance().currentUser?.uid){
+        private fun setMessageSide(message: Message) {
+            if (message.senderUid == FirebaseAuth.getInstance().currentUser?.uid) {
                 binding.messageLayout.apply {
                     background.setTint(MaterialColors.getColor(binding.root, R.attr.colorPrimary))
-                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.END)
+                    layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                        Gravity.END
+                    )
                 }
-                binding.tvMessage.setTextColor(MaterialColors.getColor(binding.root, R.attr.colorOnPrimary))
+                binding.tvMessage.setTextColor(
+                    MaterialColors.getColor(
+                        binding.root,
+                        R.attr.colorOnPrimary
+                    )
+                )
                 binding.tvTimestamp.apply {
-                    setTextColor(context.resources.getColorStateList(R.color.selector_conversations_timestamp_user, context.theme))
+                    setTextColor(
+                        context.resources.getColorStateList(
+                            R.color.selector_conversations_timestamp_user,
+                            context.theme
+                        )
+                    )
                 }
             } else {
                 binding.messageLayout.apply {
                     background.setTint(MaterialColors.getColor(binding.root, R.attr.colorSurface))
-                    layoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT, Gravity.START)
+                    layoutParams = FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.MATCH_PARENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                        Gravity.START
+                    )
                 }
-                binding.tvMessage.setTextColor(MaterialColors.getColor(binding.root, R.attr.colorOnSurface))
+                binding.tvMessage.setTextColor(
+                    MaterialColors.getColor(
+                        binding.root,
+                        R.attr.colorOnSurface
+                    )
+                )
                 binding.tvTimestamp.apply {
-                    setTextColor(context.resources.getColorStateList(R.color.selector_conversations_timestamp_partner, context.theme))
+                    setTextColor(
+                        context.resources.getColorStateList(
+                            R.color.selector_conversations_timestamp_partner,
+                            context.theme
+                        )
+                    )
                 }
             }
         }

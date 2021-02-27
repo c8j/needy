@@ -16,11 +16,7 @@ class MessagesFragmentAdapter(private val conversationList: List<Conversation>) 
 
         fun bind(conversation: Conversation) {
             binding.apply {
-                //TODO: implement user profile image grabbing
-                tvAssociatedPostTitle.text = conversation.associatedPost.description
-                val contactName =
-                    conversation.communicationPartner.firstName + ' ' + conversation.communicationPartner.lastName
-                tvContactName.text = contactName
+
             }
         }
     }

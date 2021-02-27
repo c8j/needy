@@ -46,11 +46,7 @@ class RequestsFragmentAdapter(private val requestList: List<Request>) :
 
         fun bind(request: Request) {
             binding.apply {
-                //TODO: implement user profile image grabbing
-                tvAssociatedPostTitle.text = request.associatedPost.description
-                val contactName =
-                    request.communicationPartner.firstName + ' ' + request.communicationPartner.lastName
-                tvContactName.text = contactName
+
             }
         }
     }
