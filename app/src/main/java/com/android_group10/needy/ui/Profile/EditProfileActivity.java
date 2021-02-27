@@ -3,16 +3,12 @@ package com.android_group10.needy.ui.Profile;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,35 +17,39 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android_group10.needy.ImageHelper;
 import com.android_group10.needy.R;
 import com.android_group10.needy.User;
-import com.android_group10.needy.ui.ToDo.ToDoFragment;
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
-import java.util.HashMap;
 import java.util.Map;
-
-import static com.android_group10.needy.ImageHelper.decodeSampledBitmapFromPath;
+import java.util.UUID;
 
 public class EditProfileActivity extends AppCompatActivity {
-    TextView firstNameText;
-    TextView lastNameText;
-    EditText cityText;
-    EditText zipcodeText;
-    TextView phNumText;
-    ImageView profilePicture;
-    ImageButton editPic;
-    Uri imageURI;
-    Button updateButton;
-    String uid;
-    DatabaseReference userRef;
+    private TextView firstNameText;
+    private TextView lastNameText;
+    private EditText cityText;
+    private EditText zipcodeText;
+    private TextView phNumText;
+    private ImageView profilePicture;
+    private ImageButton editPic;
+    private Uri imageURI;
+    private Button updateButton;
+    private String uid;
+    private DatabaseReference userRef;
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
     private final User[] currentUser = new User[1];
     private static final int GALLERY_REQ_CODE = 10;
     private static final String TAG = "EditProfileActivity";
@@ -81,10 +81,6 @@ public class EditProfileActivity extends AppCompatActivity {
                 zipcodeText.setText(Integer.toString(zipCode));
                 phNumText.setText(snapshot.child("phone").getValue(String.class));
                 cityText.setText(snapshot.child("city").getValue(String.class));
-                Uri profilePic = currentUser[0].getImgUri();
-                if(profilePic != null){
-                    showPicture(profilePicture);
-                }
             }
 
             @Override
@@ -121,7 +117,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public void showPicture(ImageView imgView){
-        Glide.with(this).load(currentUser[0].getImgUri()).centerCrop().placeholder(R.drawable.anonymous_mask).into(imgView);
+        //Glide.with(this).load(currentUser[0].getImgKey()).centerCrop().placeholder(R.drawable.anonymous_mask).into(imgView);
     }
 
     private void updateProfile(){
@@ -135,10 +131,38 @@ public class EditProfileActivity extends AppCompatActivity {
             //currentUser[0].setImgUri(imageURI);
             Map<String, Object> postValues = currentUser[0].toMap();
             userRef.updateChildren(postValues);
+            storeProfilePic();
             Toast.makeText(this, "Profile updated successfully", Toast.LENGTH_SHORT).show();
         }
         //Map<String, Object> childUpdates = new HashMap<>();
         //childUpdates.put("/posts/" + key, postValues);
         //childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
+    }
+
+    public void storeProfilePic(){
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
+        final String RANDOM_KEY = UUID.randomUUID().toString();
+        StorageReference profilePicImageRef = storageReference.child("profile_images/" + RANDOM_KEY);
+        profilePicImageRef.putFile(imageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                currentUser[0].setImgKey(RANDOM_KEY);
+                Snackbar.make(findViewById(android.R.id.content), "Image uploaded", Snackbar.LENGTH_LONG).show();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                makeToast("Image failed to upload.");
+            }
+        });
+
+// While the file names are the same, the references point to different files
+        //profilePicStored.getName().equals(profilePicImageRef.getName());    // true
+        //profilePicStored.getPath().equals(profilePicImageRef.getPath());    // false
+    }
+
+    private void makeToast(String message){
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

@@ -16,7 +16,7 @@ public class User implements Serializable {
     private double authorRating;
     private double volunteerRating;
     private int zipCode;
-    private Uri imgUri;
+    private String imgKey;
 
     public String getCity() {
         return city;
@@ -98,12 +98,12 @@ public class User implements Serializable {
         return image;
     }
 
-    public void setImgUri(Uri uri){
-        imgUri = uri;
+    public void setImgKey(String imgKey){
+        this.imgKey = imgKey;
     }
 
-    public Uri getImgUri(){
-        return imgUri;
+    public String getImgKey(){
+        return imgKey;
     }
 
     public double getAuthorRating() {
@@ -144,7 +144,7 @@ public class User implements Serializable {
         result.put("city", city);
         result.put("email", email);
         result.put("zipCode", zipCode);
-        result.put("picture", imgUri);
+        result.put("picture", imgKey);
         return result;
     }
 }
