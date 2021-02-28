@@ -45,5 +45,9 @@
     <string name="profile_email">Email id</string>
     <string name="profile_edit">Edit profile</string>
     <string name="profile_lastName">LastName</string>
+    <string name="confirm">Confirm</string>
+    <string name="zip_code">Zip_Code</string>
+    <string name="city">City</string>
+    <string name="please_complete_your_profile_information">Please complete your profile information</string>
 
 </resources>
