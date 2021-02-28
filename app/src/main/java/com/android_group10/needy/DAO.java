@@ -11,20 +11,22 @@ public class DAO {
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
     private DataSnapshot snapshot;
 
-    public void writeNewPost(String userId, String userEmail, String description, int serviceType, String city, String zipCode, String incentive) {
+    public void writeNewPost(Post post) {
         // Create new post at /user-posts/$userid/$postid and at
         // /posts/$postid simultaneously and at
         // /services/$serviceType simultaneously, etc..
-        String key = db.getReference().child("posts").push().getKey();
-        Post post = new Post(userEmail, description, serviceType, city, zipCode, incentive);
+        String key = db.getReference().child("Posts").push().getKey();
+
         Map<String, Object> postValues = post.toMap();
+        postValues.put("postUID", key);
 
         Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("/active_posts/" + key, postValues);
-        childUpdates.put("/user-posts/" + userId + "/" + key, postValues);
-        childUpdates.put("/services/" + serviceType + "/" + key, postValues);
-        childUpdates.put("/zip-codes/" + zipCode + "/" + key, postValues);
-        childUpdates.put("/cities/" + city + "/" + key, postValues);
+        childUpdates.put("/Posts/" + key, postValues);
+        //  temporarily commented
+  //      childUpdates.put("/User-posts/" + post.getAuthorUID() + "/" + key, postValues);
+  //      childUpdates.put("/Services/" + post.getServiceType() + "/" + key, postValues);
+  //      childUpdates.put("/Zip-codes/" + post.getZipCode() + "/" + key, postValues);
+  //      childUpdates.put("/Cities/" + post.getCity() + "/" + key, postValues);
 
         db.getReference().updateChildren(childUpdates);
     }

@@ -40,7 +40,6 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import com.facebook.FacebookSdk;
 import com.google.firebase.database.DataSnapshot;
@@ -53,20 +52,13 @@ import org.json.JSONException;
 
 
 public class LogIn extends AppCompatActivity implements View.OnClickListener {
-    private Button logInButton, resetPasswordButton, facebookButton;
-    private TextView forgetPassword, registerInLogIn;
     private EditText logInEmail, logInPassword, forgetPasswordEmail;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private CheckBox rememberMeCheckBox;
-    private String inputEmail;
-    private String inputPassword;
     private CallbackManager callbackManager;
-    private FirebaseAuth.AuthStateListener authStateListener;
-    private AccessTokenTracker accessTokenTracker;
     public String id, email, firstName, lastName;
     private String facebookUserId;
-    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,19 +72,19 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     }
 
     public void initializeItems() {
-        logInButton = findViewById(R.id.logInButton);
+        Button logInButton = findViewById(R.id.logInButton);
         logInPassword = findViewById(R.id.logInPassword);
         logInEmail = findViewById(R.id.logInEmail);
-        registerInLogIn = findViewById(R.id.registerInLogIn);
-        forgetPassword = findViewById(R.id.forgetPassword);
+        TextView registerInLogIn = findViewById(R.id.registerInLogIn);
+        TextView forgetPassword = findViewById(R.id.forgetPassword);
         rememberMeCheckBox = findViewById(R.id.remeberMe);
-        facebookButton = findViewById(R.id.facebook_login_button);
+        Button facebookButton = findViewById(R.id.facebook_login_button);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
 
         rememberMe();
-        firebaseAuth = firebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
 
         registerInLogIn.setOnClickListener(this);
         forgetPassword.setOnClickListener(this);
@@ -137,7 +129,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         alertD.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         forgetPasswordEmail = view.findViewById(R.id.email_forget_password);
-        resetPasswordButton = view.findViewById(R.id.resetPasswordButton);
+        Button resetPasswordButton = view.findViewById(R.id.resetPasswordButton);
         firebaseAuth = FirebaseAuth.getInstance();
 
         resetPasswordButton.setOnClickListener(v -> resetPassword());
@@ -146,8 +138,8 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     }
 
     public void loginAction() {
-        inputEmail = logInEmail.getText().toString().trim();
-        inputPassword = logInPassword.getText().toString().trim();
+        String inputEmail = logInEmail.getText().toString().trim();
+        String inputPassword = logInPassword.getText().toString().trim();
 
         if (inputEmail.isEmpty()) {
             errorMessage(logInEmail, "Email is required");
@@ -249,9 +241,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     }
 
 
-
     // Facebook Methods
-
 
 
     private void handleFacebookAccessToken(AccessToken token) {
@@ -294,7 +284,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
-        authStateListener = firebaseAuth -> {
+        FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
                 updateUI(user);
@@ -302,7 +292,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
                 updateUI(null);
             }
         };
-        accessTokenTracker = new AccessTokenTracker() {
+        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
             @Override
             protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
                 if (currentAccessToken == null) {
@@ -385,7 +375,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     public void registerNewFacebookUser(String email, String password, String firstName, String lastName, String phone, String city,
                                         int zipCode) {
         User user = new User(email, password, firstName, lastName, phone, city, zipCode);
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("Users").child(facebookUserId).setValue(user);
 
         startActivity(new Intent(LogIn.this, MainActivity.class));

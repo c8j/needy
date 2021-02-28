@@ -1,11 +1,22 @@
 package com.android_group10.needy;
 
-public class User {
+import android.net.Uri;
+
+import com.google.firebase.database.Exclude;
+import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+@IgnoreExtraProperties
+public class User implements Serializable {
     private int image;
     private String phone, city, email, lastName, firstName, password;
     private double authorRating;
     private double volunteerRating;
     private int zipCode;
+    private String imgKey;
 
     public String getCity() {
         return city;
@@ -87,6 +98,14 @@ public class User {
         return image;
     }
 
+    public void setImgKey(String imgKey){
+        this.imgKey = imgKey;
+    }
+
+    public String getImgKey(){
+        return imgKey;
+    }
+
     public double getAuthorRating() {
         // authorRating = "request to database"
         return authorRating;
@@ -115,5 +134,17 @@ public class User {
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';
+    }
+
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("firstName", firstName);
+        result.put("lastName", lastName);
+        result.put("city", city);
+        result.put("email", email);
+        result.put("zipCode", zipCode);
+        result.put("picture", imgKey);
+        return result;
     }
 }

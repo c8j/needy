@@ -1,7 +1,6 @@
 package com.android_group10.needy;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 
 import android.graphics.Color;
@@ -37,13 +36,13 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.android_group10.needy.ui.InNeed.AddPostRecordFragment;
 import com.android_group10.needy.ui.InNeed.InNeedFragment;
 import com.android_group10.needy.ui.LogInAndRegistration.LogIn;
 import com.android_group10.needy.ui.NeedsAndDeeds.NeedsAndDeedsFragment;
 
 import com.android_group10.needy.ui.Profile.ProfileFragment;
 import com.android_group10.needy.ui.ToDo.ToDoFragment;
-import com.facebook.FacebookCallback;
 import com.facebook.login.LoginManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -71,9 +70,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseUser user;
     private FirebaseAuth firebaseAuth;
     private EditText phoneNumber_dialog, city_dialog, zipCode_dialog;
-
-    private Button Confirm;
-    private ImageButton imageButton;
     private View header;
     private ImageView profileImage;
 
@@ -86,8 +82,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setSupportActionBar(toolbar);
         floatingActionButton = findViewById(R.id.fab);
-        floatingActionButton.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show());
+        floatingActionButton.setOnClickListener(view -> Snackbar.make(view, "Click here to add a help request", Snackbar.LENGTH_LONG)
+                .setAction("New Need", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        fragmentManager = getSupportFragmentManager();
+                        fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.fragment_container, new AddPostRecordFragment());
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                }).show());
         floatingActionButton.setImageResource(R.drawable.add_icon);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar
@@ -132,7 +137,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case R.id.nav_in_need:
+
                 changeFragment(new InNeedFragment());
+
                 break;
             case R.id.nav_needs_and_deeds:
                 changeFragment(new NeedsAndDeedsFragment()); //Hide the round plus icon at the bottom right corner for all fragments other than "In need"
@@ -200,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         phoneNumber_dialog = findViewById(R.id.Phone_dialog);
         city_dialog = findViewById(R.id.City_dialog);
         zipCode_dialog = findViewById(R.id.zip_dialog);
-        Confirm = findViewById(R.id.confirm_button_dialog);
+
     }
 
     //Update the User name and User email in the Header.
@@ -310,42 +317,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    /*
-    public void registerFacebookUser() {
-        LogIn logIn = new LogIn();
-        String password = "1111111";
-        String email = logIn.email;
-        String firstName = logIn.firstName;
-        String lastName = logIn.lastName;
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        User user = new User(email, password, firstName, lastName, phone, city, Integer.parseInt(zipCode));
-                        FirebaseDatabase.getInstance().getReference("Users")
-                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(MainActivity.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
-                                } else {
-                                    Toast.makeText(MainActivity.this, "Failed to register! Try again", Toast.LENGTH_LONG).show();
-
-                                }
-                            }
-                        });
-                    } else {
-                        try {
-                            throw task.getException();
-                        } catch (FirebaseAuthUserCollisionException existEmail) {
-                            Toast.makeText(MainActivity.this, "This Email already exist", Toast.LENGTH_LONG).show();
-                        } catch (Exception e) {
-                            Toast.makeText(MainActivity.this, "Failed to register! Try again", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-    }
-}
-
-     */
 }
