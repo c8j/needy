@@ -44,8 +44,10 @@ public class OtherStatusPostRecordFragment extends Fragment {
     private Button contact;
     private Button report;
     private Button rate;
-    private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+
     private final FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private final String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private String authorUID;
 
     public OtherStatusPostRecordFragment(Post currentPositioned) {
         this.currentPositioned = currentPositioned;
@@ -71,7 +73,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
         textPhone = root.findViewById(R.id.text_phone2);
 
         String key = currentPositioned.getPostUID();
-        String authorUID = currentPositioned.getAuthorUID();
+        authorUID = currentPositioned.getAuthorUID();
         if (!currentPositioned.getDescription().isEmpty()) {
             postDescription.setText(currentPositioned.getDescription());
         }
@@ -86,13 +88,21 @@ public class OtherStatusPostRecordFragment extends Fragment {
             postCity.setText(currentPositioned.getCity());
         }
 
-        String currentUser = firebaseAuth.getCurrentUser().getUid();
+
         if (authorUID.equals(currentUser)){
             contact.setText(R.string.button_contact2);
             report.setText(R.string.button_report2);
             authorPhone.setVisibility(View.INVISIBLE);
             textPhone.setVisibility(View.INVISIBLE);
             rate.setText(R.string.button_rate2);
+            if (currentPositioned.getPostStatus() >= 3) {
+                if (currentPositioned.getPostStatus() == 5 || currentPositioned.getPostStatus() == 3)
+                {
+                    rate.setVisibility(View.VISIBLE);
+                } else {
+                    rate.setVisibility(View.INVISIBLE);
+                }
+            }
 
         } else if (currentPositioned.getVolunteer().equals(currentUser)){
             contact.setText(R.string.button_contact);
@@ -100,6 +110,14 @@ public class OtherStatusPostRecordFragment extends Fragment {
             authorPhone.setVisibility(View.VISIBLE);
             textPhone.setVisibility(View.VISIBLE);
             rate.setText(R.string.button_rate1);
+            if (currentPositioned.getPostStatus() >= 3) {
+                if (currentPositioned.getPostStatus() == 4 || currentPositioned.getPostStatus() == 3)
+                {
+                    rate.setVisibility(View.VISIBLE);
+                } else {
+                    rate.setVisibility(View.INVISIBLE);
+                }
+            }
         }
 
 
@@ -147,13 +165,12 @@ public class OtherStatusPostRecordFragment extends Fragment {
     private void listenerCode(DatabaseReference currentRef, DataSnapshot snapshot) {
         Post post = snapshot.getValue(Post.class);
         if (post != null) {
-          //  if (!currentPositioned.getAuthorUID().equals(firebaseAuth.getUid())) {
+
             if(currentPositioned.getPostStatus() == 2){
                 completePost.setVisibility(View.VISIBLE);
                 rate.setVisibility(View.INVISIBLE);
 
                 completePost.setOnClickListener(v -> {
-                    Toast.makeText(getContext(), "change Post status to 3", Toast.LENGTH_SHORT).show();
                     currentPositioned.setPostStatus(3);
                     assert post != null;
                     post.setPostStatus(3);
@@ -166,7 +183,25 @@ public class OtherStatusPostRecordFragment extends Fragment {
             } else {
                 completePost.setVisibility(View.INVISIBLE);
                 contact.setVisibility(View.INVISIBLE);
-                rate.setVisibility(View.VISIBLE);
+
+                rate.setOnClickListener(v -> {
+                    Toast.makeText(getContext(), "open a window to select rate and submit", Toast.LENGTH_SHORT).show();
+                    if(authorUID.equals(currentUser) && (post.getPostStatus() == 3 || post.getPostStatus() == 5)) {
+                        Toast.makeText(getContext(), "you are author and status 3 or 5", Toast.LENGTH_SHORT).show();
+                        currentPositioned.setPostStatus(4);
+                        assert post != null;
+                        post.setPostStatus(4);
+                        currentRef.child("postStatus").setValue(4);
+                        rate.setVisibility(View.INVISIBLE);
+                    } else if (currentPositioned.getVolunteer().equals(currentUser) && (post.getPostStatus() == 3 || post.getPostStatus() == 4)){
+                        Toast.makeText(getContext(), "you are volunteer and status 3 or 4", Toast.LENGTH_SHORT).show();
+                        currentPositioned.setPostStatus(5);
+                        assert post != null;
+                        post.setPostStatus(5);
+                        currentRef.child("postStatus").setValue(5);
+                        rate.setVisibility(View.INVISIBLE);
+                    }
+                });
             }
         }
     }

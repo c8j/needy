@@ -9,7 +9,7 @@ import java.util.Map;
 
 @IgnoreExtraProperties
 public class Post implements Serializable {
-    private int postStatus;  // 1=Active, 2=In progress, 3=Finished
+    private int postStatus;  // 1=Active, 2=In progress, 3=Finished (ready for rating), 4=rated by author, 5= rated by volunteer
     private String authorUID;
     private String description;
     private int serviceType;
