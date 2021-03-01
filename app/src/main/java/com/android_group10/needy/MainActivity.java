@@ -139,19 +139,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case R.id.nav_in_need:
-
                 changeFragment(new InNeedFragment());
-
+                floatingActionButton.show();
                 break;
             case R.id.nav_needs_and_deeds:
-                changeFragment(new NeedsAndDeedsFragment()); //Hide the round plus icon at the bottom right corner for all fragments other than "In need"
+                changeFragment(new NeedsAndDeedsFragment());
+                floatingActionButton.hide();
                 break;
             case R.id.nav_to_do:
                 changeFragment(new ToDoFragment());
-
+                floatingActionButton.hide();
                 break;
             case R.id.nav_profile:
                 changeFragment(new ProfileFragment());
+                floatingActionButton.hide();
                 break;
 
             case R.id.log_out:
@@ -171,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
-        floatingActionButton.hide();
     }
 
     // Item menu
