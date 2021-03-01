@@ -1,5 +1,6 @@
 package com.android_group10.needy.ui.NeedsAndDeeds;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,6 +49,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
     private final FirebaseDatabase db = FirebaseDatabase.getInstance();
     private final String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String authorUID;
+ //   private int REQ_CODE = 12345;
 
     public OtherStatusPostRecordFragment(Post currentPositioned) {
         this.currentPositioned = currentPositioned;
@@ -159,6 +161,27 @@ public class OtherStatusPostRecordFragment extends Fragment {
 
         currentPostRef.addValueEventListener(postListener1);
 
+      /*  report.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.putExtra("reportAuthor", currentUser);
+            intent.putExtra("postUID", currentPositioned.getPostUID());
+            if (authorUID.equals(currentUser)){
+                intent.putExtra("blamedUser", currentPositioned.getVolunteer());
+            } else{
+                intent.putExtra("blamedUser", currentPositioned.getAuthorUID());
+            }
+
+            try{
+                startActivityForResult(intent, REQ_CODE);
+            } catch (Exception ex){
+                ex.printStackTrace();
+            }
+
+
+        });
+
+        */
+
         return root;
     }
 
@@ -171,10 +194,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
                 rate.setVisibility(View.INVISIBLE);
 
                 completePost.setOnClickListener(v -> {
-                    currentPositioned.setPostStatus(3);
-                    assert post != null;
-                    post.setPostStatus(3);
-                    currentRef.child("postStatus").setValue(3);
+                    postStatusUpdate(currentRef, post, 3);
                     completePost.setVisibility(View.INVISIBLE);
                     contact.setVisibility(View.VISIBLE);
                     rate.setVisibility(View.VISIBLE);
@@ -188,22 +208,25 @@ public class OtherStatusPostRecordFragment extends Fragment {
                     Toast.makeText(getContext(), "open a window to select rate and submit", Toast.LENGTH_SHORT).show();
                     if(authorUID.equals(currentUser) && (post.getPostStatus() == 3 || post.getPostStatus() == 5)) {
                         Toast.makeText(getContext(), "you are author and status 3 or 5", Toast.LENGTH_SHORT).show();
-                        currentPositioned.setPostStatus(4);
-                        assert post != null;
-                        post.setPostStatus(4);
-                        currentRef.child("postStatus").setValue(4);
+                        postStatusUpdate(currentRef, post, 4);
                         rate.setVisibility(View.INVISIBLE);
                     } else if (currentPositioned.getVolunteer().equals(currentUser) && (post.getPostStatus() == 3 || post.getPostStatus() == 4)){
                         Toast.makeText(getContext(), "you are volunteer and status 3 or 4", Toast.LENGTH_SHORT).show();
-                        currentPositioned.setPostStatus(5);
-                        assert post != null;
-                        post.setPostStatus(5);
-                        currentRef.child("postStatus").setValue(5);
+                        postStatusUpdate(currentRef, post, 5);
                         rate.setVisibility(View.INVISIBLE);
                     }
                 });
             }
+
+
         }
+
     }
 
+    private void postStatusUpdate(DatabaseReference currentRef, Post post, int newStatus){
+        currentPositioned.setPostStatus(newStatus);
+        assert post != null;
+        post.setPostStatus(newStatus);
+        currentRef.child("postStatus").setValue(newStatus);
+    }
 }

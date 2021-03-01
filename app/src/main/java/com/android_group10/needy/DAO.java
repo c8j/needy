@@ -30,4 +30,13 @@ public class DAO {
 
         db.getReference().updateChildren(childUpdates);
     }
+
+    public void writeReport(Report report){
+        String key = db.getReference().child("Reports").child(report.getBlamedUserUID()).push().getKey();
+        Map<String, Object> postValues = report.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/Reports/" + report.getBlamedUserUID() + "/" + key, postValues);
+        db.getReference().updateChildren(childUpdates);
+    }
 }
