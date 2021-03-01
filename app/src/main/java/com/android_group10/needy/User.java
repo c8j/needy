@@ -1,5 +1,7 @@
 package com.android_group10.needy;
 
+import android.net.Uri;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -14,6 +16,7 @@ public class User implements Serializable {
     private double authorRating;
     private double volunteerRating;
     private int zipCode;
+    private String imgKey;
 
     public String getCity() {
         return city;
@@ -40,7 +43,7 @@ public class User implements Serializable {
     }
 
     public User() {
-        
+
     }
 
     public User(String email, String password, String firstName, String lastName, String phone, String city, int zipCode) {
@@ -95,6 +98,14 @@ public class User implements Serializable {
         return image;
     }
 
+    public void setImgKey(String imgKey){
+        this.imgKey = imgKey;
+    }
+
+    public String getImgKey(){
+        return imgKey;
+    }
+
     public double getAuthorRating() {
         // authorRating = "request to database"
         return authorRating;
@@ -133,7 +144,7 @@ public class User implements Serializable {
         result.put("city", city);
         result.put("email", email);
         result.put("zipCode", zipCode);
-        result.put("picture", image);
+        result.put("picture", imgKey);
         return result;
     }
 }

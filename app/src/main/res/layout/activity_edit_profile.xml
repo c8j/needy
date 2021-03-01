@@ -129,12 +129,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/editPicimageButton"
         android:layout_width="29dp"
         android:layout_height="29dp"
         android:layout_marginStart="115dp"
         android:layout_marginTop="90dp"
         android:background="@color/dark_grey_elements"
+        android:onClick="onEditImageClick"
         android:src="@android:drawable/ic_menu_edit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/editPicImageView" />

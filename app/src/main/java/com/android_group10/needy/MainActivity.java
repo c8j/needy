@@ -13,6 +13,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
@@ -37,6 +43,7 @@ import com.android_group10.needy.ui.NeedsAndDeeds.NeedsAndDeedsFragment;
 
 import com.android_group10.needy.ui.Profile.ProfileFragment;
 import com.android_group10.needy.ui.ToDo.ToDoFragment;
+import com.facebook.login.LoginManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -49,7 +56,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener {
     private FragmentTransaction fragmentTransaction;
     private FragmentManager fragmentManager;
     private AppBarConfiguration mAppBarConfiguration;
@@ -62,14 +69,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String userId;
     private FirebaseUser user;
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
-
+    private FirebaseAuth firebaseAuth;
+    private EditText phoneNumber_dialog, city_dialog, zipCode_dialog;
+    private View header;
+    private ImageView profileImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initialization();
-        setUserNameAndEmailInHeader();
+        updateHeader();
 
         setSupportActionBar(toolbar);
         floatingActionButton = findViewById(R.id.fab);
@@ -99,6 +109,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.fragment_container, new InNeedFragment());
         fragmentTransaction.commit();
 
+
+        // Handle Image on on the Header.
+        profileImage.setOnClickListener(v -> {
+            drawer.closeDrawer(GravityCompat.START);
+            showPopup(profileImage);
+            drawer.openDrawer(GravityCompat.START);
+        });
     }
 
     @Override
@@ -116,49 +133,57 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 || super.onSupportNavigateUp();
     }
 
-
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
         switch (item.getItemId()) {
             case R.id.nav_in_need:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, new InNeedFragment());
-                fragmentTransaction.commit();
-                floatingActionButton.show(); //force to show the round plus icon at the bottom right corner again
+
+                changeFragment(new InNeedFragment());
+
                 break;
             case R.id.nav_needs_and_deeds:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, new NeedsAndDeedsFragment());
-                fragmentTransaction.commit();
-                floatingActionButton.hide(); //Hide the round plus icon at the bottom right corner for all fragments other than "In need"
+                changeFragment(new NeedsAndDeedsFragment()); //Hide the round plus icon at the bottom right corner for all fragments other than "In need"
                 break;
             case R.id.nav_to_do:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, new ToDoFragment());
-                fragmentTransaction.commit();
-                floatingActionButton.hide();
+                changeFragment(new ToDoFragment());
+
                 break;
             case R.id.nav_profile:
-                fragmentManager = getSupportFragmentManager();
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, new ProfileFragment());
-                fragmentTransaction.commit();
-                floatingActionButton.hide();
+                changeFragment(new ProfileFragment());
                 break;
 
             case R.id.log_out:
                 FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
                 startActivity(new Intent(this, LogIn.class));
+                break;
         }
         //This helps to close the navigation bar after choose an item from it.
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    // Change fragments when press on navigation drawer.
+    public void changeFragment(Fragment fragment) {
+        fragmentManager = getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
+        floatingActionButton.hide();
+    }
+
+    // Item menu
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.about_us) {
+            about_us_dialog();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     // Can press back button and only close the navigation bar and not the activity
     @Override
@@ -176,14 +201,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         toolbar = findViewById(R.id.toolbar);
 
+
+        header = navigationView.getHeaderView(0);
+        profileImage = (ImageView) header.findViewById(R.id.profileImageHeader);
+
+
+        phoneNumber_dialog = findViewById(R.id.Phone_dialog);
+        city_dialog = findViewById(R.id.City_dialog);
+        zipCode_dialog = findViewById(R.id.zip_dialog);
+
     }
 
     //Update the User name and User email in the Header.
-    public void setUserNameAndEmailInHeader() {
+    public void updateHeader() {
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
-        TextView userName = headerView.findViewById(R.id.user_name);
-        TextView userEmail = headerView.findViewById(R.id.user_email_header);
+        TextView userNameOnHeader = headerView.findViewById(R.id.user_name);
+        TextView userEmailOnHeader = headerView.findViewById(R.id.user_email_header);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -199,8 +233,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     String name = user.getFirstName();
                     String email = user.getEmail();
 
-                    userName.setText("Welcome " + name);
-                    userEmail.setText(email);
+                    userNameOnHeader.setText("Welcome " + name);
+                    userEmailOnHeader.setText(email);
                 }
             }
 
@@ -211,13 +245,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.about_us) {
-            about_us_dialog();
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
     public void about_us_dialog() {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
@@ -231,8 +258,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-        // SharedPreference shared = new SharedPreference(getApplicationContext());
-        //shared.firstTime();
+
+    }
+
+    public void register_dialog() {
+        LayoutInflater layoutInflater = LayoutInflater.from(this);
+        View view = layoutInflater.inflate(R.layout.register_dialog, null);
+        final AlertDialog alertD = new AlertDialog.Builder(this).create();
+        alertD.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertD.setView(view);
+        alertD.show();
     }
 
     ValueEventListener listListener = new ValueEventListener(){
@@ -271,4 +306,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     };
 
+    public void checkIfFacebookUserExistsInDataBase() {
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference uidRef = rootRef.child("users").child(uid);
+        ValueEventListener eventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (!snapshot.exists()) {
+                    register_dialog();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+
+        };
+        uidRef.addListenerForSingleValueEvent(eventListener);
+    }
+
+    public void showPopup(View view) {
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.setOnMenuItemClickListener(this);
+        popupMenu.inflate(R.menu.image_menu);
+        popupMenu.show();
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.change_image:
+                Toast.makeText(this, "Change image", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.delete_image:
+                Toast.makeText(this, "Delete image", Toast.LENGTH_SHORT).show();
+                return true;
+
+            case R.id.take_image:
+                Toast.makeText(this, "Take image", Toast.LENGTH_SHORT).show();
+                return true;
+
+            default:
+                return false;
+        }
+    }
 }

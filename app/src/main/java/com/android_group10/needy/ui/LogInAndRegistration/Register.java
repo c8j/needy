@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +18,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
-import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -66,18 +64,6 @@ public class Register extends AppCompatActivity {
         }
     }
 
-    public void updateUI(FirebaseUser account) {
-
-        if (account != null) {
-            Toast.makeText(this, "You Signed In successfully", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(this, MainActivity.class));
-
-        } else {
-            Toast.makeText(this, "You haven't signed in", Toast.LENGTH_LONG).show();
-        }
-
-    }
-
     public void registerUser() {
         String email = registerEmail.getText().toString().trim();
         String firstName = registerFirstName.getText().toString().trim();
@@ -117,15 +103,13 @@ public class Register extends AppCompatActivity {
                             User user = new User(email, password, firstName, lastName, phone, city, Integer.parseInt(zipCode));
                             FirebaseDatabase.getInstance().getReference("Users")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Toast.makeText(Register.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
-                                    } else {
-                                        Toast.makeText(Register.this, "Failed to register! Try again", Toast.LENGTH_LONG).show();
+                                    .setValue(user).addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    Toast.makeText(Register.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
+                                    startActivity(new Intent(this, LogIn.class));
+                                } else {
+                                    Toast.makeText(Register.this, "Failed to register! Try again", Toast.LENGTH_LONG).show();
 
-                                    }
                                 }
                             });
                         } else {
@@ -137,7 +121,7 @@ public class Register extends AppCompatActivity {
                             } catch (FirebaseAuthUserCollisionException existEmail) {
 
                                 Toast.makeText(Register.this, "This Email already exist", Toast.LENGTH_LONG).show();
-
+                                startActivity(new Intent(this, LogIn.class));
 
                             } catch (Exception e) {
 
