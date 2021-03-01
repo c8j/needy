@@ -94,7 +94,7 @@ public class NeedsAndDeedsFragment extends Fragment {
                         Post clickedItem = dataList2.get(position);
                         FragmentManager fm = getChildFragmentManager();
                         FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                        fragmentTransaction.replace(R.id.layout_needs_n_deeds_fragment, new OpenPostRecordFragment(clickedItem));
+                        fragmentTransaction.replace(R.id.layout_needs_n_deeds_fragment, new OtherStatusPostRecordFragment(clickedItem));
                         fragmentTransaction.commit();
                     }
                 });
