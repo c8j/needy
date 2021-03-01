@@ -40,8 +40,10 @@ public class OtherStatusPostRecordFragment extends Fragment {
     private TextView authorPhone;
     private TextView postIncentive;
     private TextView textPhone;
-    private Button acceptPost;
-    private Button contactAuthor;
+    private Button completePost;
+    private Button contact;
+    private Button report;
+    private Button rate;
     private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private final FirebaseDatabase db = FirebaseDatabase.getInstance();
 
@@ -52,19 +54,21 @@ public class OtherStatusPostRecordFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        root = inflater.inflate(R.layout.open_post, container, false);
+        root = inflater.inflate(R.layout.open_post_status2, container, false);
 
-        authorPicture = root.findViewById(R.id.author_image);
-        authorName = root.findViewById(R.id.author_name);
-        authorRating = root.findViewById(R.id.author_rating);
-        authorPhone = root.findViewById(R.id.author_phone);
-        postDescription = root.findViewById(R.id.post_description);
-        postZipCode = root.findViewById(R.id.post_zip);
-        postCity = root.findViewById(R.id.post_city);
-        postIncentive = root.findViewById(R.id.post_incentive);
-        acceptPost = root.findViewById(R.id.accept);
-        contactAuthor = root.findViewById(R.id.contact_author);
-        textPhone = root.findViewById(R.id.text_phone);
+        authorPicture = root.findViewById(R.id.author_image2);
+        authorName = root.findViewById(R.id.author_name2);
+        authorRating = root.findViewById(R.id.author_rating2);
+        authorPhone = root.findViewById(R.id.author_phone2);
+        postDescription = root.findViewById(R.id.post_description2);
+        postZipCode = root.findViewById(R.id.post_zip2);
+        postCity = root.findViewById(R.id.post_city2);
+        postIncentive = root.findViewById(R.id.post_incentive2);
+        completePost = root.findViewById(R.id.complete);
+        contact = root.findViewById(R.id.contact_2);
+        report = root.findViewById(R.id.report);
+        rate = root.findViewById(R.id.rate);
+        textPhone = root.findViewById(R.id.text_phone2);
 
         String key = currentPositioned.getPostUID();
         String authorUID = currentPositioned.getAuthorUID();
@@ -81,6 +85,23 @@ public class OtherStatusPostRecordFragment extends Fragment {
         if (!currentPositioned.getCity().isEmpty()) {
             postCity.setText(currentPositioned.getCity());
         }
+
+        String currentUser = firebaseAuth.getCurrentUser().getUid();
+        if (authorUID.equals(currentUser)){
+            contact.setText(R.string.button_contact2);
+            report.setText(R.string.button_report2);
+            authorPhone.setVisibility(View.INVISIBLE);
+            textPhone.setVisibility(View.INVISIBLE);
+            rate.setText(R.string.button_rate2);
+
+        } else if (currentPositioned.getVolunteer().equals(currentUser)){
+            contact.setText(R.string.button_contact);
+            report.setText(R.string.button_report1);
+            authorPhone.setVisibility(View.VISIBLE);
+            textPhone.setVisibility(View.VISIBLE);
+            rate.setText(R.string.button_rate1);
+        }
+
 
         assert authorUID != null;
         db.getReference().child("Users").child(authorUID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -126,22 +147,26 @@ public class OtherStatusPostRecordFragment extends Fragment {
     private void listenerCode(DatabaseReference currentRef, DataSnapshot snapshot) {
         Post post = snapshot.getValue(Post.class);
         if (post != null) {
-            if (!currentPositioned.getAuthorUID().equals(firebaseAuth.getUid())) {
-                acceptPost.setOnClickListener(v -> {
-                    Toast.makeText(getContext(), "change Post status to 2, remove from the list of active", Toast.LENGTH_SHORT).show();
-                    textPhone.setVisibility(View.VISIBLE);
-                    authorPhone.setVisibility(View.VISIBLE);
-                    currentPositioned.setPostStatus(2);
+          //  if (!currentPositioned.getAuthorUID().equals(firebaseAuth.getUid())) {
+            if(currentPositioned.getPostStatus() == 2){
+                completePost.setVisibility(View.VISIBLE);
+                rate.setVisibility(View.INVISIBLE);
+
+                completePost.setOnClickListener(v -> {
+                    Toast.makeText(getContext(), "change Post status to 3", Toast.LENGTH_SHORT).show();
+                    currentPositioned.setPostStatus(3);
                     assert post != null;
-                    post.setPostStatus(2);
-                    currentRef.child("postStatus").setValue(2);
-                    currentRef.child("volunteer").setValue(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid());
-                    acceptPost.setVisibility(View.INVISIBLE);
+                    post.setPostStatus(3);
+                    currentRef.child("postStatus").setValue(3);
+                    completePost.setVisibility(View.INVISIBLE);
+                    contact.setVisibility(View.VISIBLE);
+                    rate.setVisibility(View.VISIBLE);
                 });
-                contactAuthor.setOnClickListener(v -> Toast.makeText(getContext(), "send request to chat to the author", Toast.LENGTH_SHORT).show());
+                contact.setOnClickListener(v -> Toast.makeText(getContext(), "send a message", Toast.LENGTH_SHORT).show());
             } else {
-                acceptPost.setVisibility(View.INVISIBLE);
-                contactAuthor.setVisibility(View.INVISIBLE);
+                completePost.setVisibility(View.INVISIBLE);
+                contact.setVisibility(View.INVISIBLE);
+                rate.setVisibility(View.VISIBLE);
             }
         }
     }
