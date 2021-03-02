@@ -7,7 +7,7 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.android_group10.needy.R
 import com.android_group10.needy.databinding.ItemMessagingMessageBinding
-import com.android_group10.needy.ui.messaging.data.Message
+import com.android_group10.needy.messaging.data.Message
 import com.google.android.material.color.MaterialColors
 import com.google.firebase.auth.FirebaseAuth
 import java.time.Instant

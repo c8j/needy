@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android_group10.needy.databinding.ActivityChatBinding
+import com.android_group10.needy.messaging.ChatActivityViewModel
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatBinding

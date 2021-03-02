@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.android_group10.needy.Post;
 import com.android_group10.needy.R;
 import com.android_group10.needy.User;
+import com.android_group10.needy.messaging.util.FirestoreUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -142,7 +143,11 @@ public class OpenPostRecordFragment extends Fragment {
                     currentRef.child("volunteer").setValue(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid());
                     acceptPost.setVisibility(View.INVISIBLE);
                 });
-                contactAuthor.setOnClickListener(v -> Toast.makeText(getContext(), "send request to chat to the author", Toast.LENGTH_SHORT).show());
+                contactAuthor.setOnClickListener(v -> {
+                            if (post != null){
+                                FirestoreUtil.createRequest(post, (wasSuccessful, message) -> Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show());
+                            }
+                        });
             } else {
                 acceptPost.setVisibility(View.INVISIBLE);
                 contactAuthor.setVisibility(View.INVISIBLE);

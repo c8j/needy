@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.android_group10.needy.R
 import com.android_group10.needy.databinding.FragmentMessagingConversationsBinding
+import com.android_group10.needy.messaging.ConversationsFragmentViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
 
@@ -24,7 +25,6 @@ class ConversationsFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentMessagingConversationsBinding.inflate(inflater, container, false)
-        viewModel.init()
         binding.viewPager.adapter = ConversationsPagerAdapter(viewModel.pagerFragments, this)
 
         //TODO: implement badges for incoming requests/unread messages

@@ -1,12 +1,10 @@
 package com.android_group10.needy.ui.messaging
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.android_group10.needy.databinding.ItemMessagingConversationBinding
-import com.android_group10.needy.ui.messaging.data.Conversation
+import com.android_group10.needy.messaging.data.Conversation
 
 class MessagesFragmentAdapter(private val conversationList: List<Conversation>) :
     RecyclerView.Adapter<MessagesFragmentAdapter.ConversationItemViewHolder>() {

@@ -5,13 +5,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.PopupMenu
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android_group10.needy.R
 import com.android_group10.needy.databinding.ItemMessagingRequestBinding
-import com.android_group10.needy.ui.messaging.data.Request
+import com.android_group10.needy.messaging.data.RequestQueryItem
+import com.android_group10.needy.messaging.util.RequestQueryItemDiffCallback
 
-class RequestsFragmentAdapter(private val requestList: List<Request>) :
-    RecyclerView.Adapter<RequestsFragmentAdapter.RequestsViewHolder>() {
+class RequestsFragmentAdapter :
+    ListAdapter<RequestQueryItem, RequestsFragmentAdapter.RequestsViewHolder>(object :
+        RequestQueryItemDiffCallback() {}) {
 
     inner class RequestsViewHolder(private val binding: ItemMessagingRequestBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -23,15 +26,23 @@ class RequestsFragmentAdapter(private val requestList: List<Request>) :
                         PopupMenu(it, view).apply {
                             inflate(R.menu.messaging_request)
                             setOnMenuItemClickListener { menuItem ->
-                                when (menuItem.itemId){
+                                when (menuItem.itemId) {
                                     R.id.messaging_request_menu_accept -> {
                                         //TODO: implement accept request
-                                        Toast.makeText(view.context, "Request accepted", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            view.context,
+                                            "Request accepted",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                         true
                                     }
                                     R.id.messaging_request_menu_ignore -> {
                                         //TODO: implement ignore request
-                                        Toast.makeText(view.context, "Request ignored", Toast.LENGTH_SHORT).show()
+                                        Toast.makeText(
+                                            view.context,
+                                            "Request ignored",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                         true
                                     }
                                     else -> false
@@ -44,9 +55,10 @@ class RequestsFragmentAdapter(private val requestList: List<Request>) :
             }
         }
 
-        fun bind(request: Request) {
+        fun bind(queryItem: RequestQueryItem) {
             binding.apply {
-
+                tvAssociatedPostTitle.text = queryItem.item.associatedPostUID
+                tvContactName.text = queryItem.item.senderUID
             }
         }
     }
@@ -58,8 +70,8 @@ class RequestsFragmentAdapter(private val requestList: List<Request>) :
     }
 
     override fun onBindViewHolder(holder: RequestsViewHolder, position: Int) {
-        holder.bind(requestList[position])
+        val queryItem = getItem(position)
+        holder.bind(queryItem)
     }
 
-    override fun getItemCount(): Int = requestList.size
 }

@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android_group10.needy.databinding.FragmentMessagingMessagesBinding
+import com.android_group10.needy.messaging.ConversationsFragmentViewModel
 
 class MessagesFragment : Fragment() {
 
@@ -34,7 +35,6 @@ class MessagesFragment : Fragment() {
 
     private fun initRecyclerView(){
         binding.recyclerView.apply {
-            adapter = MessagesFragmentAdapter(viewModel.conversationList)
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(
                 DividerItemDecoration(

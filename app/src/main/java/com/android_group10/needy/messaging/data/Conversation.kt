@@ -1,4 +1,4 @@
-package com.android_group10.needy.ui.messaging.data
+package com.android_group10.needy.messaging.data
 
 data class Conversation(
     val partnerUID: String,

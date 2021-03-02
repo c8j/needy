@@ -1,4 +1,4 @@
-package com.android_group10.needy.ui.messaging.data
+package com.android_group10.needy.messaging.data
 
 import com.google.firebase.Timestamp
 

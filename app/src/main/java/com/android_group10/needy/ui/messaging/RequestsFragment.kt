@@ -9,6 +9,8 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android_group10.needy.databinding.FragmentMessagingRequestsBinding
+import com.android_group10.needy.messaging.ConversationsFragmentViewModel
+import com.google.firebase.firestore.ListenerRegistration
 
 class RequestsFragment : Fragment() {
 
@@ -17,13 +19,17 @@ class RequestsFragment : Fragment() {
 
     private val viewModel by viewModels<ConversationsFragmentViewModel>({requireParentFragment()})
 
+    private var shouldInitRecyclerView = true
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMessagingRequestsBinding.inflate(inflater, container, false)
-        initRecyclerView()
+        if (shouldInitRecyclerView){
+            initRecyclerView()
+        }
         return binding.root
     }
 
@@ -34,7 +40,6 @@ class RequestsFragment : Fragment() {
 
     private fun initRecyclerView(){
         binding.recyclerView.apply {
-            adapter = RequestsFragmentAdapter(viewModel.requestList)
             layoutManager = LinearLayoutManager(requireContext())
             addItemDecoration(
                 DividerItemDecoration(
@@ -42,6 +47,16 @@ class RequestsFragment : Fragment() {
                     (layoutManager as LinearLayoutManager).orientation
                 )
             )
+
+            val listAdapter = RequestsFragmentAdapter()
+            val requestsLiveData = viewModel.getRequests()
+            requestsLiveData.observe(viewLifecycleOwner){
+                if (it != null){
+                    listAdapter.submitList(it)
+                }
+            }
+            adapter = listAdapter
         }
+        shouldInitRecyclerView = false
     }
 }
