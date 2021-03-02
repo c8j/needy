@@ -1,12 +1,14 @@
 package com.android_group10.needy.ui.NeedsAndDeeds;
 
-import android.content.Intent;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,8 +16,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.android_group10.needy.DAO;
 import com.android_group10.needy.Post;
 import com.android_group10.needy.R;
+import com.android_group10.needy.Report;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,7 +31,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.Objects;
 
 public class OtherStatusPostRecordFragment extends Fragment {
     View root;
@@ -49,7 +52,6 @@ public class OtherStatusPostRecordFragment extends Fragment {
     private final FirebaseDatabase db = FirebaseDatabase.getInstance();
     private final String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String authorUID;
- //   private int REQ_CODE = 12345;
 
     public OtherStatusPostRecordFragment(Post currentPositioned) {
         this.currentPositioned = currentPositioned;
@@ -161,26 +163,32 @@ public class OtherStatusPostRecordFragment extends Fragment {
 
         currentPostRef.addValueEventListener(postListener1);
 
-      /*  report.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.putExtra("reportAuthor", currentUser);
-            intent.putExtra("postUID", currentPositioned.getPostUID());
+        report.setOnClickListener(v -> {
+            String blamedUserUID;
             if (authorUID.equals(currentUser)){
-                intent.putExtra("blamedUser", currentPositioned.getVolunteer());
+                blamedUserUID = currentPositioned.getVolunteer();
             } else{
-                intent.putExtra("blamedUser", currentPositioned.getAuthorUID());
+                blamedUserUID =currentPositioned.getAuthorUID();
             }
 
-            try{
-                startActivityForResult(intent, REQ_CODE);
-            } catch (Exception ex){
-                ex.printStackTrace();
-            }
+            LayoutInflater dialogInflater = LayoutInflater.from(getContext());
+            final View yourCustomView = dialogInflater.inflate(R.layout.report_user, null);
 
-
+            final TextView etName = (EditText) yourCustomView.findViewById(R.id.report_description);
+            AlertDialog dialog = new AlertDialog.Builder(getContext())
+                    .setTitle("Report")
+                    .setView(yourCustomView)
+                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            Log.e("dialog", etName.getText().toString());
+                            Report complaint = new Report(key, currentUser, blamedUserUID, etName.getText().toString());
+                            DAO saveDB = new DAO();
+                            saveDB.writeReport(complaint);
+                        }
+                    })
+                    .setNegativeButton("Cancel", null).create();
+            dialog.show();
         });
-
-        */
 
         return root;
     }
