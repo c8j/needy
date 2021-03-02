@@ -1,10 +1,9 @@
-package com.android_group10.needy.ui.Profile;
+package com.android_group10.needy;
 
 import android.app.Activity;
 import android.net.Uri;
 import android.widget.ImageView;
 
-import com.android_group10.needy.R;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;

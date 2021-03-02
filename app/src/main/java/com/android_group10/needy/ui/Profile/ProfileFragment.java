@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.android_group10.needy.ImageHelper;
+import com.android_group10.needy.ProfilePictureManager;
 import com.android_group10.needy.R;
 import com.android_group10.needy.User;
 import com.android_group10.needy.ui.InNeed.InNeedFragment;

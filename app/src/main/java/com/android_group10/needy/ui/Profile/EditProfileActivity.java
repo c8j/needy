@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android_group10.needy.ProfilePictureManager;
 import com.android_group10.needy.R;
 import com.android_group10.needy.User;
 import com.bumptech.glide.Glide;
