@@ -27,8 +27,11 @@
 
     <string name="button_accept">offer help</string>
     <string name="button_save">save</string>
+    <string name="button_send">send</string>
+    <string name="button_cancel">cancel</string>
     <string name="button_report">report</string>
-    <string name="button_rate">rate</string>
+    <string name="button_rate1">rate author</string>
+    <string name="button_rate2">rate volunteer</string>
     <string name="button_contact">contact author</string>
     <string name="phone_text">Contact phone#: </string>
     <string name="description_text">I would like to get help with the following: </string>
@@ -36,7 +39,16 @@
     <string name="service_type_text">Choose category: </string>
     <string name="address_text">Specify a ZIP code and a city if they differ from the ones in your Profile: </string>
     <string name="description_text1">What is it you need to get help with? </string>
+    <string name="description_text2">Task: </string>
     <string name="motivation_text">If you would like to motivate a volunteer, how would you do it? </string>
+    <string name="warning">Attention! Reporting a user might lead to that user being blocked in our system and/or police being informed.
+        Please, consider giving the user low rating instead</string>
+    <string name="hint_text">Write your complaint here </string>
+    <string name="button_complete">Mark Complete </string>
+    <string name="button_contact2">contact volunteer</string>
+    <string name="button_report1">report author</string>
+    <string name="button_report2">report volunteer</string>
+    <string name="button_open_profile">open profile</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 

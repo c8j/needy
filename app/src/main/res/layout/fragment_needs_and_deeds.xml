@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/darker_yellow"
+    android:id="@+id/layout_needs_n_deeds_fragment"
     tools:context=".ui.NeedsAndDeeds.NeedsAndDeedsFragment">
 
     <TextView
@@ -20,4 +21,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/postRecyclerView_needs_and_deeds"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="76dp"
+        tools:layout_editor_absoluteY="80dp"
+        tools:listitem="@layout/post_details"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

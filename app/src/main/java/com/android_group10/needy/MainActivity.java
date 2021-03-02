@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DatabaseReference reference;
     private String userId;
     private FirebaseUser user;
+    private FirebaseDatabase db = FirebaseDatabase.getInstance();
     private FirebaseAuth firebaseAuth;
     private EditText phoneNumber_dialog, city_dialog, zipCode_dialog;
     private View header;
@@ -144,8 +145,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.fragment_container, new InNeedFragment());
         fragmentTransaction.commit();
 
+        ProfilePictureManager ppManager = new ProfilePictureManager();
+        ppManager.displayProfilePic(this, profileImage);
 
-        // Handle Image on on the Header.
+        // Handle Image on on the Header.-X--Editing image only to be done in profile fragment to avoid confusion.
+
         profileImage.setOnClickListener(v -> {
             drawer.closeDrawer(GravityCompat.START);
             showPopup(profileImage);
@@ -179,16 +183,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (item.getItemId()) {
             case R.id.nav_in_need:
                 changeFragment(new InNeedFragment());
+
+                floatingActionButton.show();
+
                 break;
             case R.id.nav_needs_and_deeds:
-                changeFragment(new NeedsAndDeedsFragment()); //Hide the round plus icon at the bottom right corner for all fragments other than "In need"
+                changeFragment(new NeedsAndDeedsFragment());
+                floatingActionButton.hide();
                 break;
             case R.id.nav_to_do:
                 changeFragment(new ToDoFragment());
-
+                floatingActionButton.hide();
                 break;
             case R.id.nav_profile:
                 changeFragment(new ProfileFragment());
+                floatingActionButton.hide();
                 break;
             case R.id.log_out:
                 FirebaseAuth.getInstance().signOut();
@@ -207,7 +216,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
-        floatingActionButton.hide();
     }
 
     // Item menu
@@ -369,6 +377,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
     // will update the header and Local database.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -448,5 +457,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
     }
-
 }

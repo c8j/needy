@@ -1,6 +1,7 @@
 package com.android_group10.needy.ui.InNeed;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 
 public class InNeedFragment extends Fragment implements PostAdapter.OnItemClickListener {
     private View root;
-    private static ArrayList<Post> dataList = new ArrayList<>();
+    public static ArrayList<Post> dataList = new ArrayList<>();
     private PostAdapter myPostAdapter;
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
 
@@ -47,6 +48,7 @@ public class InNeedFragment extends Fragment implements PostAdapter.OnItemClickL
                                 dataList.add(object);
                             }
                                 count++;
+                            myPostAdapter.notifyDataSetChanged();
                         }
                     }
                 }

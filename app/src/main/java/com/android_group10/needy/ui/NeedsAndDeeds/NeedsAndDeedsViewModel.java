@@ -1,19 +1,22 @@
 package com.android_group10.needy.ui.NeedsAndDeeds;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.android_group10.needy.Post;
+
+import java.util.ArrayList;
+
 public class NeedsAndDeedsViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
+    private MutableLiveData<ArrayList<Post>> _list;
 
     public NeedsAndDeedsViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is gallery fragment");
+        _list = new MutableLiveData<>();
+        _list.setValue(new ArrayList());
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public MutableLiveData<ArrayList<Post>> getList() {
+        return _list;
     }
 }
