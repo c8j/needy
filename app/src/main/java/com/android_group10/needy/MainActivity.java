@@ -1,21 +1,27 @@
 package com.android_group10.needy;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 
 
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -26,6 +32,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -36,6 +43,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.android_group10.needy.LocalDatabase.DatabaseHandler;
+import com.android_group10.needy.LocalDatabase.DbBitmapUtility;
+import com.android_group10.needy.LocalDatabase.LocalDatabaseHelper;
 import com.android_group10.needy.ui.InNeed.AddPostRecordFragment;
 import com.android_group10.needy.ui.InNeed.InNeedFragment;
 import com.android_group10.needy.ui.LogInAndRegistration.LogIn;
@@ -43,6 +53,7 @@ import com.android_group10.needy.ui.NeedsAndDeeds.NeedsAndDeedsFragment;
 
 import com.android_group10.needy.ui.Profile.ProfileFragment;
 import com.android_group10.needy.ui.ToDo.ToDoFragment;
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -55,8 +66,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, PopupMenu.OnMenuItemClickListener {
+
+
     private FragmentTransaction fragmentTransaction;
     private FragmentManager fragmentManager;
     private AppBarConfiguration mAppBarConfiguration;
@@ -72,9 +92,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private EditText phoneNumber_dialog, city_dialog, zipCode_dialog;
     private View header;
     private ImageView profileImage;
+    private boolean hasChanged = false;
+    private Bitmap bitmap;
+    private long pressedTime;
+
+
+    private String imageFilePath;
+    File photoFile = null;
+    private int five = 5;
+    private SQLiteDatabase database;
+    private Uri selectedImageUri;
+    private LocalDatabaseHelper localDatabaseHelper;
+
+    private static final int SELECT_PICTURE = 100;
+    private static final int CAMERA_REQUEST = 1;
+    private static final String TAG = "StoreImageActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        localDatabaseHelper = new LocalDatabaseHelper(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initialization();
@@ -115,11 +151,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             showPopup(profileImage);
             drawer.openDrawer(GravityCompat.START);
         });
+
+
+        loadImageFromDB();
+
     }
 
+
+    // Inflate the menu; this adds items to the action bar if it is present.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -137,9 +178,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (item.getItemId()) {
             case R.id.nav_in_need:
-
                 changeFragment(new InNeedFragment());
-
                 break;
             case R.id.nav_needs_and_deeds:
                 changeFragment(new NeedsAndDeedsFragment()); //Hide the round plus icon at the bottom right corner for all fragments other than "In need"
@@ -151,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_profile:
                 changeFragment(new ProfileFragment());
                 break;
-
             case R.id.log_out:
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
@@ -188,9 +226,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        } else if (pressedTime + 2000 > System.currentTimeMillis()) {
             super.onBackPressed();
+            finish();
+        } else {
+            Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
+            pressedTime = System.currentTimeMillis();
         }
+
     }
 
     public void initialization() {
@@ -209,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         zipCode_dialog = findViewById(R.id.zip_dialog);
 
     }
+
 
     //Update the User name and User email in the Header.
     public void updateHeader() {
@@ -243,7 +287,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
-
     public void about_us_dialog() {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View view = layoutInflater.inflate(R.layout.about_us, null);
@@ -259,36 +302,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    public void register_dialog() {
-        LayoutInflater layoutInflater = LayoutInflater.from(this);
-        View view = layoutInflater.inflate(R.layout.register_dialog, null);
-        final AlertDialog alertD = new AlertDialog.Builder(this).create();
-        alertD.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertD.setView(view);
-        alertD.show();
-    }
-
-    public void checkIfFacebookUserExistsInDataBase() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference uidRef = rootRef.child("users").child(uid);
-        ValueEventListener eventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {
-                    register_dialog();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
-        };
-        uidRef.addListenerForSingleValueEvent(eventListener);
-    }
-
+    // Header Photo methods.
     public void showPopup(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.setOnMenuItemClickListener(this);
@@ -296,25 +310,143 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         popupMenu.show();
     }
 
+    //This will open the gallery
+
+    public void openImageChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
+    }
+
+    @SuppressLint("QueryPermissionsNeeded")
+    public void openCamera() {
+        Intent pictureIntent = new Intent(
+                MediaStore.ACTION_IMAGE_CAPTURE);
+        if (pictureIntent.resolveActivity(getPackageManager()) != null) {
+            //Create a file to store the image
+
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this, "com.android_group10.needy.provider", photoFile);
+                pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        photoURI);
+                startActivityForResult(pictureIntent,
+                        CAMERA_REQUEST);
+            }
+        }
+
+    }
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+
         switch (item.getItemId()) {
             case R.id.change_image:
-                Toast.makeText(this, "Change image", Toast.LENGTH_SHORT).show();
+
+                //This will open the gallery
+                openImageChooser();
                 return true;
 
             case R.id.delete_image:
-                Toast.makeText(this, "Delete image", Toast.LENGTH_SHORT).show();
+                localDatabaseHelper.open();
+                localDatabaseHelper.deleteImage();
+                localDatabaseHelper.close();
+                profileImage.setImageResource(R.drawable.anonymous_mask);
                 return true;
 
             case R.id.take_image:
-                Toast.makeText(this, "Take image", Toast.LENGTH_SHORT).show();
+                openCamera();
                 return true;
 
             default:
                 return false;
         }
+    }
+
+    // will update the header and Local database.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+
+            if (requestCode == SELECT_PICTURE) {
+                selectedImageUri = data.getData();
+                profileImage.setImageURI(selectedImageUri);
+                saveImageInDB();
+
+            } else if (requestCode == CAMERA_REQUEST) {
+                Glide.with(this).load(imageFilePath).into(profileImage);
+
+                selectedImageUri = Uri.fromFile(photoFile);
+                saveImageInDB();
+            }
+
+        }
+    }
+
+    public File createImageFile() throws IOException {
+        String timeStamp =
+                new SimpleDateFormat("yyyyMMdd_HHmmss",
+                        Locale.getDefault()).format(new Date());
+        String imageFileName = "IMG_" + timeStamp + "_";
+        File storageDir =
+                getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        imageFilePath = image.getAbsolutePath();
+        return image;
+    }
+
+    // Retrieve the image from the database.
+    public void loadImageFromDB() {
+        // check first if there is an image in the database(Check if the table is empty or not)
+        boolean empty = localDatabaseHelper.checkTableEmpty();
+
+        if (empty) {
+            // if the table in the database is empty so will set back the default image
+            profileImage.setImageResource(R.drawable.anonymous_mask);
+        } else {
+            new Thread((Runnable) () -> {
+                try {
+                    localDatabaseHelper.open();
+                    final byte[] bytes = localDatabaseHelper.retreiveImageFromDB();
+                    localDatabaseHelper.close();
+                    // Show Image from DB in ImageView
+                    profileImage.post((Runnable) () -> {
+                        profileImage.setImageBitmap(DbBitmapUtility.getImage(bytes));
+                        Toast.makeText(MainActivity.this, "Image lodaed from database", Toast.LENGTH_SHORT).show();
+                    });
+                } catch (Exception e) {
+
+                    localDatabaseHelper.close();
+                }
+            }).start();
+        }
+    }
+
+    // Save the images has been picked from the gallery into the SQLite database.
+    public void saveImageInDB() {
+        try {
+            localDatabaseHelper.open();
+            InputStream iStream = getContentResolver().openInputStream(selectedImageUri);
+            byte[] inputData = DbBitmapUtility.getBytes(iStream);
+            localDatabaseHelper.insertImage(inputData);
+            localDatabaseHelper.close();
+        } catch (IOException ioe) {
+            Log.e(TAG, "<saveImageInDB> Error : " + ioe.getLocalizedMessage());
+            localDatabaseHelper.close();
+        }
+
     }
 
 }

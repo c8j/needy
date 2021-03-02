@@ -26,7 +26,7 @@ public class Register extends AppCompatActivity {
     private EditText registerPassword, registerCity, registerPhone, registerFirstName, registerLastName, registerEmail, registerZip;
     private Button registerButton;
     private FirebaseAuth firebaseAuth;
-    private String TAG = "The Function";
+    private final String TAG = "The Function";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
