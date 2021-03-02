@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +56,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private static final int GALLERY_REQ_CODE = 10;
     private static final String TAG = "EditProfileActivity";
     Activity thisActivity = this;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,8 @@ public class EditProfileActivity extends AppCompatActivity {
         profilePictureImageView = findViewById(R.id.editPicImageView);
         editPic = findViewById(R.id.editPicimageButton);
         updateButton = findViewById(R.id.updateButton);
+        progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         ProfilePictureManager ppManager = new ProfilePictureManager();
@@ -138,17 +142,20 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public void uploadProfilePic(){
+        progressBar.setVisibility(View.VISIBLE);
         storageReference = FirebaseStorage.getInstance().getReference().child("profile_images/" + uid + "/profile_pic");
         storageReference.putFile(imageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Snackbar.make(findViewById(android.R.id.content), "Image uploaded", Snackbar.LENGTH_LONG).show();
+                Toast.makeText(thisActivity, "Image Uploaded", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 //makeToast("Image failed to upload.");
                 Toast.makeText(thisActivity, "Image failed to upload.", Toast.LENGTH_SHORT).show();
+                progressBar.setVisibility(View.GONE);
             }
         });
     }
