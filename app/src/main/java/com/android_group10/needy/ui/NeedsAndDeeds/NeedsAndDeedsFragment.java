@@ -61,6 +61,7 @@ public class NeedsAndDeedsFragment extends Fragment {
                                 }
                             }
                             count++;
+                            myPostAdapter.notifyDataSetChanged();
                         }
                     }
 

@@ -122,7 +122,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        db.getReference().child("Posts").addValueEventListener(listListener);
         return true;
     }
 
@@ -269,42 +268,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alertD.setView(view);
         alertD.show();
     }
-
-    ValueEventListener listListener = new ValueEventListener(){
-        @Override
-        public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-            if (snapshot.hasChildren()) {
-                int count = 0;
-
-                if (snapshot.getChildrenCount() != count) {
-                    NeedsAndDeedsFragment.dataList2.clear();
-                    InNeedFragment.dataList.clear();
-                    for (DataSnapshot child : snapshot.getChildren()) {
-                        Post object = child.getValue(Post.class);
-                        assert object != null;
-                        object.setAuthorUID(String.valueOf(child.child("author").getValue()));
-                        if (object.getPostStatus() != 1) {
-
-                            if(object.getAuthorUID().equals(user.getUid()) || object.getVolunteer().equals(user.getUid())) {
-                                NeedsAndDeedsFragment.dataList2.add(object);
-                            }
-                        } else {
-                            object.setAuthorUID(String.valueOf(child.child("author").getValue()));
-                            InNeedFragment.dataList.add(object);
-                        }
-                        count++;
-                    }
-                }
-
-            }
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
-
-        }
-    };
 
     public void checkIfFacebookUserExistsInDataBase() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();

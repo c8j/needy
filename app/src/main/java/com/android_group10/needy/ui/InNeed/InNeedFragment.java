@@ -48,6 +48,7 @@ public class InNeedFragment extends Fragment implements PostAdapter.OnItemClickL
                                 dataList.add(object);
                             }
                                 count++;
+                            myPostAdapter.notifyDataSetChanged();
                         }
                     }
                 }
