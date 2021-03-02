@@ -47,6 +47,7 @@ public class ProfileFragment extends Fragment {
     final User[] currentUser = new User[1];
     private StorageReference storageReference;
     private Uri imgUri;
+    ImageView profilePictureImageView;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,11 +58,11 @@ public class ProfileFragment extends Fragment {
         TextView zipcodeText = view.findViewById(R.id.profileZipcodeTextView);
         TextView phNumText = view.findViewById(R.id.profilePhoneNumTextView);
         TextView emailIdText = view.findViewById(R.id.profileEmailTextView);
-        ImageView profilePictureImageView = view.findViewById(R.id.profilePicimageView);
+        profilePictureImageView = view.findViewById(R.id.profilePicimageView);
         Button editButton = view.findViewById(R.id.profileEditButton);
 
-        storageReference = FirebaseStorage.getInstance().getReference("profile_images/efe4cf91-e8b8-491b-b637-a85ddc9016fa");
-        Glide.with(this).load(storageReference).centerCrop().placeholder(R.drawable.anonymous_mask).into(profilePictureImageView);
+        ProfilePictureManager ppManager = new ProfilePictureManager();
+        ppManager.displayProfilePic(getActivity(), profilePictureImageView);
 
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
@@ -78,14 +79,6 @@ public class ProfileFragment extends Fragment {
                 emailIdText.setText(snapshot.child("email").getValue(String.class));
                 phNumText.setText(snapshot.child("phone").getValue(String.class));
                 cityText.setText(snapshot.child("city").getValue(String.class));
-                //Uri profilePic = currentUser[0].getImgUri();
-                /*
-                if(profilePic != null){
-                    //decodeSampledBitmapFromPath("", profilePictureImageView.getWidth(), profilePictureImageView.getHeight());
-                    //profilePictureImageView.setImageURI(profilePic);
-                    showPicture(profilePictureImageView);
-                }
-                 */
             }
 
             @Override
@@ -103,7 +96,4 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    public void showPicture(ImageView imgView){
-        Glide.with(this).load(imgUri).centerCrop().placeholder(R.drawable.anonymous_mask).into(imgView);
-    }
 }
