@@ -68,7 +68,6 @@ public class InNeedFragment extends Fragment implements PostAdapter.OnItemClickL
         root = inflater.inflate(R.layout.fragment_in_need, container, false);
 
         RecyclerView recycler = root.findViewById(R.id.postRecyclerView_in_need);
-        Log.e("list size", String.valueOf(dataList.size()));
         myPostAdapter = new PostAdapter(dataList, this);
         recycler.setAdapter(myPostAdapter);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));

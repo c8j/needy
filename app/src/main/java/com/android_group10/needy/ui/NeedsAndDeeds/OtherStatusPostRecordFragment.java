@@ -180,7 +180,6 @@ public class OtherStatusPostRecordFragment extends Fragment {
                     .setView(yourCustomView)
                     .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            Log.e("dialog", etName.getText().toString());
                             Report complaint = new Report(key, currentUser, blamedUserUID, etName.getText().toString());
                             DAO saveDB = new DAO();
                             saveDB.writeReport(complaint);
