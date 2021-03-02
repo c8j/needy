@@ -1,5 +1,6 @@
 package com.android_group10.needy.ui.messaging
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -11,6 +12,8 @@ import com.android_group10.needy.R
 import com.android_group10.needy.databinding.ItemMessagingRequestBinding
 import com.android_group10.needy.messaging.data.RequestQueryItem
 import com.android_group10.needy.messaging.util.RequestQueryItemDiffCallback
+import com.android_group10.needy.util.FirebaseUtil
+import com.bumptech.glide.Glide
 
 class RequestsFragmentAdapter :
     ListAdapter<RequestQueryItem, RequestsFragmentAdapter.RequestsViewHolder>(object :
@@ -57,8 +60,27 @@ class RequestsFragmentAdapter :
 
         fun bind(queryItem: RequestQueryItem) {
             binding.apply {
-                tvAssociatedPostTitle.text = queryItem.item.associatedPostUID
-                tvContactName.text = queryItem.item.senderUID
+                FirebaseUtil.getPostAndUser(
+                    queryItem.item.associatedPostUID,
+                    queryItem.item.senderUID
+                ) {
+                    this.tvAssociatedPostTitle.text = it.first.description
+                    val fullName = "${it.second.firstName} ${it.second.lastName}"
+                    this.tvContactName.text = fullName
+                }
+
+                FirebaseUtil.getUserPictureURI(queryItem.item.senderUID) { uri, exception ->
+                    exception?.let {
+                        Log.e(
+                            "RECYCLERVIEW_REQUESTS",
+                            "Failed to get profile picture from database",
+                            it
+                        )
+                    }
+
+                    Glide.with(this.root).load(uri).centerCrop()
+                        .placeholder(R.drawable.anonymous_mask).into(this.ivConversationAvatar)
+                }
             }
         }
     }

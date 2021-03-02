@@ -4,15 +4,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.android_group10.needy.Post
 import com.android_group10.needy.messaging.data.RequestQueryItem
+import com.android_group10.needy.messaging.util.liveData.FirestoreRequestQueryLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.function.BiConsumer
-import java.util.function.Consumer
-import java.util.function.DoubleConsumer
 
 object FirestoreUtil {
-    private const val FIRESTORE_LOG_TAG = "FIRESTORE"
+    const val FIRESTORE_LOG_TAG = "FIRESTORE"
     private const val REQUESTS_COLLECTION = "messaging.requests"
 
     private val firestoreInstance: FirebaseFirestore by lazy {
@@ -32,7 +31,7 @@ object FirestoreUtil {
 
         val requestQuery = postAuthorMessagingDataRequestsRef
             .whereEqualTo("associatedPostUID", post.postUID)
-            .whereEqualTo("senderUID", FirebaseAuth.getInstance().currentUser!!)
+            .whereEqualTo("senderUID", FirebaseAuth.getInstance().currentUser!!.uid)
 
         requestQuery.get().addOnSuccessListener { querySnapshot ->
             if (querySnapshot.isEmpty) {
@@ -40,7 +39,7 @@ object FirestoreUtil {
                     .add(
                         mutableMapOf(
                             "associatedPostUID" to post.postUID,
-                            "senderUID" to FirebaseAuth.getInstance().currentUser!!
+                            "senderUID" to FirebaseAuth.getInstance().currentUser!!.uid
                         )
                     ).addOnSuccessListener {
                         completionMessage = "Request successfully added"

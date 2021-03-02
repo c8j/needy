@@ -1,8 +1,10 @@
-package com.android_group10.needy.messaging.util
+package com.android_group10.needy.messaging.util.liveData
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.android_group10.needy.messaging.data.Request
 import com.android_group10.needy.messaging.data.RequestQueryItem
+import com.android_group10.needy.messaging.util.FirestoreUtil
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObject
 
@@ -22,6 +24,10 @@ class FirestoreRequestQueryLiveData(private val query: Query) : LiveData<List<Re
     }
 
     override fun onEvent(value: QuerySnapshot?, error: FirebaseFirestoreException?) {
+        error?.let {
+            Log.e(FirestoreUtil.FIRESTORE_LOG_TAG, "Error occurred on requests listener", error)
+        }
+
         value?.documents?.let { documents ->
             val requestQueryItemList = mutableListOf<RequestQueryItem>()
             documents.forEach {
