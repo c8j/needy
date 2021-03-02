@@ -109,13 +109,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.fragment_container, new InNeedFragment());
         fragmentTransaction.commit();
 
+        ProfilePictureManager ppManager = new ProfilePictureManager();
+        ppManager.displayProfilePic(this, profileImage);
 
-        // Handle Image on on the Header.
+        // Handle Image on on the Header.-X--Editing image only to be done in profile fragment to avoid confusion.
+        /*
         profileImage.setOnClickListener(v -> {
             drawer.closeDrawer(GravityCompat.START);
             showPopup(profileImage);
             drawer.openDrawer(GravityCompat.START);
         });
+
+         */
     }
 
     @Override
