@@ -3,6 +3,7 @@ package com.android_group10.needy.ui.LogInAndRegistration;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -59,6 +60,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     private CallbackManager callbackManager;
     public String id, email, firstName, lastName;
     private String facebookUserId;
+    private long pressedTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +69,6 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         getSupportActionBar().setTitle("Log In");
         initializeItems();
         keepLogin();
-
 
     }
 
@@ -92,6 +93,12 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         logInEmail.setOnClickListener(this);
         rememberMeCheckBox.setOnClickListener(this);
         facebookButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
+        super.onBackPressed();
     }
 
     @Override

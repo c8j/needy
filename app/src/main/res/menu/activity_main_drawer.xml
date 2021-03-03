@@ -34,7 +34,6 @@
                     android:icon="@drawable/ic_profile"
                     android:title="@string/profile" />
 
-
             </group>
         </menu>
 

@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     tools:openDrawer="start">
 
     <include
@@ -23,7 +23,7 @@
         app:arc_cropDirection="cropInside"
         app:arc_width="150dp"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" >
+        app:menu="@menu/activity_main_drawer">
 
     </com.rom4ek.arcnavigationview.ArcNavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>

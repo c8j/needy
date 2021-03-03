@@ -105,10 +105,11 @@ public class Register extends AppCompatActivity {
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(user).addOnCompleteListener(task1 -> {
                                 if (task1.isSuccessful()) {
-                                    Toast.makeText(Register.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
+                                    createToast("User has been registered successfully");
                                     startActivity(new Intent(this, LogIn.class));
                                 } else {
-                                    Toast.makeText(Register.this, "Failed to register! Try again", Toast.LENGTH_LONG).show();
+
+                                    createToast("Failed to register! Try again");
 
                                 }
                             });
@@ -116,20 +117,24 @@ public class Register extends AppCompatActivity {
                             try {
                                 throw task.getException();
                             } catch (FirebaseAuthInvalidCredentialsException malformedEmail) {
-                                Toast.makeText(Register.this, "Wrong Password! Try again", Toast.LENGTH_LONG).show();
+                                createToast("Wrong Password! Try again");
 
                             } catch (FirebaseAuthUserCollisionException existEmail) {
 
-                                Toast.makeText(Register.this, "This Email already exist", Toast.LENGTH_LONG).show();
+                                createToast("This Email already exist");
                                 startActivity(new Intent(this, LogIn.class));
 
                             } catch (Exception e) {
+                                createToast("Failed to register! Try again");
 
-                                Toast.makeText(Register.this, "Failed to register! Try again", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
         }
+    }
+
+    public void createToast(String text) {
+        Toast.makeText(Register.this, text, Toast.LENGTH_LONG).show();
     }
 
     public void errorMessage(EditText editText, String text) {
