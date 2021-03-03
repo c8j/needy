@@ -22,66 +22,23 @@ import java.util.List;
 import java.util.Set;
 
 public class InNeedViewModel extends ViewModel {
-  /*  private final MutableLiveData<Set<Filter>> filters = new MutableLiveData<>();
+    private MutableLiveData<ArrayList<Post>> _list;
+    private final MutableLiveData<String> _defaultText;
 
-    private final LiveData<List<Post>> dataList;
-  //  private final LiveData<List<Post>> filteredDataList;
+    public InNeedViewModel() {
+        _list = new MutableLiveData<>();
+        _list.setValue(new ArrayList<>());
 
-    public LiveData<List<Post>> getFilteredDataList(){
-   //     return filteredDataList;
-        return dataList;
+        _defaultText = new MutableLiveData<>();
+        _defaultText.setValue("There are no posts to show");
+
     }
 
-    public LiveData<Set<Filter>> getFilters(){
-        return filters;
+    public MutableLiveData<ArrayList<Post>> getList() {
+        return _list;
     }
 
-    public void addFilter(Filter filter){};
-
-    public void removeFilter(Filter filter){}
-
-    public InNeedViewModel(LiveData<List<Post>> dataList) {
-       // dataList = new LiveData<List<Post>>(generateData());
-
-       // mText.setValue("This is in need fragment");
-        this.dataList = dataList;
-    }*/
-
- /*   public ArrayList<Post> getData() {
-        return generateData();
+    public LiveData<String> getText() {
+        return _defaultText;
     }
-
-
-}
-
- class RecyclerViewFragment extends Fragment {
-    private InNeedViewModel viewModel;
-    @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState){
-        super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider(requireActivity()).get(InNeedViewModel.class);
-        viewModel.getFilteredDataList().observe(getViewLifecycleOwner(), list -> {
-            //update the list UI
-        });
-    }
-}
-
- class FilterFragment extends Fragment {
-    private InNeedViewModel viewModel;
-
-    @Override
-    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
-        viewModel = new ViewModelProvider(requireActivity()).get(InNeedViewModel.class);
-        viewModel.getFilters().observe(getViewLifecycleOwner(), set -> {
-            // Update the selected filters UI
-        });
-    }
-
-    public void onFilterSelected(Filter filter) {
-        viewModel.addFilter(filter);
-    }
-
-    public void onFilterDeselected(Filter filter) {
-        viewModel.removeFilter(filter);
-    }*/
 }
