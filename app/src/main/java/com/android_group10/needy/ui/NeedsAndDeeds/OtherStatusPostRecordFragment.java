@@ -246,8 +246,9 @@ public class OtherStatusPostRecordFragment extends Fragment {
 
                     AlertDialog.Builder dialog2 = new AlertDialog.Builder(getContext());
                     dialog2.setTitle("Rate");
-                    dialog2.setView(rateView);
-                    String[] items = {"1","2","3","4","5"};
+                    rateView.setBackgroundResource(R.drawable.dialog_background);
+                    dialog2.setView(rateView).create();
+                    String[] items = {"Horrible experience!","Bad","Average","Good","It was a pleasure!"};
                    // int checkedItem = 4;
 
                     dialog2.setSingleChoiceItems(items, 5, new DialogInterface.OnClickListener() {
@@ -274,25 +275,28 @@ public class OtherStatusPostRecordFragment extends Fragment {
                             hiddenText.setText(String.valueOf(usersChoice));
                         }
                     });
+
                     dialog2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                    if(authorUID.equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByVolunteer)) {
-                                        Toast.makeText(getContext(), "you are author and status 3 or 5", Toast.LENGTH_SHORT).show();
-                                        postStatusUpdate(currentRef, post, statusRatedByAuthor);
-                                        rate.setVisibility(View.INVISIBLE);
-                                    } else if (currentPositioned.getVolunteer().equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByAuthor)){
-                                        Toast.makeText(getContext(), "you are volunteer and status 3 or 4", Toast.LENGTH_SHORT).show();
-                                        postStatusUpdate(currentRef, post, statusRatedByVolunteer);
-                                        rate.setVisibility(View.INVISIBLE);
-                                    }
-                                    UserRating rating = new UserRating(ratedUserUID, ratingType, Integer.parseInt(hiddenText.getText().toString()));
-                                    DAO saveDB = new DAO();
-                                    saveDB.writeRating(rating);
+                                   if (hiddenText.length()!=0) {
+                                        if (authorUID.equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByVolunteer)) {
+                                            postStatusUpdate(currentRef, post, statusRatedByAuthor);
+                                            rate.setVisibility(View.INVISIBLE);
+                                        } else if (currentPositioned.getVolunteer().equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByAuthor)) {
+                                            postStatusUpdate(currentRef, post, statusRatedByVolunteer);
+                                            rate.setVisibility(View.INVISIBLE);
+                                        }
+                                        UserRating rating = new UserRating(ratedUserUID, ratingType, Integer.parseInt(hiddenText.getText().toString()));
+                                        DAO saveDB = new DAO();
+                                        saveDB.writeRating(rating);
+                                    } else {
+                                       Toast.makeText(getContext(), "You must select one option!", Toast.LENGTH_SHORT).show();
+                                       Log.e("no value", "no value / option");
+                                   }
                                 }
                             });
                     dialog2.setNegativeButton("Cancel", null).create();
                     dialog2.show();
-                 //   Toast.makeText(getContext(), "open a window to select rate and submit", Toast.LENGTH_SHORT).show();
                 });
             }
         }

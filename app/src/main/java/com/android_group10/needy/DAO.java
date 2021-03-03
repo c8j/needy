@@ -1,10 +1,24 @@
 package com.android_group10.needy;
 
 
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class DAO {
@@ -42,11 +56,40 @@ public class DAO {
     }
 
     public void writeRating(UserRating rating){
-        String key = db.getReference().child("Ratings").child(rating.getUserUID()).child(String.valueOf(rating.getRatingType())).push().getKey();
+        DatabaseReference currentUserRatingRef = db.getReference().child("Ratings").child(rating.getUserUID()).child(String.valueOf(rating.getRatingType()));
+        String key = currentUserRatingRef.push().getKey();
         Map<String, Object> ratingValue = rating.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
-      //  childUpdates.put("/Reports/" + rating.getBlamedUserUID() + "/" + key, postValues);
+        childUpdates.put("/Ratings/" + rating.getUserUID() + "/" + rating.getRatingType() + "/" + key, ratingValue);
+        Log.e("rating recorded", "record saved " + rating);
         db.getReference().updateChildren(childUpdates);
+
+     //   DatabaseReference currentPostRef = db.getReference().child("Ratings").child(rating.getUserUID()).child(String.valueOf(rating.getRatingType()));
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+              //  int[] array;
+                if (snapshot != null && snapshot.hasChildren()){
+                        int count = 1;
+                        int sum = 0;
+                        Log.e("inside datasnapshot", "IN");
+                        for (DataSnapshot child : snapshot.getChildren()) {
+                            sum = sum + child.getValue(UserRating.class).getRatingValue();
+                            count++;
+                        }
+                        Log.e("count", String.valueOf(sum));
+
+                } else  {
+                    Log.e("outside datasnapshot", "NOT IN");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        };
+        currentUserRatingRef.addValueEventListener(postListener);
     }
 }

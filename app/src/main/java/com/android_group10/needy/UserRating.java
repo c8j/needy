@@ -18,6 +18,14 @@ public class UserRating {
         this.ratingValue = ratingValue; // values 1-5
     }
 
+    public UserRating(int ratingValue){
+        this.ratingValue = ratingValue; // values 1-5
+    }
+
+    public UserRating(){
+
+    }
+
     public String getUserUID() {
         return userUID;
     }
@@ -40,6 +48,15 @@ public class UserRating {
 
     public void setRatingValue(int ratingValue) {
         this.ratingValue = ratingValue;
+    }
+
+    @Override
+    public String toString() {
+        return "UserRating{" +
+                "userUID='" + userUID + '\'' +
+                ", ratingType=" + ratingType +
+                ", ratingValue=" + ratingValue +
+                '}';
     }
 
     @Exclude
