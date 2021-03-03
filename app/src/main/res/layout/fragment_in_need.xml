@@ -9,7 +9,7 @@
     tools:context=".ui.InNeed.InNeedFragment">
 
     <TextView
-        android:id="@+id/text_in_need"
+        android:id="@+id/text_default2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

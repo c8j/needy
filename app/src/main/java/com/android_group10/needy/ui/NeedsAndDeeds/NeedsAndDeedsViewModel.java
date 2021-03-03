@@ -9,8 +9,7 @@ import com.android_group10.needy.Post;
 import java.util.ArrayList;
 
 public class NeedsAndDeedsViewModel extends ViewModel {
-
-    private MutableLiveData<ArrayList<Post>> _list;
+    private final MutableLiveData<ArrayList<Post>> _list;
     private final MutableLiveData<String> _defaultText;
 
     public NeedsAndDeedsViewModel() {
@@ -18,7 +17,7 @@ public class NeedsAndDeedsViewModel extends ViewModel {
         _list.setValue(new ArrayList<>());
 
         _defaultText = new MutableLiveData<>();
-        _defaultText.setValue("There are no posts to view");
+        _defaultText.setValue("There are no posts to show");
 
     }
 

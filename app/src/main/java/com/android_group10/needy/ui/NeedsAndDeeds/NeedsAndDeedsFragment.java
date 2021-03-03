@@ -47,35 +47,35 @@ public class NeedsAndDeedsFragment extends Fragment {
         int statusRatedByVolunteer = 5;
         int statusRatedByAuthor = 4;
 
-        ValueEventListener listListener = new ValueEventListener(){
+        ValueEventListener listListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if (snapshot.hasChildren()) {
                     int count = 0;
-
                     if (snapshot.getChildrenCount() != count) {
                         dataList2.clear();
                         for (DataSnapshot child : snapshot.getChildren()) {
                             Post object = child.getValue(Post.class);
                             assert object != null;
-                            if ((object.getPostStatus() > statusNew) && (object.getPostStatus() < statusGone)){
+                            if ((object.getPostStatus() > statusNew) && (object.getPostStatus() < statusGone)) {
                                 object.setAuthorUID(String.valueOf(child.child("author").getValue()));
 
-                                if(object.getAuthorUID().equals(firebaseUser)) {
-                                    if (object.getPostStatus() == statusRatedByVolunteer || object.getPostStatus() <= statusComplete)
-                                    {
-                                       dataList2.add(object);
+                                if (object.getAuthorUID().equals(firebaseUser)) {
+                                    if (object.getPostStatus() == statusRatedByVolunteer || object.getPostStatus() <= statusComplete) {
+                                        dataList2.add(object);
                                     }
                                 } else if (object.getVolunteer().equals(firebaseUser)) {
-                                    if (object.getPostStatus() <= statusRatedByAuthor)
-                                    {
+                                    if (object.getPostStatus() <= statusRatedByAuthor) {
                                         dataList2.add(object);
                                     }
                                 }
                             }
                             count++;
-                            myPostAdapter.notifyDataSetChanged();
+                        }
+                        myPostAdapter.notifyDataSetChanged();
+                        if (dataList2.size() != 0) {
+                            textView.setText("");
                         }
                     }
 
@@ -98,7 +98,6 @@ public class NeedsAndDeedsFragment extends Fragment {
 
         final RecyclerView recyclerView = root.findViewById(R.id.postRecyclerView_needs_and_deeds);
         textView = root.findViewById(R.id.text_default);
-        addText();
 
         needsAndDeedsViewModel.getList().observe(getViewLifecycleOwner(), new Observer<ArrayList>() {
             @Override
@@ -118,21 +117,11 @@ public class NeedsAndDeedsFragment extends Fragment {
                 recyclerView.setAdapter(myPostAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-                addText();
+                if (dataList2.size() == 0) {
+                    textView.setText(needsAndDeedsViewModel.getText().getValue());
+                } else textView.setText("");
             }
         });
         return root;
-    }
-
-    private void addText(){
-        needsAndDeedsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                if (dataList2.size() == 0) {
-                    textView.setText(needsAndDeedsViewModel.getText().getValue());
-                }
-            }
-        });
     }
 }
