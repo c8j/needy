@@ -1,5 +1,6 @@
 package com.android_group10.needy;
 
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
@@ -37,6 +38,15 @@ public class DAO {
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/Reports/" + report.getBlamedUserUID() + "/" + key, postValues);
+        db.getReference().updateChildren(childUpdates);
+    }
+
+    public void writeRating(UserRating rating){
+        String key = db.getReference().child("Ratings").child(rating.getUserUID()).child(String.valueOf(rating.getRatingType())).push().getKey();
+        Map<String, Object> ratingValue = rating.toMap();
+
+        Map<String, Object> childUpdates = new HashMap<>();
+      //  childUpdates.put("/Reports/" + rating.getBlamedUserUID() + "/" + key, postValues);
         db.getReference().updateChildren(childUpdates);
     }
 }

@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +22,7 @@ import com.android_group10.needy.DAO;
 import com.android_group10.needy.Post;
 import com.android_group10.needy.R;
 import com.android_group10.needy.Report;
+import com.android_group10.needy.UserRating;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -199,6 +202,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
     }
 
     private void listenerCode(DatabaseReference currentRef, DataSnapshot snapshot) {
+        int optionValue = 5;
         Post post = snapshot.getValue(Post.class);
         if (post != null) {
 
@@ -218,22 +222,80 @@ public class OtherStatusPostRecordFragment extends Fragment {
                 contact.setVisibility(View.INVISIBLE);
 
                 rate.setOnClickListener(v -> {
-                    Toast.makeText(getContext(), "open a window to select rate and submit", Toast.LENGTH_SHORT).show();
-                    if(authorUID.equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByVolunteer)) {
-                        Toast.makeText(getContext(), "you are author and status 3 or 5", Toast.LENGTH_SHORT).show();
-                        postStatusUpdate(currentRef, post, statusRatedByAuthor);
-                        rate.setVisibility(View.INVISIBLE);
-                    } else if (currentPositioned.getVolunteer().equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByAuthor)){
-                        Toast.makeText(getContext(), "you are volunteer and status 3 or 4", Toast.LENGTH_SHORT).show();
-                        postStatusUpdate(currentRef, post, statusRatedByVolunteer);
-                        rate.setVisibility(View.INVISIBLE);
+                    //view dialog - choose option and confirm. send value to DB and add to Ratings. Get all records for this user of this type and calc average. update value in User table
+                    String ratedUserUID;
+                    int ratingType;
+                    if (authorUID.equals(currentUser)){
+                        ratedUserUID = currentPositioned.getVolunteer();
+                        ratingType = 2;
+                    } else{
+                        ratedUserUID = currentPositioned.getAuthorUID();
+                        ratingType = 1;
                     }
+
+                    LayoutInflater dialogInflater = LayoutInflater.from(getContext());
+                    final View rateView = dialogInflater.inflate(R.layout.rate_user, null);
+                    final TextView hiddenText = rateView.findViewById(R.id.hidden_option);
+/*
+                    final RadioButton btn1 = (RadioButton) rateView.findViewById(R.id.btn_1);
+                    final RadioButton btn2 = (RadioButton) rateView.findViewById(R.id.btn_2);
+                    final RadioButton btn3 = (RadioButton) rateView.findViewById(R.id.btn_3);
+                    final RadioButton btn4 = (RadioButton) rateView.findViewById(R.id.btn_4);
+                    final RadioButton btn5 = (RadioButton) rateView.findViewById(R.id.btn_5);
+                    RadioGroup btn_grp = (RadioGroup) rateView.findViewById(R.id.btn_grp);*/
+
+                    AlertDialog.Builder dialog2 = new AlertDialog.Builder(getContext());
+                    dialog2.setTitle("Rate");
+                    dialog2.setView(rateView);
+                    String[] items = {"1","2","3","4","5"};
+                   // int checkedItem = 4;
+
+                    dialog2.setSingleChoiceItems(items, 5, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int option) {
+                            int usersChoice = 5;
+                            switch (option) {
+                                case 0:
+                                    usersChoice = 1;
+                                    break;
+                                case 1:
+                                    usersChoice = 2;
+                                    break;
+                                case 2:
+                                    usersChoice = 3;
+                                    break;
+                                case 3:
+                                    usersChoice = 4;
+                                    break;
+                                case 4:
+                                    usersChoice = 5;
+                                    break;
+                            }
+                            hiddenText.setText(String.valueOf(usersChoice));
+                        }
+                    });
+                    dialog2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+                                    if(authorUID.equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByVolunteer)) {
+                                        Toast.makeText(getContext(), "you are author and status 3 or 5", Toast.LENGTH_SHORT).show();
+                                        postStatusUpdate(currentRef, post, statusRatedByAuthor);
+                                        rate.setVisibility(View.INVISIBLE);
+                                    } else if (currentPositioned.getVolunteer().equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByAuthor)){
+                                        Toast.makeText(getContext(), "you are volunteer and status 3 or 4", Toast.LENGTH_SHORT).show();
+                                        postStatusUpdate(currentRef, post, statusRatedByVolunteer);
+                                        rate.setVisibility(View.INVISIBLE);
+                                    }
+                                    UserRating rating = new UserRating(ratedUserUID, ratingType, Integer.parseInt(hiddenText.getText().toString()));
+                                    DAO saveDB = new DAO();
+                                    saveDB.writeRating(rating);
+                                }
+                            });
+                    dialog2.setNegativeButton("Cancel", null).create();
+                    dialog2.show();
+                 //   Toast.makeText(getContext(), "open a window to select rate and submit", Toast.LENGTH_SHORT).show();
                 });
             }
-
-
         }
-
     }
 
     private void postStatusUpdate(DatabaseReference currentRef, Post post, int newStatus){
@@ -249,4 +311,6 @@ public class OtherStatusPostRecordFragment extends Fragment {
         }
 
     }
+
+
 }
