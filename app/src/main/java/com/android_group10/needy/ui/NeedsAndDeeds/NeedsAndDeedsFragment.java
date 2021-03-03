@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -13,14 +15,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android_group10.needy.Post;
 import com.android_group10.needy.PostAdapter;
 import com.android_group10.needy.R;
-import com.android_group10.needy.ui.InNeed.OpenPostRecordFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,6 +36,7 @@ public class NeedsAndDeedsFragment extends Fragment {
     private PostAdapter myPostAdapter;
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
     private final String firebaseUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private TextView textView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,9 +61,7 @@ public class NeedsAndDeedsFragment extends Fragment {
                             assert object != null;
                             if ((object.getPostStatus() > statusNew) && (object.getPostStatus() < statusGone)){
                                 object.setAuthorUID(String.valueOf(child.child("author").getValue()));
-                              /*  if(object.getAuthorUID().equals(firebaseUser) || object.getVolunteer().equals(firebaseUser)) {
-                                    dataList2.add(object);
-                                }*/
+
                                 if(object.getAuthorUID().equals(firebaseUser)) {
                                     if (object.getPostStatus() == statusRatedByVolunteer || object.getPostStatus() <= statusComplete)
                                     {
@@ -98,6 +97,8 @@ public class NeedsAndDeedsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_needs_and_deeds, container, false);
 
         final RecyclerView recyclerView = root.findViewById(R.id.postRecyclerView_needs_and_deeds);
+        textView = root.findViewById(R.id.text_default);
+        addText();
 
         needsAndDeedsViewModel.getList().observe(getViewLifecycleOwner(), new Observer<ArrayList>() {
             @Override
@@ -117,8 +118,21 @@ public class NeedsAndDeedsFragment extends Fragment {
                 recyclerView.setAdapter(myPostAdapter);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+                addText();
             }
         });
         return root;
+    }
+
+    private void addText(){
+        needsAndDeedsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                if (dataList2.size() == 0) {
+                    textView.setText(needsAndDeedsViewModel.getText().getValue());
+                }
+            }
+        });
     }
 }
