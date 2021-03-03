@@ -40,6 +40,12 @@ public class NeedsAndDeedsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int statusNew = 1;
+        int statusGone = 100;
+        int statusComplete = 3;
+        int statusRatedByVolunteer = 5;
+        int statusRatedByAuthor = 4;
+
         ValueEventListener listListener = new ValueEventListener(){
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -52,10 +58,21 @@ public class NeedsAndDeedsFragment extends Fragment {
                         for (DataSnapshot child : snapshot.getChildren()) {
                             Post object = child.getValue(Post.class);
                             assert object != null;
-                            if (object.getPostStatus() != 1) {
+                            if ((object.getPostStatus() > statusNew) && (object.getPostStatus() < statusGone)){
                                 object.setAuthorUID(String.valueOf(child.child("author").getValue()));
-                                if(object.getAuthorUID().equals(firebaseUser) || object.getVolunteer().equals(firebaseUser)) {
+                              /*  if(object.getAuthorUID().equals(firebaseUser) || object.getVolunteer().equals(firebaseUser)) {
                                     dataList2.add(object);
+                                }*/
+                                if(object.getAuthorUID().equals(firebaseUser)) {
+                                    if (object.getPostStatus() == statusRatedByVolunteer || object.getPostStatus() <= statusComplete)
+                                    {
+                                       dataList2.add(object);
+                                    }
+                                } else if (object.getVolunteer().equals(firebaseUser)) {
+                                    if (object.getPostStatus() <= statusRatedByAuthor)
+                                    {
+                                        dataList2.add(object);
+                                    }
                                 }
                             }
                             count++;

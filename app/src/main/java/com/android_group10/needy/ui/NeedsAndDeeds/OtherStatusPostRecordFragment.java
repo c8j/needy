@@ -53,6 +53,12 @@ public class OtherStatusPostRecordFragment extends Fragment {
     private final String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String authorUID;
 
+    int statusInProgress = 2;
+    int statusComplete = 3;
+    int statusRatedByAuthor = 4;
+    int statusRatedByVolunteer = 5;
+    int statusGone = 100;
+
     public OtherStatusPostRecordFragment(Post currentPositioned) {
         this.currentPositioned = currentPositioned;
     }
@@ -99,8 +105,8 @@ public class OtherStatusPostRecordFragment extends Fragment {
             authorPhone.setVisibility(View.INVISIBLE);
             textPhone.setVisibility(View.INVISIBLE);
             rate.setText(R.string.button_rate2);
-            if (currentPositioned.getPostStatus() >= 3) {
-                if (currentPositioned.getPostStatus() == 5 || currentPositioned.getPostStatus() == 3)
+            if (currentPositioned.getPostStatus() >= statusComplete) {
+                if (currentPositioned.getPostStatus() == statusRatedByVolunteer || currentPositioned.getPostStatus() == statusComplete)
                 {
                     rate.setVisibility(View.VISIBLE);
                 } else {
@@ -114,8 +120,8 @@ public class OtherStatusPostRecordFragment extends Fragment {
             authorPhone.setVisibility(View.VISIBLE);
             textPhone.setVisibility(View.VISIBLE);
             rate.setText(R.string.button_rate1);
-            if (currentPositioned.getPostStatus() >= 3) {
-                if (currentPositioned.getPostStatus() == 4 || currentPositioned.getPostStatus() == 3)
+            if (currentPositioned.getPostStatus() >= statusComplete) {
+                if (currentPositioned.getPostStatus() == statusRatedByAuthor|| currentPositioned.getPostStatus() == statusComplete)
                 {
                     rate.setVisibility(View.VISIBLE);
                 } else {
@@ -196,12 +202,12 @@ public class OtherStatusPostRecordFragment extends Fragment {
         Post post = snapshot.getValue(Post.class);
         if (post != null) {
 
-            if(currentPositioned.getPostStatus() == 2){
+            if(currentPositioned.getPostStatus() == statusInProgress){
                 completePost.setVisibility(View.VISIBLE);
                 rate.setVisibility(View.INVISIBLE);
 
                 completePost.setOnClickListener(v -> {
-                    postStatusUpdate(currentRef, post, 3);
+                    postStatusUpdate(currentRef, post, statusComplete);
                     completePost.setVisibility(View.INVISIBLE);
                     contact.setVisibility(View.VISIBLE);
                     rate.setVisibility(View.VISIBLE);
@@ -213,13 +219,13 @@ public class OtherStatusPostRecordFragment extends Fragment {
 
                 rate.setOnClickListener(v -> {
                     Toast.makeText(getContext(), "open a window to select rate and submit", Toast.LENGTH_SHORT).show();
-                    if(authorUID.equals(currentUser) && (post.getPostStatus() == 3 || post.getPostStatus() == 5)) {
+                    if(authorUID.equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByVolunteer)) {
                         Toast.makeText(getContext(), "you are author and status 3 or 5", Toast.LENGTH_SHORT).show();
-                        postStatusUpdate(currentRef, post, 4);
+                        postStatusUpdate(currentRef, post, statusRatedByAuthor);
                         rate.setVisibility(View.INVISIBLE);
-                    } else if (currentPositioned.getVolunteer().equals(currentUser) && (post.getPostStatus() == 3 || post.getPostStatus() == 4)){
+                    } else if (currentPositioned.getVolunteer().equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByAuthor)){
                         Toast.makeText(getContext(), "you are volunteer and status 3 or 4", Toast.LENGTH_SHORT).show();
-                        postStatusUpdate(currentRef, post, 5);
+                        postStatusUpdate(currentRef, post, statusRatedByVolunteer);
                         rate.setVisibility(View.INVISIBLE);
                     }
                 });
@@ -231,9 +237,16 @@ public class OtherStatusPostRecordFragment extends Fragment {
     }
 
     private void postStatusUpdate(DatabaseReference currentRef, Post post, int newStatus){
-        currentPositioned.setPostStatus(newStatus);
         assert post != null;
-        post.setPostStatus(newStatus);
-        currentRef.child("postStatus").setValue(newStatus);
+        if ((post.getPostStatus() == statusRatedByAuthor && newStatus == statusRatedByVolunteer) || (post.getPostStatus() == statusRatedByVolunteer && newStatus == statusRatedByAuthor)) {
+            currentPositioned.setPostStatus(statusGone);
+            post.setPostStatus(statusGone);
+            currentRef.child("postStatus").setValue(statusGone);
+        } else {
+            currentPositioned.setPostStatus(newStatus);
+            post.setPostStatus(newStatus);
+            currentRef.child("postStatus").setValue(newStatus);
+        }
+
     }
 }
