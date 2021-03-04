@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +23,8 @@ import com.android_group10.needy.DAO;
 import com.android_group10.needy.Post;
 import com.android_group10.needy.R;
 import com.android_group10.needy.Report;
+import com.android_group10.needy.UserRating;
+import com.android_group10.needy.messaging.util.FirestoreUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,12 +57,14 @@ public class OtherStatusPostRecordFragment extends Fragment {
     private final FirebaseDatabase db = FirebaseDatabase.getInstance();
     private final String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String authorUID;
+    private Boolean volunteer;
 
-    int statusInProgress = 2;
-    int statusComplete = 3;
-    int statusRatedByAuthor = 4;
-    int statusRatedByVolunteer = 5;
-    int statusGone = 100;
+    private final int statusInProgress = 2;
+    private final int statusComplete = 3;
+    private final int statusRatedByAuthor = 4;
+    private final int statusRatedByVolunteer = 5;
+    private final int statusGone = 100;
+    private int selectedOption;
 
     public OtherStatusPostRecordFragment(Post currentPositioned) {
         this.currentPositioned = currentPositioned;
@@ -100,6 +107,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
 
 
         if (authorUID.equals(currentUser)){
+            volunteer = false;
             contact.setText(R.string.button_contact2);
             report.setText(R.string.button_report2);
             authorPhone.setVisibility(View.INVISIBLE);
@@ -115,6 +123,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
             }
 
         } else if (currentPositioned.getVolunteer().equals(currentUser)){
+            volunteer = true;
             contact.setText(R.string.button_contact);
             report.setText(R.string.button_report1);
             authorPhone.setVisibility(View.VISIBLE);
@@ -199,6 +208,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
     }
 
     private void listenerCode(DatabaseReference currentRef, DataSnapshot snapshot) {
+        int optionValue = 5;
         Post post = snapshot.getValue(Post.class);
         if (post != null) {
 
@@ -209,31 +219,100 @@ public class OtherStatusPostRecordFragment extends Fragment {
                 completePost.setOnClickListener(v -> {
                     postStatusUpdate(currentRef, post, statusComplete);
                     completePost.setVisibility(View.INVISIBLE);
-                    contact.setVisibility(View.VISIBLE);
+                    contact.setVisibility(View.INVISIBLE);
+                    //Close associated conversation
+                    FirestoreUtil.closeConversation(currentPositioned);
                     rate.setVisibility(View.VISIBLE);
                 });
-                contact.setOnClickListener(v -> Toast.makeText(getContext(), "send a message", Toast.LENGTH_SHORT).show());
+
+                contact.setOnClickListener(v ->
+                        //Create conversation request associated with this post
+                        FirestoreUtil.createRequest(
+                                currentPositioned,
+                                volunteer,
+                                (wasSuccessful, message) ->
+                                        Toast.makeText(getContext(),
+                                                message,
+                                                Toast.LENGTH_SHORT
+                                        ).show()
+                        )
+                );
             } else {
                 completePost.setVisibility(View.INVISIBLE);
                 contact.setVisibility(View.INVISIBLE);
 
                 rate.setOnClickListener(v -> {
-                    Toast.makeText(getContext(), "open a window to select rate and submit", Toast.LENGTH_SHORT).show();
-                    if(authorUID.equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByVolunteer)) {
-                        Toast.makeText(getContext(), "you are author and status 3 or 5", Toast.LENGTH_SHORT).show();
-                        postStatusUpdate(currentRef, post, statusRatedByAuthor);
-                        rate.setVisibility(View.INVISIBLE);
-                    } else if (currentPositioned.getVolunteer().equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByAuthor)){
-                        Toast.makeText(getContext(), "you are volunteer and status 3 or 4", Toast.LENGTH_SHORT).show();
-                        postStatusUpdate(currentRef, post, statusRatedByVolunteer);
-                        rate.setVisibility(View.INVISIBLE);
+                    String ratedUserUID;
+                    int ratingType;
+                    if (authorUID.equals(currentUser)){
+                        ratedUserUID = currentPositioned.getVolunteer();
+                        ratingType = 2;
+                    } else{
+                        ratedUserUID = currentPositioned.getAuthorUID();
+                        ratingType = 1;
                     }
+
+                    LayoutInflater dialogInflater = LayoutInflater.from(getContext());
+                    final View rateView = dialogInflater.inflate(R.layout.rate_user, null);
+
+                    AlertDialog.Builder dialog2 = new AlertDialog.Builder(getContext());
+                    dialog2.setTitle("Rate user");
+
+                    rateView.setBackgroundColor(getResources().getColor(R.color.light_yello_background));
+                    dialog2.setView(rateView).create();
+
+                    String[] items = getResources().getStringArray(R.array.radio);
+
+                    dialog2.setSingleChoiceItems(items, 5, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int option) {
+                            int usersChoice = 5;
+                            switch (option) {
+                                case 0:
+                                    usersChoice = 1;
+                                    break;
+                                case 1:
+                                    usersChoice = 2;
+                                    break;
+                                case 2:
+                                    usersChoice = 3;
+                                    break;
+                                case 3:
+                                    usersChoice = 4;
+                                    break;
+                                case 4:
+                                    usersChoice = 5;
+                                    break;
+                            }
+                            selectedOption = usersChoice;
+                        }
+                    });
+
+                    dialog2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int whichButton) {
+
+                                    if (selectedOption != 0) {
+                                        if (authorUID.equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByVolunteer)) {
+                                            postStatusUpdate(currentRef, post, statusRatedByAuthor);
+                                            rate.setVisibility(View.INVISIBLE);
+                                        } else if (currentPositioned.getVolunteer().equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByAuthor)) {
+                                            postStatusUpdate(currentRef, post, statusRatedByVolunteer);
+                                            rate.setVisibility(View.INVISIBLE);
+                                        }
+                                       UserRating rating = new UserRating(ratedUserUID, ratingType, selectedOption);
+                                        DAO saveDB = new DAO();
+                                        saveDB.writeRating(rating);
+                                    } else {
+                                       Toast.makeText(getContext(), "You must select one option!", Toast.LENGTH_SHORT).show();
+                                       Log.e("no value", "no value / option");
+                                   }
+                                }
+                            });
+                    dialog2.setNegativeButton("Cancel", null).create();
+                    dialog2.create().show();
                 });
             }
-
-
         }
-
     }
 
     private void postStatusUpdate(DatabaseReference currentRef, Post post, int newStatus){

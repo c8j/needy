@@ -52,7 +52,7 @@ import com.android_group10.needy.ui.LogInAndRegistration.LogIn;
 import com.android_group10.needy.ui.NeedsAndDeeds.NeedsAndDeedsFragment;
 
 import com.android_group10.needy.ui.Profile.ProfileFragment;
-import com.android_group10.needy.ui.ToDo.ToDoFragment;
+import com.android_group10.needy.ui.messaging.MessagingFragment;
 import com.bumptech.glide.Glide;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SQLiteDatabase database;
     private Uri selectedImageUri;
     private LocalDatabaseHelper localDatabaseHelper;
+    private ProfilePictureManager ppManager;
 
     private static final int SELECT_PICTURE = 100;
     private static final int CAMERA_REQUEST = 1;
@@ -122,6 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         localDatabaseHelper = new LocalDatabaseHelper(this);
+        ppManager = new ProfilePictureManager();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initialization();
@@ -155,11 +157,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fragmentTransaction.replace(R.id.fragment_container, new InNeedFragment());
         fragmentTransaction.commit();
 
-        ProfilePictureManager ppManager = new ProfilePictureManager();
-        ppManager.displayProfilePic(this, profileImage);
-
-        // Handle Image on on the Header.-X--Editing image only to be done in profile fragment to avoid confusion.
-
         profileImage.setOnClickListener(v -> {
             drawer.closeDrawer(GravityCompat.START);
             showPopup(profileImage);
@@ -168,7 +165,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //this.deleteDatabase("Images.db");
         loadImageFromDB();
-        
+
+        //ProfilePictureManager ppManager = new ProfilePictureManager();
+        //ppManager.displayProfilePic(this, profileImage);
+
     }
 
 
@@ -201,8 +201,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 changeFragment(new NeedsAndDeedsFragment());
                 floatingActionButton.hide();
                 break;
-            case R.id.nav_to_do:
-                changeFragment(new ToDoFragment());
+            case R.id.nav_conversations:
+                changeFragment(new MessagingFragment());
                 floatingActionButton.hide();
                 break;
             case R.id.nav_profile:
@@ -268,8 +268,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         header = navigationView.getHeaderView(0);
-        profileImage = (ImageView) header.findViewById(R.id.profileImageHeader);
-
+        profileImage = header.findViewById(R.id.profileImageHeader);
 
         phoneNumber_dialog = findViewById(R.id.Phone_dialog);
         city_dialog = findViewById(R.id.City_dialog);
@@ -288,7 +287,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users");
         userId = user.getUid();
-
 
         reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("SetTextI18n")
@@ -404,14 +402,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 selectedImageUri = data.getData();
                 profileImage.setImageURI(selectedImageUri);
                 saveImageInDB();
+                ppManager.uploadPicToRemote(selectedImageUri, userId, this);
 
             } else if (requestCode == CAMERA_REQUEST) {
                 Glide.with(this).load(imageFilePath).into(profileImage);
 
                 selectedImageUri = Uri.fromFile(photoFile);
                 saveImageInDB();
+                ppManager.uploadPicToRemote(selectedImageUri, userId, this);
             }
-
         }
         //This for sharing on facebook.
         callbackManager.onActivityResult(requestCode, resultCode, data);
@@ -443,7 +442,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (empty) {
             // if the table in the database is empty so will set back the default image
             profileImage.setImageResource(R.drawable.anonymous_mask);
-        } else {
+        }
+        else {
             new Thread((Runnable) () -> {
                 try {
                     localDatabaseHelper.open();
@@ -452,13 +452,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     // Show Image from DB in ImageView
                     profileImage.post((Runnable) () -> {
                         try {
-
                             profileImage.setImageBitmap(DbBitmapUtility.getImage(bytes));
                         } catch (Exception e) {
                             profileImage.setImageResource(R.drawable.anonymous_mask);
                         }
                         Toast.makeText(MainActivity.this, "Image loaded from database", Toast.LENGTH_SHORT).show();
                     });
+
                 } catch (Exception e) {
                     localDatabaseHelper.close();
                 }
@@ -474,7 +474,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             byte[] inputData = DbBitmapUtility.getBytes(iStream);
             localDatabaseHelper.insertImage(inputData, userId);
             localDatabaseHelper.close();
-            Log.d("insertImage", String.valueOf(LocalDatabaseHelper.newImage));
+            Log.d("Inserted image:", String.valueOf(LocalDatabaseHelper.newImage));
+            Log.i(TAG, "Inserted image");
         } catch (IOException ioe) {
             Log.e(TAG, "<saveImageInDB> Error : " + ioe.getLocalizedMessage());
             localDatabaseHelper.close();

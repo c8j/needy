@@ -101,12 +101,32 @@
 
     <ImageView
         android:id="@+id/profilePicimageView"
-        android:layout_width="117dp"
-        android:layout_height="117dp"
+        android:layout_width="127dp"
+        android:layout_height="127dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileLastNameTextView"
         app:srcCompat="@drawable/anonymous_mask" />
+
+    <ImageButton
+        android:id="@+id/editPicImageButton"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:background="@color/dark_grey_elements"
+        android:onClick="onEditImageClick"
+        android:src="@android:drawable/ic_menu_edit"
+        app:layout_constraintBottom_toBottomOf="@+id/profilePicimageView"
+        app:layout_constraintEnd_toEndOf="@+id/profilePicimageView" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="36dp"
+        app:layout_constraintStart_toStartOf="@+id/profilePicimageView"
+        app:layout_constraintTop_toTopOf="@+id/profilePicimageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

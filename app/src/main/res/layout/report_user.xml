@@ -3,10 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_yello_background"
+    android:backgroundTint="@color/light_yello_background"
     tools:context=".ui.InNeed.AddPostRecordFragment"
-    android:textColorHint="@color/dark_grey_elements"
-    android:textColor="@color/dark_grey_elements"
     android:padding="10dp">
 
     <TextView
@@ -15,8 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/warning"
-        android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements"
+        android:textColor="@color/dark_grey_elements"
         android:textSize="18sp"
         android:textStyle="bold"
         android:visibility="visible" />
@@ -29,9 +27,9 @@
         android:minHeight="19sp"
         android:layout_below="@id/text_incentive1"
         android:layout_marginBottom="5dp"
-        android:textColor="@color/dark_grey_elements"
-        android:textColorHint="@color/dark_grey_elements"
         android:hint="@string/hint_text"
+        android:textColorHint="@color/dark_grey_elements"
+        android:textColor="@color/dark_grey_elements"
         android:textSize="18sp" />
 
 </RelativeLayout>

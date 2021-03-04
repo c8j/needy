@@ -31,15 +31,29 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/author_rating2"
-        android:layout_width="match_parent"
+        android:id="@+id/text_author_rating"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/post_zip2"
+        android:layout_below="@id/author_name2"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="5dp"
         android:layout_toEndOf="@id/author_image2"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements"
+        android:text="@string/rating_text"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/author_rating2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/post_zip2"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toEndOf="@+id/text_author_rating"
+        android:textColor="@color/dark_grey_elements"
+        android:textColorHint="@color/dark_grey_elements"
+        android:textAlignment="viewStart"
         android:textSize="18sp" />
 
     <TextView
@@ -203,19 +217,14 @@
         android:id="@+id/report"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-
         android:layout_alignStart="@id/complete"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="false"
-
-        android:layout_marginLeft="0dp"
-
         android:layout_marginEnd="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/button_design"
-
         android:textColor="@color/dark_grey_elements"
         android:textSize="16sp"
         android:textStyle="bold" />

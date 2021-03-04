@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.android_group10.needy.Post;
 import com.android_group10.needy.R;
 import com.android_group10.needy.User;
+import com.android_group10.needy.messaging.util.FirestoreUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -130,19 +131,31 @@ public class OpenPostRecordFragment extends Fragment {
     private void listenerCode(DatabaseReference currentRef, DataSnapshot snapshot) {
         Post post = snapshot.getValue(Post.class);
         if (post != null) {
-            if (!currentPositioned.getAuthorUID().equals(firebaseAuth.getUid())) {
+            if (!currentPositioned.getAuthorUID().equals(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid())) {
                 acceptPost.setOnClickListener(v -> {
                     Toast.makeText(getContext(), "change Post status to 2, remove from the list of active", Toast.LENGTH_SHORT).show();
                     textPhone.setVisibility(View.VISIBLE);
                     authorPhone.setVisibility(View.VISIBLE);
                     currentPositioned.setPostStatus(2);
-                    assert post != null;
                     post.setPostStatus(2);
                     currentRef.child("postStatus").setValue(2);
                     currentRef.child("volunteer").setValue(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid());
                     acceptPost.setVisibility(View.INVISIBLE);
                 });
-                contactAuthor.setOnClickListener(v -> Toast.makeText(getContext(), "send request to chat to the author", Toast.LENGTH_SHORT).show());
+
+                //Create conversation request associated with this post
+                contactAuthor.setOnClickListener(v ->
+                        FirestoreUtil.createRequest(
+                                currentPositioned,
+                                true,
+                                (wasSuccessful, message) ->
+                                        Toast.makeText(
+                                                getContext(),
+                                                message,
+                                                Toast.LENGTH_SHORT
+                                        ).show()
+                        )
+                );
             } else {
                 acceptPost.setVisibility(View.INVISIBLE);
                 contactAuthor.setVisibility(View.INVISIBLE);

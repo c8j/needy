@@ -34,10 +34,11 @@
     <string name="button_rate2">rate volunteer</string>
     <string name="button_contact">contact author</string>
     <string name="phone_text">Contact phone#: </string>
-    <string name="description_text">I would like to get help with the following: </string>
+    <string name="rating_text">User rating: </string>
     <string name="incentive_text">Offered incentive: </string>
     <string name="service_type_text">Choose category: </string>
     <string name="address_text">Specify a ZIP code and a city if they differ from the ones in your Profile: </string>
+    <string name="description_text">I would like to get help with the following: </string>
     <string name="description_text1">What is it you need to get help with? </string>
     <string name="description_text2">Task: </string>
     <string name="motivation_text">If you would like to motivate a volunteer, how would you do it? </string>
@@ -60,7 +61,7 @@
     <string name="profile_firstName">First Name</string>
     <string name="profile_address">City</string>
     <string name="profile_zipcode">Zipcode</string>
-    <string name="profile_phone_number">Phone number</string>
+    <string name="profile_phone_number">Phone number: </string>
     <string name="profile_email">Email id</string>
     <string name="profile_edit">Edit profile</string>
 
@@ -77,5 +78,28 @@
     <string name="share_us_of_facebook">Share us of Facebook</string>
 
 
+    <string name="btn1">Horrible experience!</string>
+    <string name="btn2">Bad</string>
+    <string name="btn3">Average</string>
+    <string name="btn4">Good</string>
+    <string name="btn5">It was a pleasure!</string>
 
+    <string-array name="radio">
+        <item>@string/btn1</item>
+        <item>@string/btn2</item>
+        <item>@string/btn3</item>
+        <item>@string/btn4</item>
+        <item>@string/btn5</item>
+    </string-array>
+
+<!--messaging related-->
+    <string name="messaging_tab_label_requests">Requests</string>
+    <string name="messaging_tab_label_messages">Messages</string>
+    <string name="messaging_conversation_label_post">Post:</string>
+    <string name="messaging_request_imageDescription">Request menu</string>
+    <string name="messaging_request_accept">Accept request</string>
+    <string name="messaging_request_ignore">Ignore request</string>
+    <string name="messaging_chat_hint">Type message here…</string>
+    <string name="messaging_chat_send_description">Send message</string>
+    <string name="messaging_conversation_pronoun">You</string>
 </resources>

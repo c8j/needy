@@ -16,9 +16,9 @@
             android:title="Need And Deeds" />
 
         <item
-            android:id="@+id/nav_to_do"
+            android:id="@+id/nav_conversations"
             android:icon="@drawable/ic_to_do"
-            android:title="To Do" />
+            android:title="Conversations" />
 
 
     </group>
