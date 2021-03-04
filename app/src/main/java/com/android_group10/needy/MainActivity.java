@@ -54,7 +54,13 @@ import com.android_group10.needy.ui.NeedsAndDeeds.NeedsAndDeedsFragment;
 import com.android_group10.needy.ui.Profile.ProfileFragment;
 import com.android_group10.needy.ui.ToDo.ToDoFragment;
 import com.bumptech.glide.Glide;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
+import com.facebook.share.model.ShareHashtag;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareButton;
+import com.facebook.share.widget.ShareDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -97,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Bitmap bitmap;
     private long pressedTime;
 
-
     private String imageFilePath;
     File photoFile = null;
     private int five = 5;
@@ -107,7 +112,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private static final int SELECT_PICTURE = 100;
     private static final int CAMERA_REQUEST = 1;
+    private static final int SHARE_ON_FACEBOOK = 2;
+
     private static final String TAG = "StoreImageActivity";
+
+    ShareDialog shareDialog;
+    CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         initialization();
         updateHeader();
-
+        facebookSDKInitialize();
         setSupportActionBar(toolbar);
         floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(view -> Snackbar.make(view, "Click here to add a help request", Snackbar.LENGTH_LONG)
@@ -158,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         //this.deleteDatabase("Images.db");
         loadImageFromDB();
-
+        
     }
 
 
@@ -203,6 +213,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
                 startActivity(new Intent(this, LogIn.class));
+                break;
+            case R.id.share:
+                if (ShareDialog.canShow(ShareLinkContent.class)) {
+                    ShareOnFacebook shareOnFacebook = new ShareOnFacebook();
+                    shareDialog.show(shareOnFacebook.createShare());
+                }
                 break;
         }
         //This helps to close the navigation bar after choose an item from it.
@@ -275,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         reference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
@@ -295,6 +312,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    // About us Dialog
     public void about_us_dialog() {
         LayoutInflater layoutInflater = LayoutInflater.from(this);
         View view = layoutInflater.inflate(R.layout.about_us, null);
@@ -307,7 +325,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-
     }
 
     // Header Photo methods.
@@ -379,6 +396,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // will update the header and Local database.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
 
@@ -395,6 +413,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
         }
+        //This for sharing on facebook.
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+
     }
 
     public File createImageFile() throws IOException {
@@ -459,5 +480,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             localDatabaseHelper.close();
         }
 
+    }
+
+    protected void facebookSDKInitialize() {
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        shareDialog = new ShareDialog(this);
     }
 }

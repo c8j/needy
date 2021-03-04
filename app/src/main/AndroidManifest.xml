@@ -18,6 +18,8 @@
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
 
+
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.android_group10.needy.provider"
@@ -58,7 +60,9 @@
             android:label="@string/Needy"
             >
         </activity>
-
+        <provider android:authorities="com.facebook.app.FacebookContentProvider{138417034808418}"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

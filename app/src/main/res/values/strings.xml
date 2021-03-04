@@ -74,6 +74,8 @@
     <string name="profile_update">Update</string>
     <string name="edit_firstName">First Name: </string>
     <string name="edit_lastName">Last Name: </string>
+    <string name="share_us_of_facebook">Share us of Facebook</string>
+
 
 
 </resources>
