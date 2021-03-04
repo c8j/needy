@@ -55,8 +55,8 @@ public class InNeedFragment extends Fragment {
         ValueEventListener listListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                if (snapshot.hasChildren()) {
+                addData(snapshot, false);
+              /*  if (snapshot.hasChildren()) {
                     int count = 0;
                     if (snapshot.getChildrenCount() != count) {
                         dataList.clear();
@@ -74,7 +74,7 @@ public class InNeedFragment extends Fragment {
                             textView.setText("");
                         }
                     }
-                }
+                }*/
             }
 
             @Override
@@ -135,7 +135,6 @@ public class InNeedFragment extends Fragment {
                                        int position, long id) {
 
                 hiddenText.setText(String.valueOf(parent.getItemIdAtPosition(position)));
-                Log.v("item id", String.valueOf(parent.getItemIdAtPosition(position)));
             }
 
             @Override
@@ -159,42 +158,7 @@ public class InNeedFragment extends Fragment {
                     ValueEventListener listListener = new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                            if (snapshot.hasChildren()) {
-                                int count = 0;
-                                if (snapshot.getChildrenCount() != count) {
-                                    dataList.clear();
-                                    for (DataSnapshot child : snapshot.getChildren()) {
-                                        Post object = child.getValue(Post.class);
-                                        assert object != null;
-                                        if (object.getPostStatus() == 1) {
-                                            object.setAuthorUID(String.valueOf(child.child("author").getValue()));
-                                            if (!addressFilter.isEmpty()) {
-                                                if (object.getCity().contains(addressFilter) || object.getZipCode().equals(addressFilter)) {
-                                                    if (selectedServiceType > 0) {
-                                                        if (object.getServiceType() == (selectedServiceType - 1)) {
-                                                            dataList.add(object);
-                                                        }
-                                                    } else dataList.add(object);
-                                                }
-                                            } else if (selectedServiceType > 0) {
-                                                if (object.getServiceType() == (selectedServiceType - 1)) {
-                                                    if (!addressFilter.isEmpty()) {
-                                                        if (object.getCity().contains(addressFilter) || object.getZipCode().equals(addressFilter)) {
-                                                            dataList.add(object);
-                                                        }
-                                                    } else dataList.add(object);
-                                                }
-                                            }
-                                        }
-                                        count++;
-                                    }
-                                    myPostAdapter.notifyDataSetChanged();
-                                    if (dataList.size() != 0) {
-                                        textView.setText("");
-                                    }
-                                }
-                            }
+                            addData(snapshot, true);
                         }
 
                         @Override
@@ -206,6 +170,69 @@ public class InNeedFragment extends Fragment {
                 }
             }
         });
+        clearFilters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ValueEventListener listListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        filterText.setText("");
+                        spinner.setSelection(0);
+                        addData(snapshot, false);
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                };
+                db.getReference().child("Posts").addValueEventListener(listListener);
+            }
+        });
+    }
+
+    private void addData(DataSnapshot snapshot, boolean filters){
+        if (snapshot.hasChildren()) {
+            int count = 0;
+            if (snapshot.getChildrenCount() != count) {
+                dataList.clear();
+                for (DataSnapshot child : snapshot.getChildren()) {
+                    Post object = child.getValue(Post.class);
+                    assert object != null;
+                    if (object.getPostStatus() == 1) {
+                        object.setAuthorUID(String.valueOf(child.child("author").getValue()));
+
+                        if(!filters) {
+                            dataList.add(object);
+                        } else{
+                            int selectedServiceType = Integer.parseInt(hiddenText.getText().toString());
+                            String addressFilter =  filterText.getText().toString();
+                            if (!addressFilter.isEmpty()) {
+                                if (object.getCity().contains(addressFilter) || object.getZipCode().equals(addressFilter)) {
+                                    if (selectedServiceType > 0) {
+                                        if (object.getServiceType() == (selectedServiceType - 1)) {
+                                            dataList.add(object);
+                                        }
+                                    } else dataList.add(object);
+                                }
+                            } else if (selectedServiceType > 0) {
+                                if (object.getServiceType() == (selectedServiceType - 1)) {
+                                    if (!addressFilter.isEmpty()) {
+                                        if (object.getCity().contains(addressFilter) || object.getZipCode().equals(addressFilter)) {
+                                            dataList.add(object);
+                                        }
+                                    } else dataList.add(object);
+                                }
+                            }
+                        }
+                    }
+                    count++;
+                }
+                myPostAdapter.notifyDataSetChanged();
+                if (dataList.size() != 0) {
+                    textView.setText("");
+                } else textView.setText(inNeedViewModel.getText().getValue());
+            }
+        }
     }
 }
