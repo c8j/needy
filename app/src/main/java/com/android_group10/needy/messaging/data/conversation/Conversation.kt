@@ -5,7 +5,18 @@ data class Conversation(
     val associatedPostDescription: String,
     val userUIDs: List<String>,
     val userNameMap: MutableMap<String, String>,
-    val latestMessage: String
+    val latestMessage: String,
+    val latestMessageSenderUID: String,
+    val concluded: Boolean
 ) {
-    constructor() : this("", "", listOf(), mutableMapOf(), "")
+    constructor() :
+            this(
+                "",
+                "",
+                listOf(),
+                mutableMapOf(),
+                "",
+                "",
+                false
+            )
 }

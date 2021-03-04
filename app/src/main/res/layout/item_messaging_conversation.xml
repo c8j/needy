@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_margin="4dp"
+    app:strokeWidth="2dp"
+    app:strokeColor="?colorAccent"
     android:clickable="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +33,7 @@
             android:id="@+id/tvLabelAssociatedPost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/conversations_conversation_label_post"
+            android:text="@string/messaging_conversation_label_post"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             app:layout_constraintBottom_toTopOf="@+id/tvContactName"
             app:layout_constraintStart_toStartOf="@+id/tvContactName"

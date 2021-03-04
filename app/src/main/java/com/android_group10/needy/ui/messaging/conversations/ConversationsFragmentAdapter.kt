@@ -17,7 +17,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 
-class ConversationsFragmentAdapter :
+class ConversationsFragmentAdapter(private val pronoun: String) :
     ListAdapter<ConversationQueryItem, ConversationsFragmentAdapter.ConversationItemViewHolder>(
         object :
             ConversationQueryItemDiffCallback() {}) {
@@ -50,7 +50,13 @@ class ConversationsFragmentAdapter :
             binding.apply {
                 tvAssociatedPostTitle.text = conversationQueryItem.item.associatedPostDescription
                 tvContactName.text = conversationQueryItem.item.userNameMap[partnerUID]
-                tvMessagePreview.text = conversationQueryItem.item.latestMessage
+                var latestMessageText = conversationQueryItem.item.latestMessage
+                conversationQueryItem.item.latestMessageSenderUID.let { uid ->
+                    if(uid != "" && uid == currentUserUID){
+                        latestMessageText = "$pronoun: $latestMessageText"
+                    }
+                }
+                tvMessagePreview.text = latestMessageText
                 FirebaseUtil.getUserPictureURI(partnerUID) { uri ->
                     uri?.let {
                         Glide.with(itemView.context).load(it).apply(

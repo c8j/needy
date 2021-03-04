@@ -44,13 +44,14 @@ object FirestoreUtil {
 
     private fun isOnIgnoreList(
         userUID: String,
+        receiverUID: String,
         post: Post,
         onComplete: (Boolean?, Exception?) -> Unit
     ) {
-        val postAuthorIgnoreListRef = firestoreInstance
-            .collection("$ROOT_COLLECTION/${post.authorUID}/$REQUESTS_IGNORE_LIST_COLLECTION")
+        val receiverIgnoreListRef = firestoreInstance
+            .collection("$ROOT_COLLECTION/$receiverUID/$REQUESTS_IGNORE_LIST_COLLECTION")
 
-        val query = postAuthorIgnoreListRef.whereEqualTo("postUID", post.postUID)
+        val query = receiverIgnoreListRef.whereEqualTo("postUID", post.postUID)
             .whereEqualTo("userUID", userUID)
 
         query.get().addOnSuccessListener {
@@ -66,12 +67,12 @@ object FirestoreUtil {
 
     private fun isRequestRegistered(
         associatedPostUID: String,
-        postAuthorUID: String,
+        receiverUID: String,
         senderUID: String,
         onComplete: (alreadyRegistered: Boolean?) -> Unit
     ) {
         firestoreInstance
-            .collection("$ROOT_COLLECTION/$postAuthorUID/$REQUESTS_COLLECTION")
+            .collection("$ROOT_COLLECTION/$receiverUID/$REQUESTS_COLLECTION")
             .whereEqualTo("associatedPostUID", associatedPostUID)
             .whereEqualTo("senderUID", senderUID)
             .get().addOnSuccessListener { querySnapshot ->
@@ -88,14 +89,19 @@ object FirestoreUtil {
 
     private fun createRequest(
         post: Post,
+        volunteer: Boolean,
         onComplete: (wasSuccessful: Boolean, message: String) -> Unit
     ) {
         lateinit var completionMessage: String
         val currentUserUID = firebaseAuthInstance.currentUser!!.uid
 
-        val postAuthorMessagingDataRequestsRef = firestoreInstance
-            .collection("$ROOT_COLLECTION/${post.authorUID}/$REQUESTS_COLLECTION")
+        //Determine receiver
+        val receiverUID = if (volunteer) post.authorUID else post.volunteer
 
+        val receiverMessagingDataRequestsRef = firestoreInstance
+            .collection("$ROOT_COLLECTION/$receiverUID/$REQUESTS_COLLECTION")
+
+        //Check if conversation already exists
         isConversationRegistered(
             post.postUID,
             listOf(post.authorUID, currentUserUID)
@@ -104,16 +110,18 @@ object FirestoreUtil {
             _conversationAlreadyRegistered?.let { conversationAlreadyRegistered ->
 
                 if (!conversationAlreadyRegistered) {
+                    //Check if there is already a pending request
                     isRequestRegistered(
                         post.postUID,
-                        post.authorUID,
+                        receiverUID,
                         currentUserUID
                     ) { _requestAlreadyRegistered ->
 
                         _requestAlreadyRegistered?.let { requestAlreadyRegistered ->
 
                             if (!requestAlreadyRegistered) {
-                                isOnIgnoreList(currentUserUID, post) { _isIgnored, exception ->
+                                //Check if user is on the ignore list of the receiver
+                                isOnIgnoreList(currentUserUID, receiverUID, post) { _isIgnored, exception ->
 
                                     exception?.let {
                                         completionMessage =
@@ -129,7 +137,7 @@ object FirestoreUtil {
                                                 if (user != null) {
                                                     val userFullName =
                                                         "${user.firstName} ${user.lastName}"
-                                                    postAuthorMessagingDataRequestsRef
+                                                    receiverMessagingDataRequestsRef
                                                         .add(
                                                             Request(
                                                                 post.postUID,
@@ -180,8 +188,8 @@ object FirestoreUtil {
     }
 
     @JvmStatic
-    fun createRequest(post: Post, onComplete: BiConsumer<Boolean, String>) =
-        createRequest(post, onComplete::accept)
+    fun createRequest(post: Post, volunteer: Boolean, onComplete: BiConsumer<Boolean, String>) =
+        createRequest(post, volunteer, onComplete::accept)
 
     fun acceptRequest(
         requestQueryItem: RequestQueryItem,
@@ -315,7 +323,9 @@ object FirestoreUtil {
                                         currentUserUID to userFullName,
                                         requestQueryItem.item.senderUID to requestQueryItem.item.senderFullName
                                     ),
-                                    ""
+                                    "",
+                                    "",
+                                    false
                                 )
                             )
                                 .addOnSuccessListener {
@@ -343,9 +353,27 @@ object FirestoreUtil {
         }
     }
 
+    @JvmStatic
+    fun closeConversation(post: Post){
+        conversationsCollectionRef.whereEqualTo("associatedPostUID", post.postUID).limit(1).get().addOnSuccessListener { querySnapshot ->
+            if (!querySnapshot.isEmpty){
+                querySnapshot.forEach { queryDocumentSnapshot ->
+                    conversationsCollectionRef.document(queryDocumentSnapshot.id).update("concluded", true).addOnFailureListener {
+                        Log.e(FIRESTORE_LOG_TAG, "Failed to update conversation status.", it)
+                    }
+                }
+            } else {
+                Log.e(FIRESTORE_LOG_TAG, "No conversation was found for selected post.")
+            }
+        }.addOnFailureListener {
+            Log.e(FIRESTORE_LOG_TAG, "Failed to query database for associated conversation.", it)
+        }
+    }
+
     fun getConversationsLiveData(): LiveData<List<ConversationQueryItem>> {
         val currentUserUID = firebaseAuthInstance.currentUser!!.uid
         val query = conversationsCollectionRef.whereArrayContains("userUIDs", currentUserUID)
+            .whereEqualTo("concluded", false)
         return FirestoreConversationQueryLiveData(query)
     }
 
@@ -354,7 +382,7 @@ object FirestoreUtil {
         val chatMessage = ChatMessage(currentUserUID, messageText, Timestamp.now())
         conversationsCollectionRef.document(conversationUID).collection(MESSAGES_COLLECTION)
             .add(chatMessage).addOnSuccessListener {
-                updateLatestMessage(conversationUID, messageText)
+                updateLatestMessage(conversationUID, messageText, currentUserUID)
                 onComplete(null)
             }.addOnFailureListener {
                 Log.e(FIRESTORE_LOG_TAG, "Error when adding message to database.", it)
@@ -362,15 +390,22 @@ object FirestoreUtil {
             }
     }
 
-    private fun updateLatestMessage(conversationUID: String, messageText: String) {
-        conversationsCollectionRef.document(conversationUID).update("latestMessage", messageText)
-            .addOnFailureListener {
-                Log.e(
-                    FIRESTORE_LOG_TAG,
-                    "Failed to update latest message for conversation with uid: $conversationUID",
-                    it
-                )
-            }
+    private fun updateLatestMessage(
+        conversationUID: String,
+        messageText: String,
+        senderUID: String
+    ) {
+        val conversationDocumentRef = conversationsCollectionRef.document(conversationUID)
+        firestoreInstance.runBatch { batch ->
+            batch.update(conversationDocumentRef, "latestMessage", messageText)
+            batch.update(conversationDocumentRef, "latestMessageSenderUID", senderUID)
+        }.addOnFailureListener {
+            Log.e(
+                FIRESTORE_LOG_TAG,
+                "Failed to update latest message for conversation with uid: $conversationUID",
+                it
+            )
+        }
     }
 
     fun getChatMessagesLiveData(conversationUID: String): LiveData<List<ChatMessageQueryItem>> {

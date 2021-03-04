@@ -57,6 +57,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
     private final FirebaseDatabase db = FirebaseDatabase.getInstance();
     private final String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String authorUID;
+    private Boolean volunteer;
 
     private final int statusInProgress = 2;
     private final int statusComplete = 3;
@@ -106,6 +107,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
 
 
         if (authorUID.equals(currentUser)){
+            volunteer = false;
             contact.setText(R.string.button_contact2);
             report.setText(R.string.button_report2);
             authorPhone.setVisibility(View.INVISIBLE);
@@ -121,6 +123,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
             }
 
         } else if (currentPositioned.getVolunteer().equals(currentUser)){
+            volunteer = true;
             contact.setText(R.string.button_contact);
             report.setText(R.string.button_report1);
             authorPhone.setVisibility(View.VISIBLE);
@@ -216,10 +219,24 @@ public class OtherStatusPostRecordFragment extends Fragment {
                 completePost.setOnClickListener(v -> {
                     postStatusUpdate(currentRef, post, statusComplete);
                     completePost.setVisibility(View.INVISIBLE);
-                    contact.setVisibility(View.VISIBLE);
+                    contact.setVisibility(View.INVISIBLE);
+                    //Close associated conversation
+                    FirestoreUtil.closeConversation(currentPositioned);
                     rate.setVisibility(View.VISIBLE);
                 });
-                contact.setOnClickListener(v -> FirestoreUtil.createRequest(currentPositioned, (wasSuccessful, message) -> Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show()));
+
+                contact.setOnClickListener(v ->
+                        //Create conversation request associated with this post
+                        FirestoreUtil.createRequest(
+                                currentPositioned,
+                                volunteer,
+                                (wasSuccessful, message) ->
+                                        Toast.makeText(getContext(),
+                                                message,
+                                                Toast.LENGTH_SHORT
+                                        ).show()
+                        )
+                );
             } else {
                 completePost.setVisibility(View.INVISIBLE);
                 contact.setVisibility(View.INVISIBLE);

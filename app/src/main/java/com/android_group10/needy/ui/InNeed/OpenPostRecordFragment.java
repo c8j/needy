@@ -142,7 +142,20 @@ public class OpenPostRecordFragment extends Fragment {
                     currentRef.child("volunteer").setValue(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid());
                     acceptPost.setVisibility(View.INVISIBLE);
                 });
-                contactAuthor.setOnClickListener(v -> FirestoreUtil.createRequest(currentPositioned, (wasSuccessful, message) -> Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show()));
+
+                //Create conversation request associated with this post
+                contactAuthor.setOnClickListener(v ->
+                        FirestoreUtil.createRequest(
+                                currentPositioned,
+                                true,
+                                (wasSuccessful, message) ->
+                                        Toast.makeText(
+                                                getContext(),
+                                                message,
+                                                Toast.LENGTH_SHORT
+                                        ).show()
+                        )
+                );
             } else {
                 acceptPost.setVisibility(View.INVISIBLE);
                 contactAuthor.setVisibility(View.INVISIBLE);

@@ -43,7 +43,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/rect_oval_shape"
         android:elevation="1dp"
-        android:hint="@string/conversations_chat_hint"
+        android:hint="@string/messaging_chat_hint"
         android:inputType="textAutoCorrect|textMultiLine|textCapSentences|textImeMultiLine"
         android:maxHeight="108dp"
         android:maxLength="@integer/messaging_character_limit"
@@ -52,19 +52,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="@tools:sample/lorem/random"/>
+        tools:text="@tools:sample/lorem/random" />
 
-    <ImageButton
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/iBtnSend"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackgroundBorderless"
-        android:contentDescription="@string/conversations_chat_send_description"
+        android:contentDescription="@string/messaging_chat_send_description"
+        app:icon="@drawable/ic_chat_send"
+        app:iconGravity="textEnd"
+        app:iconPadding="0dp"
+        app:iconTint="@color/selector_messaging_button_send"
         app:layout_constraintBottom_toBottomOf="@+id/etMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
-        app:layout_constraintTop_toTopOf="@+id/etMessage"
-        app:srcCompat="@drawable/ic_chat_send" />
+        app:layout_constraintTop_toTopOf="@+id/etMessage" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"

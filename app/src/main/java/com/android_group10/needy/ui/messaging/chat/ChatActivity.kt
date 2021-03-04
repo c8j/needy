@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android_group10.needy.databinding.ActivityChatBinding
 import com.android_group10.needy.messaging.ChatActivityViewModel
@@ -33,15 +34,23 @@ class ChatActivity : AppCompatActivity() {
         }
 
         binding.apply {
+            iBtnSend.isEnabled = false
+
+            etMessage.addTextChangedListener {
+                iBtnSend.isEnabled = !it.isNullOrEmpty()
+            }
+
             iBtnSend.setOnClickListener {
                 val messageText = etMessage.text.toString()
                 if (messageText != "") {
+                    iBtnSend.isSelected = true
                     viewModel.sendMessage(etMessage.text.toString()) { message ->
                         if (message != null) {
                             Toast.makeText(this@ChatActivity, message, Toast.LENGTH_SHORT).show()
                         } else {
                             etMessage.setText("")
                         }
+                        iBtnSend.isSelected = false
                     }
                 }
             }

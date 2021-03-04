@@ -33,8 +33,8 @@ class MessagingFragment : Fragment() {
             binding.viewPager
         ) { tab, position ->
             when (position) {
-                0 -> tab.text = getString(R.string.conversations_tab_label_requests)
-                1 -> tab.text = getString(R.string.conversations_tab_label_messages)
+                0 -> tab.text = getString(R.string.messaging_tab_label_requests)
+                1 -> tab.text = getString(R.string.messaging_tab_label_messages)
             }
         }.attach()
         return binding.root
