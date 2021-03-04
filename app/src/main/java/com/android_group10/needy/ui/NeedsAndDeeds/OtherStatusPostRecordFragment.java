@@ -24,6 +24,7 @@ import com.android_group10.needy.Post;
 import com.android_group10.needy.R;
 import com.android_group10.needy.Report;
 import com.android_group10.needy.UserRating;
+import com.android_group10.needy.messaging.util.FirestoreUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -218,7 +219,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
                     contact.setVisibility(View.VISIBLE);
                     rate.setVisibility(View.VISIBLE);
                 });
-                contact.setOnClickListener(v -> Toast.makeText(getContext(), "send a message", Toast.LENGTH_SHORT).show());
+                contact.setOnClickListener(v -> FirestoreUtil.createRequest(currentPositioned, (wasSuccessful, message) -> Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show()));
             } else {
                 completePost.setVisibility(View.INVISIBLE);
                 contact.setVisibility(View.INVISIBLE);

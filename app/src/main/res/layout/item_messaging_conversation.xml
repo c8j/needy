@@ -14,14 +14,16 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivConversationAvatar"
-            android:layout_width="72dp"
+            android:layout_width="80dp"
             android:layout_height="0dp"
+            android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="w,1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-
             app:shapeAppearanceOverlay="@style/RoundedImageView"
+            app:strokeColor="?attr/colorAccent"
+            app:strokeWidth="4dp"
             tools:srcCompat="@tools:sample/avatars" />
 
 
@@ -30,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/conversations_conversation_label_post"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
             app:layout_constraintBottom_toTopOf="@+id/tvContactName"
             app:layout_constraintStart_toStartOf="@+id/tvContactName"
             app:layout_constraintTop_toTopOf="parent" />
@@ -42,7 +44,7 @@
             android:layout_marginStart="4dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             app:layout_constraintBaseline_toBaselineOf="@+id/tvLabelAssociatedPost"
             app:layout_constraintEnd_toEndOf="@+id/tvContactName"
             app:layout_constraintStart_toEndOf="@+id/tvLabelAssociatedPost"
@@ -57,7 +59,7 @@
             android:layout_marginEnd="4dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textAppearance="?attr/textAppearanceHeadline5"
+            android:textAppearance="?attr/textAppearanceHeadline6"
             app:layout_constraintBottom_toTopOf="@+id/tvMessagePreview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ivConversationAvatar"
@@ -72,6 +74,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tvContactName"
             app:layout_constraintStart_toStartOf="@+id/tvContactName"

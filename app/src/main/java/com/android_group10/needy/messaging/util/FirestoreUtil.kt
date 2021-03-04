@@ -172,7 +172,7 @@ object FirestoreUtil {
                         }
                     }
                 } else {
-                    completionMessage = "Conversation already exists with post author."
+                    completionMessage = "Conversation already exists with user."
                     onComplete(false, completionMessage)
                 }
             }
@@ -354,10 +354,22 @@ object FirestoreUtil {
         val chatMessage = ChatMessage(currentUserUID, messageText, Timestamp.now())
         conversationsCollectionRef.document(conversationUID).collection(MESSAGES_COLLECTION)
             .add(chatMessage).addOnSuccessListener {
+                updateLatestMessage(conversationUID, messageText)
                 onComplete(null)
             }.addOnFailureListener {
                 Log.e(FIRESTORE_LOG_TAG, "Error when adding message to database.", it)
                 onComplete("Failed to send message.")
+            }
+    }
+
+    private fun updateLatestMessage(conversationUID: String, messageText: String) {
+        conversationsCollectionRef.document(conversationUID).update("latestMessage", messageText)
+            .addOnFailureListener {
+                Log.e(
+                    FIRESTORE_LOG_TAG,
+                    "Failed to update latest message for conversation with uid: $conversationUID",
+                    it
+                )
             }
     }
 

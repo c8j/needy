@@ -13,14 +13,16 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivConversationAvatar"
-            android:layout_width="72dp"
+            android:layout_width="80dp"
             android:layout_height="0dp"
+            android:padding="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="w,1:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-
             app:shapeAppearanceOverlay="@style/RoundedImageView"
+            app:strokeColor="?attr/colorAccent"
+            app:strokeWidth="4dp"
             tools:srcCompat="@tools:sample/avatars" />
 
 
