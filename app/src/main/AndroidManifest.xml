@@ -30,9 +30,7 @@
 
         </provider>
 
-        <activity android:name=".ui.Profile.EditProfileActivity">
 
-        </activity>
 
 
         <activity
