@@ -204,7 +204,6 @@ public class OtherStatusPostRecordFragment extends Fragment {
     }
 
     private void listenerCode(DatabaseReference currentRef, DataSnapshot snapshot) {
-        int optionValue = 5;
         Post post = snapshot.getValue(Post.class);
         if (post != null) {
 
@@ -286,7 +285,6 @@ public class OtherStatusPostRecordFragment extends Fragment {
                                         saveDB.writeRating(rating);
                                     } else {
                                        Toast.makeText(getContext(), "You must select one option!", Toast.LENGTH_SHORT).show();
-                                       Log.e("no value", "no value / option");
                                    }
                                 }
                             });

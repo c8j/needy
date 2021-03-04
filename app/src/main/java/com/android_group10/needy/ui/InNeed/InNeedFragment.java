@@ -1,7 +1,6 @@
 package com.android_group10.needy.ui.InNeed;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +26,6 @@ import com.android_group10.needy.Post;
 import com.android_group10.needy.PostAdapter;
 import com.android_group10.needy.R;
 import com.android_group10.needy.ServiceType;
-import com.android_group10.needy.ui.NeedsAndDeeds.NeedsAndDeedsViewModel;
-import com.android_group10.needy.ui.NeedsAndDeeds.OtherStatusPostRecordFragment;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -41,7 +38,7 @@ public class InNeedFragment extends Fragment {
     private View root;
     public static ArrayList<Post> dataList = new ArrayList<>();
     private PostAdapter myPostAdapter;
-    private FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private final FirebaseDatabase db = FirebaseDatabase.getInstance();
     private TextView textView;
     private Spinner spinner;
     private TextView hiddenText;
@@ -56,25 +53,6 @@ public class InNeedFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 addData(snapshot, false);
-              /*  if (snapshot.hasChildren()) {
-                    int count = 0;
-                    if (snapshot.getChildrenCount() != count) {
-                        dataList.clear();
-                        for (DataSnapshot child : snapshot.getChildren()) {
-                            Post object = child.getValue(Post.class);
-                            assert object != null;
-                            if (object.getPostStatus() == 1) {
-                                object.setAuthorUID(String.valueOf(child.child("author").getValue()));
-                                dataList.add(object);
-                            }
-                            count++;
-                        }
-                        myPostAdapter.notifyDataSetChanged();
-                        if (dataList.size() != 0) {
-                            textView.setText("");
-                        }
-                    }
-                }*/
             }
 
             @Override
