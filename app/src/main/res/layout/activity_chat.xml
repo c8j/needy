@@ -48,10 +48,11 @@
         android:maxHeight="108dp"
         android:maxLength="@integer/messaging_character_limit"
         android:minHeight="36dp"
-        android:padding="8dp"
+        android:padding="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="@tools:sample/lorem/random"/>
 
     <ImageButton
         android:id="@+id/iBtnSend"
