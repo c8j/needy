@@ -42,17 +42,12 @@ public class EditProfileDialogManager extends AppCompatActivity {
     private EditText cityText;
     private EditText zipcodeText;
     private TextView phNumText;
-    private ImageView profilePictureImageView;
-    private ImageButton editPic;
-    private Uri imageURI;
     private Button updateButton;
     private String uid;
     private DatabaseReference userRef;
     private final User[] currentUser = new User[1];
-    private static final int GALLERY_REQ_CODE = 10;
     private static final String TAG = "EditProfileActivity";
     Activity thisActivity;
-    private ProgressBar progressBar;
 
     public EditProfileDialogManager(Activity activity){
         thisActivity = activity;
@@ -68,20 +63,11 @@ public class EditProfileDialogManager extends AppCompatActivity {
         cityText = view.findViewById(R.id.cityEditText);
         zipcodeText = view.findViewById(R.id.zipEditText);
         phNumText = view.findViewById(R.id.editPhoneTextView);
-        profilePictureImageView = view.findViewById(R.id.editPicImageView);
-        editPic = view.findViewById(R.id.editPicImageButton);
         updateButton = view.findViewById(R.id.updateButton);
-        progressBar = view.findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.GONE);
-
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        ProfilePictureManager ppManager = new ProfilePictureManager();
-        ppManager.displayProfilePic(thisActivity, profilePictureImageView);
-
 
         //Get current values for fields in profile:
-
         userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -111,25 +97,6 @@ public class EditProfileDialogManager extends AppCompatActivity {
         });
     }
 
-    public void onEditImageClick(View view){
-        editPic.setEnabled(false);
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, GALLERY_REQ_CODE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == GALLERY_REQ_CODE){
-            if(resultCode == Activity.RESULT_OK){
-                imageURI = data.getData();
-                Log.i(TAG,"Obtained Uri");
-                Glide.with(this).load(imageURI).centerCrop().placeholder(R.drawable.anonymous_mask).into(profilePictureImageView);
-                //uploadProfilePic();
-            }
-        }
-    }
-
     private void updateProfile(){
         String newCity = cityText.getText().toString();
         String newZip = zipcodeText.getText().toString();
@@ -141,26 +108,7 @@ public class EditProfileDialogManager extends AppCompatActivity {
             Map<String, Object> postValues = currentUser[0].toMap();
             userRef.updateChildren(postValues);
             Toast.makeText(thisActivity, "Profile updated successfully", Toast.LENGTH_SHORT).show();
+            updateButton.setEnabled(true);
         }
-    }
-
-    public void uploadProfilePic(){
-        progressBar.setVisibility(View.VISIBLE);
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("profile_images/" + uid + "/profile_pic");
-        storageReference.putFile(imageURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(thisActivity, "Image Uploaded", Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
-                editPic.setEnabled(true);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                //makeToast("Image failed to upload.");
-                Toast.makeText(thisActivity, "Image failed to upload.", Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
-            }
-        });
     }
 }
