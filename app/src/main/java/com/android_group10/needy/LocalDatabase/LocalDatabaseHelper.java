@@ -8,8 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class LocalDatabaseHelper {
+    public static long newImage;
     public static final String IMAGE_ID = "id";
     public static final String IMAGE = "image";
+    public static final String USER_ID = "user_id";
     private final Context mContext;
 
     private DatabaseHelper databaseHelper;
@@ -21,8 +23,8 @@ public class LocalDatabaseHelper {
     private static final String IMAGES_TABLE = "ImagesTable";
 
     private static final String CREATE_IMAGES_TABLE =
-            "CREATE TABLE IF NOT EXISTS " + IMAGES_TABLE + " (" +
-                    IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            "CREATE TABLE IF NOT EXISTS " + IMAGES_TABLE + " ("
+                    + USER_ID + " TEXT, "
                     + IMAGE + " BLOB NOT NULL );";
 
 
@@ -57,18 +59,26 @@ public class LocalDatabaseHelper {
     }
 
     // Insert the image to the Sqlite DB
-    public void insertImage(byte[] imageBytes) {
+    public void insertImage(byte[] imageBytes, String userId) {
         ContentValues cv = new ContentValues();
+        cv.put(USER_ID, userId);
         cv.put(IMAGE, imageBytes);
-        sqLiteDatabase.insert(IMAGES_TABLE, null, cv);
+
+        // It will check if the user has already an image so will update it otherwise it will insert  a new one.
+        int id = (int) sqLiteDatabase.insertWithOnConflict(IMAGES_TABLE, null, cv, SQLiteDatabase.CONFLICT_IGNORE);
+        if (id == -1) {
+            sqLiteDatabase.update(IMAGES_TABLE, cv, "user_id=?", new String[]{userId});  // number 1 is the _id here, update to variable for your code
+        }
+        newImage = sqLiteDatabase.insert(IMAGES_TABLE, null, cv);
     }
 
     // Get the image from SQLite DB
     // We will just get the last image we just saved for convenience...
-    public byte[] retreiveImageFromDB() {
-        Cursor cur = sqLiteDatabase.query(false, IMAGES_TABLE, new String[]{IMAGE_ID, IMAGE},
-                null, null, null, null,
-                IMAGE_ID + " DESC", "1");
+    public byte[] retreiveImageFromDB(String userId) {
+
+        Cursor cur = sqLiteDatabase.query(IMAGES_TABLE, new String[]{USER_ID, IMAGE}, USER_ID + "=?",
+                new String[]{String.valueOf(userId)}, null, null, null, null);
+
         if (cur.moveToFirst()) {
             byte[] blob = cur.getBlob(cur.getColumnIndex(IMAGE));
             cur.close();
@@ -76,21 +86,19 @@ public class LocalDatabaseHelper {
         }
         cur.close();
         return null;
+
     }
 
-    public boolean deleteImage() {
-        try {
-            int result = sqLiteDatabase.delete(IMAGES_TABLE, IMAGE + " = image", null);
-            if (result > 0) {
-                return true;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return false;
+    // Delete an user image with a specific userId
+    public void deleteImage (String userId){
+        SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
+        sqLiteDatabase.delete(
+                IMAGES_TABLE,  // Where to delete
+                USER_ID+" = ?",
+                new String[]{userId});  // What to delete
+        sqLiteDatabase.close();
     }
+
 
     public boolean checkTableEmpty() {
         boolean flag;

@@ -43,7 +43,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.android_group10.needy.LocalDatabase.DatabaseHandler;
+
 import com.android_group10.needy.LocalDatabase.DbBitmapUtility;
 import com.android_group10.needy.LocalDatabase.LocalDatabaseHelper;
 import com.android_group10.needy.ui.InNeed.AddPostRecordFragment;
@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.openDrawer(GravityCompat.START);
         });
 
-
+        //this.deleteDatabase("Images.db");
         loadImageFromDB();
 
     }
@@ -362,9 +362,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
 
             case R.id.delete_image:
-                localDatabaseHelper.open();
-                localDatabaseHelper.deleteImage();
-                localDatabaseHelper.close();
+                localDatabaseHelper.deleteImage(userId);
                 profileImage.setImageResource(R.drawable.anonymous_mask);
                 return true;
 
@@ -428,29 +426,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             new Thread((Runnable) () -> {
                 try {
                     localDatabaseHelper.open();
-                    final byte[] bytes = localDatabaseHelper.retreiveImageFromDB();
+                    final byte[] bytes = localDatabaseHelper.retreiveImageFromDB(userId);
                     localDatabaseHelper.close();
                     // Show Image from DB in ImageView
                     profileImage.post((Runnable) () -> {
-                        profileImage.setImageBitmap(DbBitmapUtility.getImage(bytes));
-                        Toast.makeText(MainActivity.this, "Image lodaed from database", Toast.LENGTH_SHORT).show();
+                        try {
+
+                            profileImage.setImageBitmap(DbBitmapUtility.getImage(bytes));
+                        } catch (Exception e) {
+                            profileImage.setImageResource(R.drawable.anonymous_mask);
+                        }
+                        Toast.makeText(MainActivity.this, "Image loaded from database", Toast.LENGTH_SHORT).show();
                     });
                 } catch (Exception e) {
-
                     localDatabaseHelper.close();
                 }
             }).start();
         }
     }
 
-    // Save the images has been picked from the gallery into the SQLite database.
+    // Save the images has been picked from the gallery or the Camera into the SQLite database.
     public void saveImageInDB() {
         try {
             localDatabaseHelper.open();
             InputStream iStream = getContentResolver().openInputStream(selectedImageUri);
             byte[] inputData = DbBitmapUtility.getBytes(iStream);
-            localDatabaseHelper.insertImage(inputData);
+            localDatabaseHelper.insertImage(inputData, userId);
             localDatabaseHelper.close();
+            Log.d("insertImage", String.valueOf(LocalDatabaseHelper.newImage));
         } catch (IOException ioe) {
             Log.e(TAG, "<saveImageInDB> Error : " + ioe.getLocalizedMessage());
             localDatabaseHelper.close();
