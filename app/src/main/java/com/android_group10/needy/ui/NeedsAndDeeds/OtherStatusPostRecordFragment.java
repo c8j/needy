@@ -10,9 +10,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -183,7 +180,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
             if (authorUID.equals(currentUser)){
                 blamedUserUID = currentPositioned.getVolunteer();
             } else{
-                blamedUserUID =currentPositioned.getAuthorUID();
+                blamedUserUID = currentPositioned.getAuthorUID();
             }
 
             LayoutInflater dialogInflater = LayoutInflater.from(getContext());
@@ -208,7 +205,6 @@ public class OtherStatusPostRecordFragment extends Fragment {
     }
 
     private void listenerCode(DatabaseReference currentRef, DataSnapshot snapshot) {
-        int optionValue = 5;
         Post post = snapshot.getValue(Post.class);
         if (post != null) {
 
@@ -304,7 +300,6 @@ public class OtherStatusPostRecordFragment extends Fragment {
                                         saveDB.writeRating(rating);
                                     } else {
                                        Toast.makeText(getContext(), "You must select one option!", Toast.LENGTH_SHORT).show();
-                                       Log.e("no value", "no value / option");
                                    }
                                 }
                             });

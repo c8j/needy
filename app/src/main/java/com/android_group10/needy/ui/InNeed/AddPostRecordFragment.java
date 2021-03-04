@@ -67,7 +67,6 @@ public class AddPostRecordFragment extends Fragment{
                                            int position, long id) {
 
                     hiddenText.setText(String.valueOf(parent.getItemIdAtPosition(position)));
-                    Log.v("item id", String.valueOf(parent.getItemIdAtPosition(position)));
                 }
 
                 @Override

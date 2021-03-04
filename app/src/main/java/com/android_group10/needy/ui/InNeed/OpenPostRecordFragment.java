@@ -12,10 +12,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import com.android_group10.needy.Post;
 import com.android_group10.needy.R;
-import com.android_group10.needy.User;
 import com.android_group10.needy.messaging.util.FirestoreUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -26,7 +24,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
@@ -133,7 +130,6 @@ public class OpenPostRecordFragment extends Fragment {
         if (post != null) {
             if (!currentPositioned.getAuthorUID().equals(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid())) {
                 acceptPost.setOnClickListener(v -> {
-                    Toast.makeText(getContext(), "change Post status to 2, remove from the list of active", Toast.LENGTH_SHORT).show();
                     textPhone.setVisibility(View.VISIBLE);
                     authorPhone.setVisibility(View.VISIBLE);
                     currentPositioned.setPostStatus(2);
