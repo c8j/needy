@@ -45,6 +45,10 @@
     <string name="warning">Attention! Reporting a user might lead to that user being blocked in our system and/or police being informed.
         Please, consider giving the user low rating instead</string>
     <string name="hint_text">Write your complaint here </string>
+    <string name="hint_text1">Filter either by a ZIP code or a City </string>
+    <string name="hint_text2">You can filter by a Service type here </string>
+    <string name="hint_filter_on"> </string>
+    <string name="hint_filter_off"> </string>
     <string name="button_complete">Mark Complete </string>
     <string name="button_contact2">contact volunteer</string>
     <string name="button_report1">report author</string>

@@ -5,6 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android_group10.needy.Post;
 import com.android_group10.needy.PostAdapter;
 import com.android_group10.needy.R;
+import com.android_group10.needy.ServiceType;
 import com.android_group10.needy.ui.NeedsAndDeeds.NeedsAndDeedsViewModel;
 import com.android_group10.needy.ui.NeedsAndDeeds.OtherStatusPostRecordFragment;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +43,11 @@ public class InNeedFragment extends Fragment {
     private PostAdapter myPostAdapter;
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
     private TextView textView;
+    private Spinner spinner;
+    private TextView hiddenText;
+    private EditText filterText;
+    private ImageButton applyFilters;
+    private ImageButton clearFilters;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,6 +93,9 @@ public class InNeedFragment extends Fragment {
 
         RecyclerView recycler = root.findViewById(R.id.postRecyclerView_in_need);
         textView = root.findViewById(R.id.text_default2);
+        filterText = root.findViewById(R.id.address_filter);
+        applyFilters = root.findViewById(R.id.btn_set_filter);
+        clearFilters = root.findViewById(R.id.btn_clear_filter);
 
         inNeedViewModel.getList().observe(getViewLifecycleOwner(), new Observer<ArrayList>() {
             @Override
@@ -107,6 +121,91 @@ public class InNeedFragment extends Fragment {
                 } else textView.setText("");
             }
         });
+
+        hiddenText = root.findViewById(R.id.hidden_textView1);
+        spinner = root.findViewById(R.id.spinner1);
+        String[] items = {"Select a Service type here (optional)", ServiceType.WALK_A_DOG.toString(), ServiceType.SHOPPING.toString(), ServiceType.TRANSPORTATION.toString(), ServiceType.CLEANING.toString(), ServiceType.OTHER.toString()};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.simple_spinner_item, items);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+
+                hiddenText.setText(String.valueOf(parent.getItemIdAtPosition(position)));
+                Log.v("item id", String.valueOf(parent.getItemIdAtPosition(position)));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+
         return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        applyFilters.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int selectedServiceType = Integer.parseInt(hiddenText.getText().toString());
+                String addressFilter =  filterText.getText().toString();
+                if(!(addressFilter.isEmpty() && selectedServiceType == 0)){
+                    ValueEventListener listListener = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                            if (snapshot.hasChildren()) {
+                                int count = 0;
+                                if (snapshot.getChildrenCount() != count) {
+                                    dataList.clear();
+                                    for (DataSnapshot child : snapshot.getChildren()) {
+                                        Post object = child.getValue(Post.class);
+                                        assert object != null;
+                                        if (object.getPostStatus() == 1) {
+                                            object.setAuthorUID(String.valueOf(child.child("author").getValue()));
+                                            if (!addressFilter.isEmpty()) {
+                                                if (object.getCity().contains(addressFilter) || object.getZipCode().equals(addressFilter)) {
+                                                    if (selectedServiceType > 0) {
+                                                        if (object.getServiceType() == (selectedServiceType - 1)) {
+                                                            dataList.add(object);
+                                                        }
+                                                    } else dataList.add(object);
+                                                }
+                                            } else if (selectedServiceType > 0) {
+                                                if (object.getServiceType() == (selectedServiceType - 1)) {
+                                                    if (!addressFilter.isEmpty()) {
+                                                        if (object.getCity().contains(addressFilter) || object.getZipCode().equals(addressFilter)) {
+                                                            dataList.add(object);
+                                                        }
+                                                    } else dataList.add(object);
+                                                }
+                                            }
+                                        }
+                                        count++;
+                                    }
+                                    myPostAdapter.notifyDataSetChanged();
+                                    if (dataList.size() != 0) {
+                                        textView.setText("");
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    };
+                    db.getReference().child("Posts").addValueEventListener(listListener);
+                }
+            }
+        });
+
     }
 }
