@@ -34,11 +34,13 @@
             android:name=".ui.messaging.chat.ChatActivity"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".ui.Profile.EditProfileActivity"></activity>
+
         <activity
 
             android:name=".ui.LogInAndRegistration.Register"
-            android:theme="@style/loginTheme"></activity>
+            android:theme="@style/loginTheme">
+
+        </activity>
         <activity
 
             android:name=".ui.LogInAndRegistration.LogIn"
