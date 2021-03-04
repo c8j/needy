@@ -19,8 +19,8 @@
 
     <fragment
         android:id="@+id/nav_conversations"
-        android:name="com.android_group10.needy.ui.messaging.ConversationsFragment"
+        android:name="com.android_group10.needy.ui.messaging.MessagingFragment"
         android:label="Conversations"
-        tools:layout="@layout/fragment_messaging_conversations" />
+        tools:layout="@layout/fragment_messaging" />
 
 </navigation>

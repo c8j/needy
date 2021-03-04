@@ -7,25 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.android_group10.needy.R
-import com.android_group10.needy.databinding.FragmentMessagingConversationsBinding
-import com.android_group10.needy.messaging.ConversationsFragmentViewModel
+import com.android_group10.needy.databinding.FragmentMessagingBinding
+import com.android_group10.needy.messaging.MessagingFragmentViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
 
-class ConversationsFragment : Fragment() {
+class MessagingFragment : Fragment() {
 
-    private var _binding: FragmentMessagingConversationsBinding? = null
+    private var _binding: FragmentMessagingBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by viewModels<ConversationsFragmentViewModel>()
+    private val viewModel by viewModels<MessagingFragmentViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentMessagingConversationsBinding.inflate(inflater, container, false)
-        binding.viewPager.adapter = ConversationsPagerAdapter(viewModel.pagerFragments, this)
+        _binding = FragmentMessagingBinding.inflate(inflater, container, false)
+        binding.viewPager.adapter = MessagingPagerAdapter(viewModel.pagerFragments, this)
 
         //TODO: implement badges for incoming requests/unread messages
         TabLayoutMediator(

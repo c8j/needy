@@ -2,8 +2,8 @@ package com.android_group10.needy.messaging.util.liveData
 
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.android_group10.needy.messaging.data.Request
-import com.android_group10.needy.messaging.data.RequestQueryItem
+import com.android_group10.needy.messaging.data.request.Request
+import com.android_group10.needy.messaging.data.request.RequestQueryItem
 import com.android_group10.needy.messaging.util.FirestoreUtil
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObject
@@ -14,12 +14,10 @@ class FirestoreRequestQueryLiveData(private val query: Query) : LiveData<List<Re
     private var listenerRegistration: ListenerRegistration? = null
 
     override fun onActive() {
-        super.onActive()
         listenerRegistration = query.addSnapshotListener(this)
     }
 
     override fun onInactive() {
-        super.onInactive()
         listenerRegistration?.remove()
     }
 

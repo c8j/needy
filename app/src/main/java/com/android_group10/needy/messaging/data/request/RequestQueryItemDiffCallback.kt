@@ -1,7 +1,6 @@
-package com.android_group10.needy.messaging.util
+package com.android_group10.needy.messaging.data.request
 
 import androidx.recyclerview.widget.DiffUtil
-import com.android_group10.needy.messaging.data.RequestQueryItem
 
 open class RequestQueryItemDiffCallback : DiffUtil.ItemCallback<RequestQueryItem>() {
     override fun areItemsTheSame(oldItem: RequestQueryItem, newItem: RequestQueryItem): Boolean {

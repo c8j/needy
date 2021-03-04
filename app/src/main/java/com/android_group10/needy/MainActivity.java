@@ -52,7 +52,7 @@ import com.android_group10.needy.ui.LogInAndRegistration.LogIn;
 import com.android_group10.needy.ui.NeedsAndDeeds.NeedsAndDeedsFragment;
 
 import com.android_group10.needy.ui.Profile.ProfileFragment;
-import com.android_group10.needy.ui.messaging.ConversationsFragment;
+import com.android_group10.needy.ui.messaging.MessagingFragment;
 import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -192,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 floatingActionButton.hide();
                 break;
             case R.id.nav_conversations:
-                changeFragment(new ConversationsFragment());
+                changeFragment(new MessagingFragment());
                 floatingActionButton.hide();
                 break;
             case R.id.nav_profile:

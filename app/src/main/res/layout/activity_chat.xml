@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/darker_yellow"
     android:clipToPadding="false"
-    tools:context=".ui.messaging.ChatActivity">
+    tools:context=".ui.messaging.chat.ChatActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/actionBar"
@@ -23,16 +23,17 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
-        android:padding="5dp"
+        android:padding="4dp"
         android:scrollbars="vertical"
         app:layout_constraintBottom_toTopOf="@+id/etMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/actionBar" />
+        app:layout_constraintTop_toBottomOf="@+id/actionBar"
+        tools:listitem="@layout/item_messaging_message" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/etMessage"
@@ -43,10 +44,10 @@
         android:background="@drawable/rect_oval_shape"
         android:elevation="1dp"
         android:hint="@string/conversations_chat_hint"
-        android:inputType="textMultiLine|textImeMultiLine"
-        android:maxHeight="105dp"
-        android:maxLength="1500"
-        android:minHeight="35dp"
+        android:inputType="textAutoCorrect|textMultiLine|textCapSentences|textImeMultiLine"
+        android:maxHeight="108dp"
+        android:maxLength="@integer/messaging_character_limit"
+        android:minHeight="36dp"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"

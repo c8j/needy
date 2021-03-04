@@ -31,8 +31,9 @@
         </provider>
 
         <activity
-            android:name=".ui.messaging.ChatActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".ui.messaging.chat.ChatActivity"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ui.Profile.EditProfileActivity"></activity>
         <activity
 
