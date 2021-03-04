@@ -4,6 +4,7 @@ package com.android_group10.needy;
 import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,8 +19,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 public class DAO {
     private FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -55,33 +58,61 @@ public class DAO {
         db.getReference().updateChildren(childUpdates);
     }
 
+    //this will save a rating into the Ratings tree, calculate average and update a value of a User
     public void writeRating(UserRating rating){
         DatabaseReference currentUserRatingRef = db.getReference().child("Ratings").child(rating.getUserUID()).child(String.valueOf(rating.getRatingType()));
         String key = currentUserRatingRef.push().getKey();
-        Map<String, Object> ratingValue = rating.toMap();
+        Map<String, Integer> ratingValue = rating.toMap();
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/Ratings/" + rating.getUserUID() + "/" + rating.getRatingType() + "/" + key, ratingValue);
-        Log.e("rating recorded", "record saved " + rating);
         db.getReference().updateChildren(childUpdates);
 
-     //   DatabaseReference currentPostRef = db.getReference().child("Ratings").child(rating.getUserUID()).child(String.valueOf(rating.getRatingType()));
         ValueEventListener postListener = new ValueEventListener() {
+            double averageRating;
+            @SuppressWarnings("unchecked")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-              //  int[] array;
-                if (snapshot != null && snapshot.hasChildren()){
+                if (snapshot.hasChildren()){
                         int count = 1;
                         int sum = 0;
-                        Log.e("inside datasnapshot", "IN");
+
                         for (DataSnapshot child : snapshot.getChildren()) {
-                            sum = sum + child.getValue(UserRating.class).getRatingValue();
-                            count++;
+                            if (child.hasChildren()) {
+                                try {
+                                    HashMap<String, Object> map = (HashMap<String, Object>) child.getValue();
+                                    assert map != null;
+                                    Object[] keys = map.keySet().toArray();
+                                    // there will only be one child so we only take [0]
+                                    Object value = Objects.requireNonNull(map.get(keys[0]));
+
+                                    sum = sum + Integer.parseInt(value.toString());
+                                    count = count + keys.length;
+
+                                } catch (Exception ex){
+                                    ex.printStackTrace();
+                                }
+                            }
                         }
-                        Log.e("count", String.valueOf(sum));
+
+                        averageRating = (double) sum/(count-1);
+
+                    DatabaseReference ratedUserRef = db.getReference("Users").child(rating.getUserUID());
+                    ValueEventListener userListener = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            listenerCode(ratedUserRef, snapshot, rating, averageRating);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                        }
+                    };
+
+                    ratedUserRef.addValueEventListener(userListener);
 
                 } else  {
-                    Log.e("outside datasnapshot", "NOT IN");
+                    Log.e("Rating FireBase DB table", "something went wrong and the rating hasn't been saved");
                 }
 
             }
@@ -91,5 +122,29 @@ public class DAO {
             }
         };
         currentUserRatingRef.addValueEventListener(postListener);
+    }
+
+    private void listenerCode(DatabaseReference currentRef, DataSnapshot snapshot, UserRating rating, double newValue) {
+        int newInt = 1;
+        if (newValue < 2.5 && newValue >= 1.5){
+            newInt = 2;
+        } else if (newValue <3.5){
+            newInt = 3;
+        } else if (newValue < 4.5){
+            newInt = 4;
+        } else if(newValue >= 4.5){
+            newInt = 5;
+        }
+
+        User user = snapshot.getValue(User.class);
+        if (user != null) {
+            if (rating.getRatingType() == 1) {
+                user.setAuthorRating(newInt );
+                currentRef.child("authorRating").setValue(newInt);
+            } else {
+                user.setVolunteerRating(newInt);
+                currentRef.child("volunteerRating").setValue(newInt);
+            }
+        }
     }
 }

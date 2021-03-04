@@ -2,7 +2,6 @@ package com.android_group10.needy;
 
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,15 +52,13 @@ public class UserRating {
     @Override
     public String toString() {
         return "UserRating{" +
-                "userUID='" + userUID + '\'' +
-                ", ratingType=" + ratingType +
-                ", ratingValue=" + ratingValue +
+                "ratingValue=" + ratingValue +
                 '}';
     }
 
     @Exclude
-    public Map<String, Object> toMap() {
-        HashMap<String, Object> result = new HashMap<>();
+    public Map<String, Integer> toMap() {
+        HashMap<String, Integer> result = new HashMap<>();
         result.put("value", ratingValue);
         return result;
     }

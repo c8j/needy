@@ -222,7 +222,6 @@ public class OtherStatusPostRecordFragment extends Fragment {
                 contact.setVisibility(View.INVISIBLE);
 
                 rate.setOnClickListener(v -> {
-                    //view dialog - choose option and confirm. send value to DB and add to Ratings. Get all records for this user of this type and calc average. update value in User table
                     String ratedUserUID;
                     int ratingType;
                     if (authorUID.equals(currentUser)){
@@ -249,7 +248,6 @@ public class OtherStatusPostRecordFragment extends Fragment {
                     rateView.setBackgroundResource(R.drawable.dialog_background);
                     dialog2.setView(rateView).create();
                     String[] items = {"Horrible experience!","Bad","Average","Good","It was a pleasure!"};
-                   // int checkedItem = 4;
 
                     dialog2.setSingleChoiceItems(items, 5, new DialogInterface.OnClickListener() {
                         @Override
