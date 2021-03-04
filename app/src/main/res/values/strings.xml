@@ -76,5 +76,18 @@
     <string name="edit_firstName">First Name: </string>
     <string name="edit_lastName">Last Name: </string>
 
+    <string name="btn1">Horrible experience!</string>
+    <string name="btn2">Bad</string>
+    <string name="btn3">Average</string>
+    <string name="btn4">Good</string>
+    <string name="btn5">It was a pleasure!</string>
+
+    <string-array name="radio">
+        <item>@string/btn1</item>
+        <item>@string/btn2</item>
+        <item>@string/btn3</item>
+        <item>@string/btn4</item>
+        <item>@string/btn5</item>
+    </string-array>
 
 </resources>

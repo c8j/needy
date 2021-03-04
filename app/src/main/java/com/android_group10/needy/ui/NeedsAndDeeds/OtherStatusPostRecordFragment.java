@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -56,11 +57,12 @@ public class OtherStatusPostRecordFragment extends Fragment {
     private final String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private String authorUID;
 
-    int statusInProgress = 2;
-    int statusComplete = 3;
-    int statusRatedByAuthor = 4;
-    int statusRatedByVolunteer = 5;
-    int statusGone = 100;
+    private final int statusInProgress = 2;
+    private final int statusComplete = 3;
+    private final int statusRatedByAuthor = 4;
+    private final int statusRatedByVolunteer = 5;
+    private final int statusGone = 100;
+    private int selectedOption;
 
     public OtherStatusPostRecordFragment(Post currentPositioned) {
         this.currentPositioned = currentPositioned;
@@ -234,20 +236,14 @@ public class OtherStatusPostRecordFragment extends Fragment {
 
                     LayoutInflater dialogInflater = LayoutInflater.from(getContext());
                     final View rateView = dialogInflater.inflate(R.layout.rate_user, null);
-                    final TextView hiddenText = rateView.findViewById(R.id.hidden_option);
-/*
-                    final RadioButton btn1 = (RadioButton) rateView.findViewById(R.id.btn_1);
-                    final RadioButton btn2 = (RadioButton) rateView.findViewById(R.id.btn_2);
-                    final RadioButton btn3 = (RadioButton) rateView.findViewById(R.id.btn_3);
-                    final RadioButton btn4 = (RadioButton) rateView.findViewById(R.id.btn_4);
-                    final RadioButton btn5 = (RadioButton) rateView.findViewById(R.id.btn_5);
-                    RadioGroup btn_grp = (RadioGroup) rateView.findViewById(R.id.btn_grp);*/
 
                     AlertDialog.Builder dialog2 = new AlertDialog.Builder(getContext());
-                    dialog2.setTitle("Rate");
-                    rateView.setBackgroundResource(R.drawable.dialog_background);
+                    dialog2.setTitle("Rate user");
+
+                    rateView.setBackgroundColor(getResources().getColor(R.color.light_yello_background));
                     dialog2.setView(rateView).create();
-                    String[] items = {"Horrible experience!","Bad","Average","Good","It was a pleasure!"};
+
+                    String[] items = getResources().getStringArray(R.array.radio);
 
                     dialog2.setSingleChoiceItems(items, 5, new DialogInterface.OnClickListener() {
                         @Override
@@ -270,13 +266,14 @@ public class OtherStatusPostRecordFragment extends Fragment {
                                     usersChoice = 5;
                                     break;
                             }
-                            hiddenText.setText(String.valueOf(usersChoice));
+                            selectedOption = usersChoice;
                         }
                     });
 
                     dialog2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int whichButton) {
-                                   if (hiddenText.length()!=0) {
+
+                                    if (selectedOption != 0) {
                                         if (authorUID.equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByVolunteer)) {
                                             postStatusUpdate(currentRef, post, statusRatedByAuthor);
                                             rate.setVisibility(View.INVISIBLE);
@@ -284,7 +281,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
                                             postStatusUpdate(currentRef, post, statusRatedByVolunteer);
                                             rate.setVisibility(View.INVISIBLE);
                                         }
-                                        UserRating rating = new UserRating(ratedUserUID, ratingType, Integer.parseInt(hiddenText.getText().toString()));
+                                       UserRating rating = new UserRating(ratedUserUID, ratingType, selectedOption);
                                         DAO saveDB = new DAO();
                                         saveDB.writeRating(rating);
                                     } else {
@@ -294,7 +291,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
                                 }
                             });
                     dialog2.setNegativeButton("Cancel", null).create();
-                    dialog2.show();
+                    dialog2.create().show();
                 });
             }
         }
@@ -313,6 +310,4 @@ public class OtherStatusPostRecordFragment extends Fragment {
         }
 
     }
-
-
 }
