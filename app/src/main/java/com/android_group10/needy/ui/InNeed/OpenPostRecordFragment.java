@@ -158,5 +158,5 @@ public class OpenPostRecordFragment extends Fragment {
             }
         }
     }
-
+    public void preventClicks(View view) {}
 }

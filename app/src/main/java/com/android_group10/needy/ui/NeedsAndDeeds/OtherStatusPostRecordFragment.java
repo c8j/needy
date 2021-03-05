@@ -323,4 +323,5 @@ public class OtherStatusPostRecordFragment extends Fragment {
         }
 
     }
+    public void preventClicks(View view) {}
 }

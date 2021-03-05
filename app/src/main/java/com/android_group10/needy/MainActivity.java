@@ -503,4 +503,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         callbackManager = CallbackManager.Factory.create();
         shareDialog = new ShareDialog(this);
     }
+
+    public void preventClicks(View view) {}
+
 }

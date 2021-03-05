@@ -124,4 +124,5 @@ public class NeedsAndDeedsFragment extends Fragment {
         });
         return root;
     }
+    public void preventClicks(View view) {}
 }

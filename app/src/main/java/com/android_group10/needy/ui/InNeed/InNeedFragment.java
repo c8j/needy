@@ -213,4 +213,5 @@ public class InNeedFragment extends Fragment {
             }
         }
     }
+    public void preventClicks(View view) {}
 }
