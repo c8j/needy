@@ -55,9 +55,6 @@ public class EditProfileDialogManager extends AppCompatActivity {
 
     //protected void onCreate(Bundle savedInstanceState)
     protected void onCreateDialog(View view) {
-        //super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_edit_profile);
-
         firstNameText = view.findViewById(R.id.editFirstNameTextView);
         lastNameText = view.findViewById(R.id.editLastNameTextView);
         cityText = view.findViewById(R.id.cityEditText);

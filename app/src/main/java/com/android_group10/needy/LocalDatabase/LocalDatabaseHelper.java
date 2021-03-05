@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class LocalDatabaseHelper {
     public static long newImage;
@@ -63,7 +64,7 @@ public class LocalDatabaseHelper {
         ContentValues cv = new ContentValues();
         cv.put(USER_ID, userId);
         cv.put(IMAGE, imageBytes);
-
+        Log.i("LocalDatabaseHelper", "Inserted image");
         // It will check if the user has already an image so will update it otherwise it will insert  a new one.
         int id = (int) sqLiteDatabase.insertWithOnConflict(IMAGES_TABLE, null, cv, SQLiteDatabase.CONFLICT_IGNORE);
         if (id == -1) {

@@ -1,6 +1,8 @@
 package com.android_group10.needy;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +16,8 @@ import com.android_group10.needy.LocalDatabase.DbBitmapUtility;
 import com.android_group10.needy.LocalDatabase.LocalDatabaseHelper;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.signature.ObjectKey;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,7 +35,7 @@ public class ProfilePictureManager {
     }
 
     //Download image from local or remote storage, and display it in the window:
-    public void displayProfilePic(Activity activity, ImageView dpImageView){
+    public void displayProfilePic(Activity activity, ImageView dpImageView, boolean circleCrop){
         //First try to get it from local database:
         if(false) {}
         //If fails, get from remote firebase storage:
@@ -41,14 +45,17 @@ public class ProfilePictureManager {
             storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-                    showPicture(activity, uri, dpImageView);
+                    showPicture(activity, uri, dpImageView, circleCrop);
                 }
             });
         }
     }
 
-    public void showPicture(Activity activity, Uri uri, ImageView profilePictureImageView){
-        Glide.with(activity).load(uri).centerCrop().placeholder(R.drawable.anonymous_mask).into(profilePictureImageView);
+    public void showPicture(Activity activity, Uri uri, ImageView profilePictureImageView, boolean circlecrop){
+        if(!circlecrop)
+            Glide.with(activity).load(uri).centerCrop().placeholder(R.drawable.anonymous_mask).into(profilePictureImageView);
+        else
+            Glide.with(activity).load(uri).centerCrop().apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.anonymous_mask).into(profilePictureImageView);
     }
 
     public void uploadPicToRemote(Uri imageURI, String uid,Activity thisActivity){
@@ -69,16 +76,15 @@ public class ProfilePictureManager {
         });
     }
 
-    public void uploadPicToLocalDb(Activity activity, Uri selectedImageUri, String userId) {
-        LocalDatabaseHelper localDatabaseHelper = new LocalDatabaseHelper(activity);
+    public void uploadPicToLocalDb(Context contxt, Uri selectedImageUri, String userId) {
+        LocalDatabaseHelper localDatabaseHelper = new LocalDatabaseHelper(contxt);
         try {
             localDatabaseHelper.open();
-            InputStream iStream = activity.getContentResolver().openInputStream(selectedImageUri);
+            InputStream iStream = contxt.getContentResolver().openInputStream(selectedImageUri);
             byte[] inputData = DbBitmapUtility.getBytes(iStream);
             localDatabaseHelper.insertImage(inputData, userId);
             localDatabaseHelper.close();
-            Log.d("Inserted image:", String.valueOf(LocalDatabaseHelper.newImage));
-            Log.i(TAG, "Inserted image");
+            //Log.i(TAG, "Inserted image");
         } catch (IOException ioe) {
             Log.e(TAG, "<saveImageInDB> Error : " + ioe.getLocalizedMessage());
             localDatabaseHelper.close();

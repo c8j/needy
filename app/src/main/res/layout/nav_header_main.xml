@@ -19,6 +19,7 @@
         android:layout_height="100dp"
         android:contentDescription="@string/nav_header_desc"
         android:scaleType="centerCrop"
+        android:background="@drawable/circle_image_border"
         android:onClick="showPopup"
         app:srcCompat="@drawable/anonymous_mask" />
 

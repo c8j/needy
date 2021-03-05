@@ -42,8 +42,6 @@ import com.google.firebase.storage.UploadTask;
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
     final User[] currentUser = new User[1];
-    private StorageReference storageReference;
-    private Uri imgUri;
     ImageView profilePictureImageView;
     private ProgressBar progressBar;
     private ImageButton editPic;
@@ -68,7 +66,7 @@ public class ProfileFragment extends Fragment {
         progressBar.setVisibility(View.GONE);
 
         ppManager = new ProfilePictureManager();
-        ppManager.displayProfilePic(getActivity(), profilePictureImageView);
+        ppManager.displayProfilePic(getActivity(), profilePictureImageView, false);
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
@@ -94,8 +92,6 @@ public class ProfileFragment extends Fragment {
         editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(getActivity(), EditProfileActivity.class);
-                //startActivity(intent);
                 editProfileDialog();
             }
         });
@@ -109,7 +105,6 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    //tools:context="ui.Profile.EditProfileActivity"
     public void editProfileDialog() {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View view = layoutInflater.inflate(R.layout.activity_edit_profile, null);
@@ -136,10 +131,9 @@ public class ProfileFragment extends Fragment {
                 Log.i(TAG,"Obtained Uri");
                 Glide.with(this).load(imageURI).centerCrop().placeholder(R.drawable.anonymous_mask).into(profilePictureImageView);
                 ppManager.uploadPicToRemote(imageURI, uid, getActivity());
-                ppManager.uploadPicToLocalDb(getActivity(),imageURI, uid);
+                ppManager.uploadPicToLocalDb(this.getContext(),imageURI, uid);
                 editPic.setEnabled(true);
             }
         }
     }
-
 }

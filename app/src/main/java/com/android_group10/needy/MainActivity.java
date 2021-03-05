@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static final int SHARE_ON_FACEBOOK = 2;
 
     private static final String TAG = "StoreImageActivity";
-
+    private Activity thisActivity = this;
     ShareDialog shareDialog;
     CallbackManager callbackManager;
 
@@ -164,11 +164,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         //this.deleteDatabase("Images.db");
-        loadImageFromDB();
+        //loadImageFromDB();
+        drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+            }
 
-        //ProfilePictureManager ppManager = new ProfilePictureManager();
-        //ppManager.displayProfilePic(this, profileImage);
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                ProfilePictureManager ppManager = new ProfilePictureManager();
+                ppManager.displayProfilePic(thisActivity, profileImage, true);
+            }
 
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+            }
+        });
     }
 
 
