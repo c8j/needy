@@ -35,13 +35,13 @@ public class ProfilePictureManager {
     }
 
     //Download image from local or remote storage, and display it in the window:
-    public void displayProfilePic(Activity activity, ImageView dpImageView, boolean circleCrop){
+    public void displayProfilePic(Activity activity, ImageView dpImageView, boolean circleCrop, String userUID){
         //First try to get it from local database:
         if(false) {}
         //If fails, get from remote firebase storage:
         else {
-            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("profile_images/" + uid + "/profile_pic");
+           // String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("profile_images/" + userUID + "/profile_pic");
             storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {

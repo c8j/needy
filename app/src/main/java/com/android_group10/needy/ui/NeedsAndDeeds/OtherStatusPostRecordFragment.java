@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.android_group10.needy.DAO;
 import com.android_group10.needy.Post;
+import com.android_group10.needy.ProfilePictureManager;
 import com.android_group10.needy.R;
 import com.android_group10.needy.Report;
 import com.android_group10.needy.UserRating;
@@ -85,6 +86,8 @@ public class OtherStatusPostRecordFragment extends Fragment {
         report = root.findViewById(R.id.report);
         rate = root.findViewById(R.id.rate);
         textPhone = root.findViewById(R.id.text_phone2);
+
+        ProfilePictureManager ppManager = new ProfilePictureManager();
 
         String key = currentPositioned.getPostUID();
         authorUID = currentPositioned.getAuthorUID();
@@ -157,6 +160,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
                     if (authorObject.get("phone") != null) {
                         authorPhone.setText(String.valueOf(authorObject.get("phone")));
                     }
+                    ppManager.displayProfilePic(getActivity(), authorPicture, false, authorUID);
                 }
             }
         });

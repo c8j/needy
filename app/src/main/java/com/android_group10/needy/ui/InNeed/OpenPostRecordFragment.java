@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import com.android_group10.needy.Post;
+import com.android_group10.needy.ProfilePictureManager;
 import com.android_group10.needy.R;
 import com.android_group10.needy.messaging.util.FirestoreUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -68,6 +69,8 @@ public class OpenPostRecordFragment extends Fragment {
         contactAuthor = root.findViewById(R.id.contact_author);
         textPhone = root.findViewById(R.id.text_phone);
 
+        ProfilePictureManager ppManager = new ProfilePictureManager();
+
         String key = currentPositioned.getPostUID();
         String authorUID = currentPositioned.getAuthorUID();
         if (!currentPositioned.getDescription().isEmpty()) {
@@ -92,7 +95,7 @@ public class OpenPostRecordFragment extends Fragment {
                     Log.e("firebase", "Error getting data", task.getException());
                 } else {
                     HashMap<String, Object> authorObject = (HashMap<String, Object>) task.getResult().getValue();
-                    //authorPicture.setImageURI(); ;
+
                     assert authorObject != null;
                     if (authorObject.get("firstName") != null || authorObject.get("lastName") != null) {
                         String fullName = String.valueOf(authorObject.get("firstName")).concat(" ").concat(String.valueOf(authorObject.get("lastName")));
@@ -104,6 +107,7 @@ public class OpenPostRecordFragment extends Fragment {
                     if (authorObject.get("phone") != null) {
                         authorPhone.setText(String.valueOf(authorObject.get("phone")));
                     }
+                    ppManager.displayProfilePic(getActivity(), authorPicture, false, authorUID);
                 }
             }
         });

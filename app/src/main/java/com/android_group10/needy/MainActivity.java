@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private SQLiteDatabase database;
     private Uri selectedImageUri;
     private LocalDatabaseHelper localDatabaseHelper;
-    private ProfilePictureManager ppManager;
+  //  private ProfilePictureManager ppManager;
 
     private static final int SELECT_PICTURE = 100;
     private static final int CAMERA_REQUEST = 1;
@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         localDatabaseHelper = new LocalDatabaseHelper(this);
-        ppManager = new ProfilePictureManager();
+     //   ppManager = new ProfilePictureManager();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initialization();
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
                 ProfilePictureManager ppManager = new ProfilePictureManager();
-                ppManager.displayProfilePic(thisActivity, profileImage, true);
+                ppManager.displayProfilePic(thisActivity, profileImage, true, mAuth.getCurrentUser().getUid());
             }
 
             @Override
@@ -409,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // will update the header and Local database.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        ProfilePictureManager ppManager = new ProfilePictureManager();
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
 

@@ -39,16 +39,18 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.HashMap;
+
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
-    final User[] currentUser = new User[1];
+  //  final User[] currentUser = new User[1];
     ImageView profilePictureImageView;
     private ProgressBar progressBar;
     private ImageButton editPic;
     private Uri imageURI;
     private static final int GALLERY_REQ_CODE = 10;
     String uid;
-    ProfilePictureManager ppManager;
+   // private ProfilePictureManager ppManager = new ProfilePictureManager();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -65,15 +67,16 @@ public class ProfileFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
-        ppManager = new ProfilePictureManager();
-        ppManager.displayProfilePic(getActivity(), profilePictureImageView, false);
-
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        ProfilePictureManager ppManager = new ProfilePictureManager();
+        ppManager.displayProfilePic(getActivity(), profilePictureImageView, false, uid);
+
+
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currentUser[0] = snapshot.getValue(User.class);
+              //  currentUser[0] = snapshot.getValue(User.class);
                 //firstNameText.setText(currentUser[0].getFirstName());
                 firstNameText.setText(snapshot.child("firstName").getValue(String.class));
                 lastNameText.setText(snapshot.child("lastName").getValue(String.class));
@@ -124,6 +127,7 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        ProfilePictureManager ppManager = new ProfilePictureManager();
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == GALLERY_REQ_CODE){
             if(resultCode == Activity.RESULT_OK){

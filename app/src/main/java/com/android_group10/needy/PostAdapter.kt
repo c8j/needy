@@ -1,17 +1,13 @@
 package com.android_group10.needy
 
+import android.app.PendingIntent.getActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
-import com.android_group10.needy.ui.InNeed.OpenPostRecordFragment
-import com.google.firebase.auth.FirebaseAuth
-import java.security.AccessController.getContext
 import java.util.*
 
 class PostAdapter(
@@ -55,7 +51,7 @@ class PostAdapter(
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val currentItem = detailList[position]
         holder.lineView1.text = currentItem.description
-     //   holder.photoView1.setImageResource(FirebaseAuth.getInstance().currentUser.image)
+        //holder.photoView1.setImageResource()
         //add stars here
     }
 
