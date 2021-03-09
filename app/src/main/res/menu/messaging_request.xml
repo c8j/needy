@@ -6,4 +6,7 @@
     <item
         android:id="@+id/messaging.request.menu.ignore"
         android:title="@string/messaging_request_ignore" />
+    <item
+        android:id="@+id/messaging.request.menu.block"
+        android:title="@string/messaging_request_block" />
 </menu>

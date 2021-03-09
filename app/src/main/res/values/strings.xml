@@ -106,9 +106,12 @@
     <string name="messaging_request_imageDescription">Request menu</string>
     <string name="messaging_request_accept">Accept request</string>
     <string name="messaging_request_ignore">Ignore request</string>
+    <string name="messaging_request_block">Block user</string>
     <string name="messaging_chat_hint">Type message here…</string>
     <string name="messaging_chat_send_description">Send message</string>
     <string name="messaging_conversation_pronoun">You</string>
+    <string name="messaging_conversation_archive">Archive</string>
+    <string name="messaging_conversation_block">Block user</string>
 
     <!--volunteer's profile-->
     <string name="open_post_view_profile">View Author\'s details</string>

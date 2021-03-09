@@ -1,8 +1,10 @@
 package com.android_group10.needy.ui.messaging.conversations
 
 import android.view.LayoutInflater
+import android.view.MenuInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import android.widget.Toast
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android_group10.needy.R
@@ -28,6 +30,8 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
         private lateinit var partnerUID: String
 
         init {
+
+            //Set-up listener to open the chat window when clicking on a conversation
             itemView.setOnClickListener {
                 val action =
                     conversationQueryItem.item.userNameMap[partnerUID]?.let { partnerFullName ->
@@ -38,6 +42,48 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
                     }
                 if (action != null) {
                     it.findNavController().navigate(action)
+                }
+            }
+
+            //Set-up listener to open the popup menu
+            itemView.setOnCreateContextMenuListener { menu, v, _ ->
+                val inflater = MenuInflater(v.context)
+                inflater.inflate(R.menu.messaging_conversation, menu)
+                menu.getItem(0).setOnMenuItemClickListener {
+                    //Archive option
+                    FirestoreUtil.updateConversationStatus(
+                        conversationQueryItem.id,
+                        true
+                    ) { wasSuccessful ->
+                        if (wasSuccessful) {
+                            Toast.makeText(
+                                v.context,
+                                "Conversation archived.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            Toast.makeText(
+                                v.context,
+                                "Error occurred when trying to archive conversation.",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                    true
+                }
+                menu.getItem(1).setOnMenuItemClickListener {
+                    //Block option
+                    FirestoreUtil.addToBlockList(
+                        conversationQueryItem.item.associatedPostUID,
+                        partnerUID
+                    ) { _, message ->
+                        Toast.makeText(
+                            v.context,
+                            message,
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                    true
                 }
             }
         }

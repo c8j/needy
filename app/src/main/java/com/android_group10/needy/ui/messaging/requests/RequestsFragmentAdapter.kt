@@ -15,6 +15,7 @@ import com.android_group10.needy.messaging.util.FirestoreUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.snackbar.Snackbar
 
 class RequestsFragmentAdapter :
     ListAdapter<RequestQueryItem, RequestsFragmentAdapter.RequestsViewHolder>(object :
@@ -27,6 +28,8 @@ class RequestsFragmentAdapter :
 
         init {
             binding.apply {
+
+                //Set-up the listener to open the popup menu for a request item
                 iBtnChoiceMenu.setOnClickListener { view ->
                     PopupMenu(view.context, view).apply {
                         inflate(R.menu.messaging_request)
@@ -37,17 +40,30 @@ class RequestsFragmentAdapter :
                                         Toast.makeText(
                                             view.context,
                                             message,
-                                            Toast.LENGTH_SHORT
+                                            Toast.LENGTH_LONG
                                         ).show()
                                     }
                                     true
                                 }
                                 R.id.messaging_request_menu_ignore -> {
-                                    FirestoreUtil.addToIgnoreList(requestQueryItem) { _, message ->
+                                    FirestoreUtil.removeRequest(requestQueryItem.id) { _, message ->
                                         Toast.makeText(
                                             view.context,
                                             message,
-                                            Toast.LENGTH_SHORT
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                    true
+                                }
+                                R.id.messaging_request_menu_block -> {
+                                    FirestoreUtil.addToBlockList(
+                                        requestQueryItem.item.associatedPostUID,
+                                        requestQueryItem.item.senderUID
+                                    ) { _, message ->
+                                        Toast.makeText(
+                                            view.context,
+                                            message,
+                                            Toast.LENGTH_LONG
                                         ).show()
                                     }
                                     true

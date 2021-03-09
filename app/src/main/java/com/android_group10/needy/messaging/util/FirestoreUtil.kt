@@ -10,6 +10,7 @@ import com.android_group10.needy.messaging.data.message.ChatMessageQueryItem
 import com.android_group10.needy.messaging.data.request.Request
 import com.android_group10.needy.messaging.data.request.RequestQueryItem
 import com.android_group10.needy.messaging.util.liveData.FirestoreChatMessageQueryLiveData
+import com.android_group10.needy.messaging.util.liveData.FirestoreConversationLiveData
 import com.android_group10.needy.messaging.util.liveData.FirestoreConversationQueryLiveData
 import com.android_group10.needy.messaging.util.liveData.FirestoreRequestQueryLiveData
 import com.google.firebase.Timestamp
@@ -17,13 +18,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import java.util.function.BiConsumer
 
 object FirestoreUtil {
     const val FIRESTORE_LOG_TAG = "FIRESTORE"
     private const val ROOT_COLLECTION = "user_messaging_data"
     private const val REQUESTS_COLLECTION = "messaging_requests"
-    private const val REQUESTS_IGNORE_LIST_COLLECTION = "messaging_requests_ignoreList"
+    private const val BLOCK_LIST_COLLECTION = "messaging_blocklist"
     private const val CONVERSATIONS_COLLECTION = "user_conversations"
     private const val MESSAGES_COLLECTION = "conversation_messages"
 
@@ -42,16 +44,20 @@ object FirestoreUtil {
 
     private val conversationsCollectionRef = firestoreInstance.collection(CONVERSATIONS_COLLECTION)
 
-    private fun isOnIgnoreList(
+    /*
+    Requests
+     */
+
+    private fun isOnBlockList(
         userUID: String,
         receiverUID: String,
         post: Post,
         onComplete: (Boolean?, Exception?) -> Unit
     ) {
-        val receiverIgnoreListRef = firestoreInstance
-            .collection("$ROOT_COLLECTION/$receiverUID/$REQUESTS_IGNORE_LIST_COLLECTION")
+        val receiverBlockListRef = firestoreInstance
+            .collection("$ROOT_COLLECTION/$receiverUID/$BLOCK_LIST_COLLECTION")
 
-        val query = receiverIgnoreListRef.whereEqualTo("postUID", post.postUID)
+        val query = receiverBlockListRef.whereEqualTo("postUID", post.postUID)
             .whereEqualTo("userUID", userUID)
 
         query.get().addOnSuccessListener {
@@ -101,15 +107,16 @@ object FirestoreUtil {
         val receiverMessagingDataRequestsRef = firestoreInstance
             .collection("$ROOT_COLLECTION/$receiverUID/$REQUESTS_COLLECTION")
 
-        //Check if conversation already exists
-        isConversationRegistered(
+        //Check if conversation that was not concluded already exists
+        doesConversationExist(
             post.postUID,
-            listOf(post.authorUID, currentUserUID)
-        ) { _conversationAlreadyRegistered ->
+            listOf(post.authorUID, currentUserUID),
+            false,
+        ) { _conversationAlreadyActive, _ ->
 
-            _conversationAlreadyRegistered?.let { conversationAlreadyRegistered ->
+            _conversationAlreadyActive?.let { conversationAlreadyActive ->
 
-                if (!conversationAlreadyRegistered) {
+                if (!conversationAlreadyActive) {
                     //Check if there is already a pending request
                     isRequestRegistered(
                         post.postUID,
@@ -120,19 +127,23 @@ object FirestoreUtil {
                         _requestAlreadyRegistered?.let { requestAlreadyRegistered ->
 
                             if (!requestAlreadyRegistered) {
-                                //Check if user is on the ignore list of the receiver
-                                isOnIgnoreList(currentUserUID, receiverUID, post) { _isIgnored, exception ->
+                                //Check if user is on the block list of the receiver
+                                isOnBlockList(
+                                    currentUserUID,
+                                    receiverUID,
+                                    post
+                                ) { _isBlocked, exception ->
 
                                     exception?.let {
                                         completionMessage =
-                                            "Error occurred when trying to read ignore list."
+                                            "Error occurred when trying to read block list."
                                         Log.e(FIRESTORE_LOG_TAG, completionMessage, it)
                                         onComplete(false, completionMessage)
-                                        return@isOnIgnoreList
+                                        return@isOnBlockList
                                     }
 
-                                    _isIgnored?.let { isIgnored ->
-                                        if (!isIgnored) {
+                                    _isBlocked?.let { isBlocked ->
+                                        if (!isBlocked) {
                                             FirebaseUtil.getUser(currentUserUID) { user ->
                                                 if (user != null) {
                                                     val userFullName =
@@ -210,33 +221,47 @@ object FirestoreUtil {
         }
     }
 
-    fun addToIgnoreList(
-        requestQueryItem: RequestQueryItem,
+    fun addToBlockList(
+        associatedPostUID: String,
+        userUID: String,
         onComplete: (wasSuccessful: Boolean, message: String) -> Unit
     ) {
         val currentUserUID = firebaseAuthInstance.currentUser!!.uid
-        val currentUserIgnoreListRef =
-            firestoreInstance.collection("$ROOT_COLLECTION/$currentUserUID/$REQUESTS_IGNORE_LIST_COLLECTION")
-        currentUserIgnoreListRef.add(
+        val currentUserBlockListRef =
+            firestoreInstance.collection("$ROOT_COLLECTION/$currentUserUID/$BLOCK_LIST_COLLECTION")
+        currentUserBlockListRef.add(
             mutableMapOf(
-                "postUID" to requestQueryItem.item.associatedPostUID,
-                "userUID" to requestQueryItem.item.senderUID
+                "postUID" to associatedPostUID,
+                "userUID" to userUID
             )
         ).addOnSuccessListener {
-            removeRequest(requestQueryItem.id) { wasSuccessful, message ->
-                if (wasSuccessful) {
-                    onComplete(wasSuccessful, "Request ignored.")
+            removeRequestsFromUser(userUID) { _wasSuccessful ->
+                if (_wasSuccessful) {
+                    concludeConversationsFromUser(userUID) { wasSuccessful ->
+                        if (wasSuccessful) {
+                            onComplete(
+                                wasSuccessful,
+                                "User blocked. All their requests were removed and conversations with them were archived."
+                            )
+                        } else {
+                            onComplete(
+                                wasSuccessful,
+                                "Error: Failed to block user. If this keeps happening, contact an administrator."
+                            )
+                        }
+                    }
                 } else {
-                    onComplete(wasSuccessful, message)
+                    onComplete(_wasSuccessful, "Error: Failed to remove blocked user's requests.")
                 }
             }
         }.addOnFailureListener {
-            Log.e(FIRESTORE_LOG_TAG, "Error occurred when trying to add to ignore list.", it)
-            onComplete(false, "Error occurred when trying to add to ignore list.")
+            val errorMessage = "Error occurred when trying to add user to block list."
+            Log.e(FIRESTORE_LOG_TAG, errorMessage, it)
+            onComplete(false, errorMessage)
         }
     }
 
-    private fun removeRequest(
+    fun removeRequest(
         requestUID: String,
         onComplete: (wasSuccessful: Boolean, message: String) -> Unit
     ) {
@@ -250,8 +275,10 @@ object FirestoreUtil {
             }
     }
 
-    /*
-    fun removeRequestsFromUser(userUID: String) {
+    private fun removeRequestsFromUser(
+        userUID: String,
+        onComplete: (wasSuccessful: Boolean) -> Unit
+    ) {
         val currentUserRequestsCollectionRef =
             currentUserMessagingDataRef.collection(REQUESTS_COLLECTION)
         val query = currentUserRequestsCollectionRef.whereEqualTo("senderUID", userUID)
@@ -262,23 +289,36 @@ object FirestoreUtil {
                     querySnapshot.forEach { queryDocumentSnapshot ->
                         batch.delete(currentUserRequestsCollectionRef.document(queryDocumentSnapshot.id))
                     }
+                }.addOnSuccessListener {
+                    onComplete(true)
                 }.addOnFailureListener {
-                    Log.e(FIRESTORE_LOG_TAG, "Failed to remove requests from deleted user.", it)
+                    Log.e(FIRESTORE_LOG_TAG, "Failed to remove requests from user.", it)
+                    onComplete(false)
                 }
+            } else {
+                //No requests to be deleted
+                onComplete(true)
             }
+        }.addOnFailureListener {
+            Log.e(FIRESTORE_LOG_TAG, "Failed to query database for blocked user's requests.", it)
+            onComplete(false)
         }
     }
-    */
 
     fun getRequestsLiveData(): LiveData<List<RequestQueryItem>> {
         val query = currentUserMessagingDataRef.collection(REQUESTS_COLLECTION)
         return FirestoreRequestQueryLiveData(query)
     }
 
-    private fun isConversationRegistered(
+    /*
+    Conversations
+     */
+
+    private fun doesConversationExist(
         associatedPostUID: String,
         userUIDs: List<String>,
-        onComplete: (alreadyRegistered: Boolean?) -> Unit
+        shouldBeConcluded: Boolean,
+        onComplete: (alreadyExists: Boolean?, querySnapshot: QuerySnapshot?) -> Unit
     ) {
         conversationsCollectionRef.whereEqualTo(
             "associatedPostUID",
@@ -286,15 +326,15 @@ object FirestoreUtil {
         ).whereArrayContainsAny(
             "userUIDs",
             userUIDs
-        ).get().addOnSuccessListener { querySnapshot ->
+        ).whereEqualTo("concluded", shouldBeConcluded).get().addOnSuccessListener { querySnapshot ->
             if (querySnapshot.isEmpty) {
-                onComplete(false)
+                onComplete(false, null)
             } else {
-                onComplete(true)
+                onComplete(true, querySnapshot)
             }
         }.addOnFailureListener {
             Log.e(FIRESTORE_LOG_TAG, "Failed to query database for conversations.", it)
-            onComplete(null)
+            onComplete(null, null)
         }
     }
 
@@ -305,12 +345,13 @@ object FirestoreUtil {
         lateinit var completionMessage: String
         val currentUserUID = firebaseAuthInstance.currentUser!!.uid
 
-        isConversationRegistered(
+        doesConversationExist(
             requestQueryItem.item.associatedPostUID,
-            listOf(currentUserUID, requestQueryItem.item.senderUID)
-        ) { _alreadyRegistered ->
-            _alreadyRegistered?.let { alreadyRegistered ->
-                if (!alreadyRegistered) {
+            listOf(currentUserUID, requestQueryItem.item.senderUID),
+            true,
+        ) { _alreadyExists, querySnapshot ->
+            _alreadyExists?.let { alreadyExists ->
+                if (!alreadyExists) {
                     FirebaseUtil.getUser(currentUserUID) { user ->
                         if (user != null) {
                             val userFullName = "${user.firstName} ${user.lastName}"
@@ -346,28 +387,95 @@ object FirestoreUtil {
                         }
                     }
                 } else {
-                    completionMessage = "Error: Conversation with user already exists"
-                    onComplete(false, completionMessage)
+                    if (querySnapshot != null) {
+                        updateConversationStatus(
+                            querySnapshot.documents[0].id,
+                            false
+                        ) { wasSuccessful ->
+                            if (wasSuccessful) {
+                                completionMessage =
+                                    "Request accepted. Reopened existing conversation."
+                                onComplete(true, completionMessage)
+                            } else {
+                                completionMessage = "Error: Request could not be accepted."
+                                onComplete(false, completionMessage)
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
+    fun updateConversationStatus(
+        conversationUID: String,
+        setConcluded: Boolean,
+        onComplete: (wasSuccessful: Boolean) -> Unit
+    ) {
+        conversationsCollectionRef.document(conversationUID).update("concluded", setConcluded)
+            .addOnSuccessListener {
+                Log.d(FIRESTORE_LOG_TAG, "Conversation status updated")
+                onComplete(true)
+            }
+            .addOnFailureListener {
+                Log.e(FIRESTORE_LOG_TAG, "Failed to update conversation status.", it)
+                onComplete(false)
+            }
+    }
+
     @JvmStatic
-    fun closeConversation(post: Post){
-        conversationsCollectionRef.whereEqualTo("associatedPostUID", post.postUID).limit(1).get().addOnSuccessListener { querySnapshot ->
-            if (!querySnapshot.isEmpty){
-                querySnapshot.forEach { queryDocumentSnapshot ->
-                    conversationsCollectionRef.document(queryDocumentSnapshot.id).update("concluded", true).addOnFailureListener {
-                        Log.e(FIRESTORE_LOG_TAG, "Failed to update conversation status.", it)
+    fun closeConversationForPost(post: Post) {
+        conversationsCollectionRef.whereEqualTo("associatedPostUID", post.postUID).limit(1).get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    updateConversationStatus(querySnapshot.documents[0].id, true) {}
+                } else {
+                    Log.e(FIRESTORE_LOG_TAG, "No conversation was found for selected post.")
+                }
+            }.addOnFailureListener {
+                Log.e(
+                    FIRESTORE_LOG_TAG,
+                    "Failed to query database for associated conversation.",
+                    it
+                )
+            }
+    }
+
+    private fun concludeConversationsFromUser(
+        userUID: String,
+        onComplete: (wasSuccessful: Boolean) -> Unit
+    ) {
+        val query = conversationsCollectionRef.whereArrayContains("userUIDs", userUID)
+            .whereEqualTo("concluded", false)
+
+        query.get().addOnSuccessListener { querySnapshot ->
+            if (!querySnapshot.isEmpty) {
+                firestoreInstance.runBatch { batch ->
+                    querySnapshot.forEach { queryDocumentSnapshot ->
+                        batch.update(
+                            conversationsCollectionRef.document(queryDocumentSnapshot.id),
+                            "concluded",
+                            true
+                        )
                     }
+                }.addOnSuccessListener {
+                    onComplete(true)
+                }.addOnFailureListener {
+                    Log.e(FIRESTORE_LOG_TAG, "Failed to conclude conversations of user.", it)
+                    onComplete(false)
                 }
             } else {
-                Log.e(FIRESTORE_LOG_TAG, "No conversation was found for selected post.")
+                //No conversations to conclude
+                onComplete(true)
             }
         }.addOnFailureListener {
-            Log.e(FIRESTORE_LOG_TAG, "Failed to query database for associated conversation.", it)
+            Log.e(FIRESTORE_LOG_TAG, "Failed to query database for user's conversations.", it)
+            onComplete(false)
         }
+    }
+
+    fun getConversationLiveData(conversationUID: String): LiveData<Conversation> {
+        return FirestoreConversationLiveData(conversationsCollectionRef.document(conversationUID))
     }
 
     fun getConversationsLiveData(): LiveData<List<ConversationQueryItem>> {
@@ -376,6 +484,10 @@ object FirestoreUtil {
             .whereEqualTo("concluded", false)
         return FirestoreConversationQueryLiveData(query)
     }
+
+    /*
+    Messages
+     */
 
     fun sendMessage(conversationUID: String, messageText: String, onComplete: (String?) -> Unit) {
         val currentUserUID = firebaseAuthInstance.currentUser!!.uid
