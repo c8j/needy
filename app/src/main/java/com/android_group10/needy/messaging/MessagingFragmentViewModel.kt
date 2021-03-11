@@ -1,9 +1,9 @@
 package com.android_group10.needy.messaging
 
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.android_group10.needy.messaging.data.conversation.Conversation
 import com.android_group10.needy.messaging.data.conversation.ConversationQueryItem
 import com.android_group10.needy.messaging.data.message.ChatMessageQueryItem
 import com.android_group10.needy.messaging.data.request.RequestQueryItem
@@ -26,6 +26,10 @@ class MessagingFragmentViewModel : ViewModel() {
 
     fun getRequests(): LiveData<List<RequestQueryItem>> {
         return FirestoreUtil.getRequestsLiveData()
+    }
+
+    fun getConversation(): LiveData<Conversation>{
+        return FirestoreUtil.getConversationLiveData(conversationUID)
     }
 
     fun getConversations(): LiveData<List<ConversationQueryItem>> {

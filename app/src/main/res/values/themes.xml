@@ -25,6 +25,7 @@
         <item name="android:navigationBarColor">@color/dark_grey_elements</item>
     </style>
 
+    <!--Used to color the text on the toolbar to white-->
     <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.Toolbar</item>
     </style>
@@ -34,7 +35,16 @@
         <item name="colorControlNormal">@color/white</item>
     </style>
 
-    //Not used for now
+    <!--Used to style the dialogs in the messaging section-->
+    <style name="ThemeOverlay.Needy.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="materialAlertDialogBodyTextStyle">
+            @style/TextAppearance.MaterialComponents.Headline6
+        </item>
+        <item name="buttonBarNeutralButtonStyle">@style/Alert.Button</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Alert.Button</item>
+    </style>
+
+    <!--Not used for now-->
     <style name="Theme.Needy" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>

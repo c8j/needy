@@ -52,7 +52,7 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
                 inflater.inflate(R.menu.messaging_conversation, menu)
                 menu.getItem(0).setOnMenuItemClickListener {
                     //Archive option
-                    MaterialAlertDialogBuilder(view.context)
+                    MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
                         .setMessage(R.string.messaging_dialog_archive)
                         .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
                             FirestoreUtil.updateConversationStatus(
@@ -82,7 +82,7 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
                 }
                 menu.getItem(1).setOnMenuItemClickListener {
                     //Block option
-                    MaterialAlertDialogBuilder(view.context)
+                    MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
                         .setMessage(R.string.messaging_dialog_block_conversations)
                         .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
                             FirestoreUtil.addToBlockList(

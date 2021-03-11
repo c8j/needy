@@ -8,4 +8,9 @@
     <style name="RequestMenuVariant" parent="Widget.MaterialComponents.PopupMenu">
         <item name="colorSurface">?attr/colorSecondary</item>
     </style>
+
+    <style name="Alert.Button" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>

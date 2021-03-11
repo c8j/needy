@@ -114,10 +114,12 @@
     <string name="messaging_conversation_block">Block user</string>
     <string name="messaging_dialog_cancel">Cancel</string>
     <string name="messaging_dialog_confirm">Confirm</string>
+    <string name="messaging_dialog_ok">OK</string>
     <string name="messaging_dialog_ignore">This will remove the request from your list. Proceed?</string>
     <string name="messaging_dialog_block_requests">Warning: This will prevent this user from sending further messaging requests to you. Proceed?</string>
     <string name="messaging_dialog_block_conversations">Warning: This will conclude any conversations with this user and prevent them from sending further messaging requests to you. Proceed?</string>
     <string name="messaging_dialog_archive">This will conclude the conversation for both participants. Proceed?</string>
+    <string name="messaging_dialog_concluded">Conversation was concluded by other user.</string>
 
     <!--volunteer's profile-->
     <string name="open_post_view_profile">View Author\'s details</string>

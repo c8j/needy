@@ -47,7 +47,7 @@ class RequestsFragmentAdapter(private val tabCallback: (selectTab: Int) -> Unit)
                                     true
                                 }
                                 R.id.messaging_request_menu_ignore -> {
-                                    MaterialAlertDialogBuilder(view.context)
+                                    MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
                                         .setMessage(R.string.messaging_dialog_ignore)
                                         .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
                                             FirestoreUtil.removeRequest(requestQueryItem.id) { _, message ->
@@ -65,7 +65,7 @@ class RequestsFragmentAdapter(private val tabCallback: (selectTab: Int) -> Unit)
                                     true
                                 }
                                 R.id.messaging_request_menu_block -> {
-                                    MaterialAlertDialogBuilder(view.context)
+                                    MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
                                         .setMessage(R.string.messaging_dialog_block_requests)
                                         .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
                                             FirestoreUtil.addToBlockList(
