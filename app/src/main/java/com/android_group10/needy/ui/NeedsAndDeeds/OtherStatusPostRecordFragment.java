@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
     private ImageView authorPicture;
     private TextView authorName;
     private TextView authorRating;
+    private RatingBar authorRatingBar;
     private TextView postDescription;
     private TextView postZipCode;
     private TextView postCity;
@@ -72,6 +74,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
         authorPicture = root.findViewById(R.id.author_image2);
         authorName = root.findViewById(R.id.author_name2);
         authorRating = root.findViewById(R.id.author_rating2);
+        authorRatingBar = root.findViewById(R.id.authorRatingBar2);
         authorPhone = root.findViewById(R.id.author_phone2);
         postDescription = root.findViewById(R.id.post_description2);
         postZipCode = root.findViewById(R.id.post_zip2);
@@ -79,7 +82,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
         postIncentive = root.findViewById(R.id.post_incentive2);
         completePost = root.findViewById(R.id.complete);
         contact = root.findViewById(R.id.contact_2);
-        report = root.findViewById(R.id.report);
+        report = root.findViewById(R.id.reportButton);
         rate = root.findViewById(R.id.rate);
         textPhone = root.findViewById(R.id.text_phone2);
 
@@ -156,7 +159,9 @@ public class OtherStatusPostRecordFragment extends Fragment {
                             authorName.setText(fullName);
                         }
                         if (authorObject.get("authorRating") != null) {
-                            authorRating.setText(String.format(Locale.getDefault(), "%s", authorObject.get("authorRating")));
+                            String rating = String.format(Locale.getDefault(), "%s", authorObject.get("authorRating"));
+                            //authorRating.setText(rating);
+                            authorRatingBar.setRating(Float.parseFloat(rating));
                         }
                         if (authorObject.get("phone") != null) {
                             authorPhone.setText(String.valueOf(authorObject.get("phone")));

@@ -20,7 +20,6 @@ import com.android_group10.needy.Post;
 import com.android_group10.needy.ProfilePictureManager;
 import com.android_group10.needy.R;
 import com.android_group10.needy.messaging.util.FirestoreUtil;
-import com.android_group10.needy.ui.Profile.EditProfileDialogManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,8 +32,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
-
-import static com.android_group10.needy.ImageHelper.decodeSampledBitmapFromPath;
 
 public class OpenPostRecordFragment extends Fragment {
     View root;
@@ -70,7 +67,7 @@ public class OpenPostRecordFragment extends Fragment {
         acceptPost = root.findViewById(R.id.accept);
         contactAuthor = root.findViewById(R.id.contact_author);
         textPhone = root.findViewById(R.id.text_phone);
-        authorratingStars = root.findViewById(R.id.authorRatingBar);
+        authorratingStars = root.findViewById(R.id.authorRatingBar2);
 
         ProfilePictureManager ppManager = new ProfilePictureManager();
 /*
