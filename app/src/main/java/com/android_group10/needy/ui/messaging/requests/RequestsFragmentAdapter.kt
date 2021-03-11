@@ -17,7 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class RequestsFragmentAdapter :
+class RequestsFragmentAdapter(private val tabCallback: (selectTab: Int) -> Unit) :
     ListAdapter<RequestQueryItem, RequestsFragmentAdapter.RequestsViewHolder>(object :
         RequestQueryItemDiffCallback() {}) {
 
@@ -42,6 +42,7 @@ class RequestsFragmentAdapter :
                                             message,
                                             Toast.LENGTH_LONG
                                         ).show()
+                                        tabCallback(1)
                                     }
                                     true
                                 }
