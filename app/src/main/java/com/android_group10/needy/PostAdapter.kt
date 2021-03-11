@@ -15,7 +15,7 @@ import java.security.AccessController.getContext
 import java.util.*
 
 class PostAdapter(
-    val detailList: List<Post>,
+    private var detailList: List<Post>,
     private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
@@ -57,6 +57,15 @@ class PostAdapter(
         holder.lineView1.text = currentItem.description
      //   holder.photoView1.setImageResource(FirebaseAuth.getInstance().currentUser.image)
         //add stars here
+    }
+
+    fun updateData(newList: List<Post>){
+        detailList = newList;
+
+        /*This could be further optimized to only update items that have changed
+        instead of the whole list, take a look at DiffUtil
+         */
+        notifyDataSetChanged();
     }
 
 }

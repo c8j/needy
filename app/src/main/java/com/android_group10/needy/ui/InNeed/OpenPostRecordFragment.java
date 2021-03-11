@@ -32,7 +32,7 @@ import static com.android_group10.needy.ImageHelper.decodeSampledBitmapFromPath;
 
 public class OpenPostRecordFragment extends Fragment {
     View root;
-    private final Post currentPositioned;
+    private Post currentPositioned;
     private ImageView authorPicture;
     private TextView authorName;
     private TextView authorRating;
@@ -46,10 +46,6 @@ public class OpenPostRecordFragment extends Fragment {
     private Button contactAuthor;
     private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private final FirebaseDatabase db = FirebaseDatabase.getInstance();
-
-    public OpenPostRecordFragment(Post currentPositioned) {
-        this.currentPositioned = currentPositioned;
-    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -68,20 +64,30 @@ public class OpenPostRecordFragment extends Fragment {
         contactAuthor = root.findViewById(R.id.contact_author);
         textPhone = root.findViewById(R.id.text_phone);
 
-        String key = currentPositioned.getPostUID();
-        String authorUID = currentPositioned.getAuthorUID();
-        if (!currentPositioned.getDescription().isEmpty()) {
-            postDescription.setText(currentPositioned.getDescription());
+        //Get clickedPost from previous fragment
+        if (getArguments() != null) {
+            OpenPostRecordFragmentArgs args = OpenPostRecordFragmentArgs.fromBundle(getArguments());
+            currentPositioned = args.getClickedPost();
         }
-        if (!currentPositioned.getIncentive().isEmpty()) {
-            postIncentive.setText(currentPositioned.getIncentive());
-        } else postIncentive.setText("-");
 
-        if (!currentPositioned.getZipCode().isEmpty()) {
-            postZipCode.setText(currentPositioned.getZipCode());
-        }
-        if (!currentPositioned.getCity().isEmpty()) {
-            postCity.setText(currentPositioned.getCity());
+        String key = null;
+        String authorUID = null;
+        if (currentPositioned != null) {
+            key = currentPositioned.getPostUID();
+            authorUID = currentPositioned.getAuthorUID();
+            if (!currentPositioned.getDescription().isEmpty()) {
+                postDescription.setText(currentPositioned.getDescription());
+            }
+            if (!currentPositioned.getIncentive().isEmpty()) {
+                postIncentive.setText(currentPositioned.getIncentive());
+            } else postIncentive.setText("-");
+
+            if (!currentPositioned.getZipCode().isEmpty()) {
+                postZipCode.setText(currentPositioned.getZipCode());
+            }
+            if (!currentPositioned.getCity().isEmpty()) {
+                postCity.setText(currentPositioned.getCity());
+            }
         }
 
         assert authorUID != null;
@@ -127,7 +133,7 @@ public class OpenPostRecordFragment extends Fragment {
 
     private void listenerCode(DatabaseReference currentRef, DataSnapshot snapshot) {
         Post post = snapshot.getValue(Post.class);
-        if (post != null) {
+        if (post != null && currentPositioned != null) {
             if (!currentPositioned.getAuthorUID().equals(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid())) {
                 acceptPost.setOnClickListener(v -> {
                     textPhone.setVisibility(View.VISIBLE);
@@ -158,5 +164,4 @@ public class OpenPostRecordFragment extends Fragment {
             }
         }
     }
-    public void preventClicks(View view) {}
 }

@@ -3,54 +3,42 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/menu_group_main"
+        android:checkableBehavior="single">
 
         <item
-            android:id="@+id/nav_in_need"
+            android:id="@+id/in_need"
             android:icon="@drawable/ic_in_need"
-            android:title="In need" />
+            android:title="@string/title_in_need" />
 
         <item
-            android:id="@+id/nav_needs_and_deeds"
+            android:id="@+id/needs_and_deeds"
             android:icon="@drawable/ic_needs_and_deeds"
-            android:title="Need And Deeds" />
+            android:title="@string/title_needs_and_deeds" />
 
         <item
-            android:id="@+id/nav_conversations"
+            android:id="@+id/messaging"
             android:icon="@drawable/ic_to_do"
-            android:title="Conversations" />
+            android:title="@string/title_messaging" />
+    </group>
 
+    <group android:id="@+id/menu_group_profile">
+        <item
+            android:id="@+id/profile"
+            android:icon="@drawable/ic_profile"
+            android:title="@string/profile" />
 
     </group>
 
-    <item android:title="@string/profile">
-        <menu>
-            <group android:checkableBehavior="single">
-
-
-                <item
-                    android:id="@+id/nav_profile"
-                    android:icon="@drawable/ic_profile"
-                    android:title="@string/profile" />
-
-            </group>
-        </menu>
-
-    </item>
-
-    <item android:title="">
-
-        <menu>
-            <item
-                android:id="@+id/share"
-                android:icon="@drawable/ic_share"
-                android:title="@string/share_us_of_facebook"
-                />
-            <item
-                android:id="@+id/log_out"
-                android:icon="@drawable/ic_log_out"
-                android:title="@string/menu_log_out" />
-        </menu>
-    </item>
-
+    <group android:id="@+id/menu_group_extra">
+        <item
+            android:id="@+id/share"
+            android:icon="@drawable/ic_share"
+            android:title="@string/share_us_of_facebook" />
+        <item
+            android:id="@+id/log_out"
+            android:icon="@drawable/ic_log_out"
+            android:title="@string/menu_log_out" />
+    </group>
 </menu>

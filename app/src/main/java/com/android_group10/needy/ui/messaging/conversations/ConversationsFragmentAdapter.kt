@@ -1,18 +1,17 @@
 package com.android_group10.needy.ui.messaging.conversations
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android_group10.needy.R
 import com.android_group10.needy.databinding.ItemMessagingConversationBinding
 import com.android_group10.needy.messaging.data.conversation.ConversationQueryItem
 import com.android_group10.needy.messaging.data.conversation.ConversationQueryItemDiffCallback
-import com.android_group10.needy.messaging.util.ChatConstants
 import com.android_group10.needy.messaging.util.FirebaseUtil
 import com.android_group10.needy.messaging.util.FirestoreUtil
-import com.android_group10.needy.ui.messaging.chat.ChatActivity
+import com.android_group10.needy.ui.messaging.MessagingFragmentDirections
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
@@ -30,11 +29,16 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
 
         init {
             itemView.setOnClickListener {
-                val intent = Intent(itemView.context, ChatActivity::class.java)
-                intent.putExtra(ChatConstants.CONVERSATION_UID, conversationQueryItem.id)
-                intent.putExtra(ChatConstants.PARTNER_UID, partnerUID)
-                intent.putExtra(ChatConstants.PARTNER_FULL_NAME, conversationQueryItem.item.userNameMap[partnerUID])
-                itemView.context.startActivity(intent)
+                val action =
+                    conversationQueryItem.item.userNameMap[partnerUID]?.let { partnerFullName ->
+                        MessagingFragmentDirections.actionMessagingToChat(
+                            conversationQueryItem.id,
+                            partnerFullName
+                        )
+                    }
+                if (action != null) {
+                    it.findNavController().navigate(action)
+                }
             }
         }
 
@@ -52,7 +56,7 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
                 tvContactName.text = conversationQueryItem.item.userNameMap[partnerUID]
                 var latestMessageText = conversationQueryItem.item.latestMessage
                 conversationQueryItem.item.latestMessageSenderUID.let { uid ->
-                    if(uid != "" && uid == currentUserUID){
+                    if (uid != "" && uid == currentUserUID) {
                         latestMessageText = "$pronoun: $latestMessageText"
                     }
                 }

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darker_yellow">
+    android:background="@color/darker_yellow"
+    tools:context=".ui.Profile.ProfileFragment">
 
     <TextView
         android:id="@+id/textView3"
@@ -72,7 +73,6 @@
         android:layout_height="49dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"
-        android:onClick="onE"
         android:text="@string/profile_edit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileCityTextView" />
@@ -115,7 +115,6 @@
         android:layout_width="29dp"
         android:layout_height="29dp"
         android:background="@color/dark_grey_elements"
-        android:onClick="onEditImageClick"
         android:src="@android:drawable/ic_menu_edit"
         app:layout_constraintBottom_toBottomOf="@+id/profilePicimageView"
         app:layout_constraintEnd_toEndOf="@+id/profilePicimageView" />

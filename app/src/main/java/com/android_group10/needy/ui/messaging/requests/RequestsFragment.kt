@@ -5,9 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android_group10.needy.R
 import com.android_group10.needy.databinding.FragmentMessagingRequestsBinding
 import com.android_group10.needy.messaging.MessagingFragmentViewModel
 
@@ -16,7 +16,7 @@ class RequestsFragment : Fragment() {
     private var _binding: FragmentMessagingRequestsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by viewModels<MessagingFragmentViewModel>({ requireParentFragment() })
+    private val viewModel by navGraphViewModels<MessagingFragmentViewModel>(R.id.main_graph)
 
     private var shouldInitRecyclerView = true
 

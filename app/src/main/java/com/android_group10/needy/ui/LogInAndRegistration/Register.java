@@ -21,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Objects;
+
 public class Register extends AppCompatActivity {
 
     private EditText registerPassword, registerCity, registerPhone, registerFirstName, registerLastName, registerEmail, registerZip;
@@ -100,29 +102,36 @@ public class Register extends AppCompatActivity {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            User user = new User(email, password, firstName, lastName, phone, city, Integer.parseInt(zipCode));
-                            FirebaseDatabase.getInstance().getReference("Users")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
+                            if (fUser != null){
+                                User user = new User(email, password, firstName, lastName, phone, city, Integer.parseInt(zipCode));
+                                FirebaseDatabase.getInstance().getReference("Users")
+                                        .child(fUser.getUid())
                                     .setValue(user).addOnCompleteListener(task1 -> {
-                                if (task1.isSuccessful()) {
-                                    createToast("User has been registered successfully");
-                                    startActivity(new Intent(this, LogIn.class));
-                                } else {
+                                    if (task1.isSuccessful()) {
+                                        createToast("User has been registered successfully");
+                                        Intent intent = new Intent(this, LogIn.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                        startActivity(intent);
+                                    } else {
 
-                                    createToast("Failed to register! Try again");
+                                        createToast("Failed to register! Try again");
 
-                                }
-                            });
+                                    }
+                                });
+                            }
                         } else {
                             try {
-                                throw task.getException();
+                                throw Objects.requireNonNull(task.getException());
                             } catch (FirebaseAuthInvalidCredentialsException malformedEmail) {
                                 createToast("Wrong Password! Try again");
 
                             } catch (FirebaseAuthUserCollisionException existEmail) {
 
                                 createToast("This Email already exist");
-                                startActivity(new Intent(this, LogIn.class));
+                                Intent intent = new Intent(this, LogIn.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
 
                             } catch (Exception e) {
                                 createToast("Failed to register! Try again");

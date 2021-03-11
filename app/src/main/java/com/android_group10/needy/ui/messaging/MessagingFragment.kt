@@ -1,11 +1,11 @@
 package com.android_group10.needy.ui.messaging
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
+import androidx.navigation.navGraphViewModels
 import com.android_group10.needy.R
 import com.android_group10.needy.databinding.FragmentMessagingBinding
 import com.android_group10.needy.messaging.MessagingFragmentViewModel
@@ -17,7 +17,7 @@ class MessagingFragment : Fragment() {
     private var _binding: FragmentMessagingBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by viewModels<MessagingFragmentViewModel>()
+    private val viewModel by navGraphViewModels<MessagingFragmentViewModel>(R.id.main_graph)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
