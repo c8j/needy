@@ -84,22 +84,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
         textPhone = root.findViewById(R.id.text_phone2);
 
         ProfilePictureManager ppManager = new ProfilePictureManager();
-/*
-        String key = currentPositioned.getPostUID();
-        authorUID = currentPositioned.getAuthorUID();
-        if (!currentPositioned.getDescription().isEmpty()) {
-            postDescription.setText(currentPositioned.getDescription());
-        }
-        if (!currentPositioned.getIncentive().isEmpty()) {
-            postIncentive.setText(currentPositioned.getIncentive());
-        } else postIncentive.setText("-");
 
-        if (!currentPositioned.getZipCode().isEmpty()) {
-            postZipCode.setText(currentPositioned.getZipCode());
-        }
-        if (!currentPositioned.getCity().isEmpty()) {
-            postCity.setText(currentPositioned.getCity());
-=======*/
         //Get clickedPost from previous fragment
         if (getArguments() != null) {
             OtherStatusPostRecordFragmentArgs args = OtherStatusPostRecordFragmentArgs.fromBundle(getArguments());
@@ -123,6 +108,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
             if (!currentPositioned.getCity().isEmpty()) {
                 postCity.setText(currentPositioned.getCity());
             }
+            ppManager.displayProfilePic(getActivity(), authorPicture, false, authorUID);
 
 
             if (authorUID.equals(currentUser)) {
@@ -138,7 +124,6 @@ public class OtherStatusPostRecordFragment extends Fragment {
                     } else {
                         rate.setVisibility(View.INVISIBLE);
                     }
-                    ppManager.displayProfilePic(getActivity(), authorPicture, false, authorUID);
                 }
 
             } else if (currentPositioned.getVolunteer().equals(currentUser)) {
@@ -165,7 +150,6 @@ public class OtherStatusPostRecordFragment extends Fragment {
                         Log.e("firebase", "Error getting data", task.getException());
                     } else {
                         HashMap<String, Object> authorObject = (HashMap<String, Object>) task.getResult().getValue();
-                        //authorPicture.setImageURI(); ;
                         assert authorObject != null;
                         if (authorObject.get("firstName") != null || authorObject.get("lastName") != null) {
                             String fullName = String.valueOf(authorObject.get("firstName")).concat(" ").concat(String.valueOf(authorObject.get("lastName")));
