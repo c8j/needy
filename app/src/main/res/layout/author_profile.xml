@@ -41,14 +41,16 @@
 
     <TextView
         android:id="@+id/labelRatingTextView"
-        android:layout_width="128dp"
+        android:layout_width="110dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"
         android:text="@string/rating_text"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelPhoneNumberTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/labelPhoneNumberTextView"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/authCityTextView"
@@ -75,9 +77,10 @@
         android:layout_width="128dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/labelPhoneNumberTextView"
-        tools:layout_editor_absoluteY="368dp" />
+        app:layout_constraintTop_toBottomOf="@+id/authZipTextView" />
 
     <TextView
         android:id="@+id/AuthorNameTextView"
@@ -93,20 +96,21 @@
 
     <TextView
         android:id="@+id/authFirstNameTextView"
-        android:layout_width="150dp"
+        android:layout_width="140dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="30dp"
         android:hint="@string/profile_firstName"
-        android:textAlignment="viewStart"
+        android:textAlignment="viewEnd"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/AuthorNameTextView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/authLastNameTextView"
-        android:layout_width="150dp"
+        android:layout_width="140dp"
         android:layout_height="40dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="30dp"
         android:hint="@string/profile_lastName"
         android:textAlignment="viewStart"
@@ -116,8 +120,9 @@
 
     <RatingBar
         android:id="@+id/authorRatingBar"
-        android:layout_width="207dp"
-        android:layout_height="40dp"
+        style="?android:attr/ratingBarStyleIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         app:layout_constraintStart_toEndOf="@+id/labelRatingTextView"

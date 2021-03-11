@@ -1,5 +1,7 @@
 package com.android_group10.needy.ui.InNeed;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,14 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import com.android_group10.needy.Post;
 import com.android_group10.needy.R;
 import com.android_group10.needy.messaging.util.FirestoreUtil;
+import com.android_group10.needy.ui.Profile.EditProfileDialogManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +49,7 @@ public class OpenPostRecordFragment extends Fragment {
     private TextView textPhone;
     private Button acceptPost;
     private Button contactAuthor;
+    private RatingBar authorratingStars;
     private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private final FirebaseDatabase db = FirebaseDatabase.getInstance();
 
@@ -63,6 +69,7 @@ public class OpenPostRecordFragment extends Fragment {
         acceptPost = root.findViewById(R.id.accept);
         contactAuthor = root.findViewById(R.id.contact_author);
         textPhone = root.findViewById(R.id.text_phone);
+        authorratingStars = root.findViewById(R.id.authorRatingBar);
 
         //Get clickedPost from previous fragment
         if (getArguments() != null) {
@@ -105,7 +112,9 @@ public class OpenPostRecordFragment extends Fragment {
                         authorName.setText(fullName);
                     }
                     if (authorObject.get("authorRating") != null) {
-                        authorRating.setText(String.format(Locale.getDefault(), "%s", authorObject.get("authorRating")));
+                        String authRating = String.format(Locale.getDefault(), "%s", authorObject.get("authorRating"));
+                        //authorRating.setText(authRating);
+                        authorratingStars.setRating(Float.parseFloat(authRating));
                     }
                     if (authorObject.get("phone") != null) {
                         authorPhone.setText(String.valueOf(authorObject.get("phone")));
@@ -163,5 +172,16 @@ public class OpenPostRecordFragment extends Fragment {
                 contactAuthor.setVisibility(View.INVISIBLE);
             }
         }
+    }
+
+    private void openAuthorDetails(){
+        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+        View view = layoutInflater.inflate(R.layout.author_profile, null);
+        //EditProfileDialogManager editmanager = new EditProfileDialogManager(getActivity());
+        //editmanager.onCreateDialog(view);
+        final AlertDialog alertD = new AlertDialog.Builder(getContext()).create();
+        alertD.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        alertD.setView(view);
+        alertD.show();
     }
 }

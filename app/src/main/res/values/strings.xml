@@ -68,8 +68,8 @@
     <!--Profile related-->
     <string name="your_profile">Your profile</string>
     <string name="profile_firstName">First Name</string>
-    <string name="profile_address">City</string>
-    <string name="profile_zipcode">Zipcode</string>
+    <string name="profile_address">City:</string>
+    <string name="profile_zipcode">Zipcode:</string>
     <string name="profile_phone_number">Phone number: </string>
     <string name="profile_email">Email id</string>
     <string name="profile_edit">Edit profile</string>
@@ -82,8 +82,8 @@
     <string name="profile_update">Update</string>
     <string name="edit_firstName">First Name: </string>
     <string name="edit_lastName">Last Name: </string>
-    <string name="share_us_of_facebook">Share us on Facebook</string>
 
+    <string name="share_us_of_facebook">Share us on Facebook</string>
 
     <string name="btn1">Horrible experience!</string>
     <string name="btn2">Bad</string>
@@ -112,5 +112,5 @@
 
     <!--author's profile-->
     <string name="open_post_view_profile">View Author\'s details</string>
-    <string name="author_name">Name</string>
+    <string name="author_name">Name:</string>
 </resources>
