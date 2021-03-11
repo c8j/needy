@@ -104,7 +104,7 @@ public class NeedsAndDeedsFragment extends Fragment {
             public void onChanged(@Nullable ArrayList s) {
                 recyclerView.setHasFixedSize(true);
 
-                myPostAdapter = new PostAdapter(dataList2, new PostAdapter.OnItemClickListener() {
+                myPostAdapter = new PostAdapter(getContext(), dataList2, new PostAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
                         Post clickedItem = dataList2.get(position);

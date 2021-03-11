@@ -80,7 +80,7 @@ public class InNeedFragment extends Fragment {
             public void onChanged(@Nullable ArrayList s) {
                 recycler.setHasFixedSize(true);
 
-                myPostAdapter = new PostAdapter(dataList, new PostAdapter.OnItemClickListener() {
+                myPostAdapter = new PostAdapter(getContext(), dataList, new PostAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(int position) {
                         Post clickedItem = dataList.get(position);
