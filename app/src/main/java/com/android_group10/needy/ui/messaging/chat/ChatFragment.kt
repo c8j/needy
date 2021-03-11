@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.android_group10.needy.R
 import com.android_group10.needy.databinding.FragmentChatBinding
 import com.android_group10.needy.messaging.MessagingFragmentViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
 class ChatFragment : Fragment() {
@@ -59,6 +61,19 @@ class ChatFragment : Fragment() {
                         iBtnSend.isSelected = false
                     }
                 }
+            }
+        }
+
+        //Check if conversation got concluded while chatting
+        viewModel.getConversation().observe(viewLifecycleOwner) {
+            if (it.concluded) {
+                MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Needy_MaterialAlertDialog)
+                    .setMessage(R.string.messaging_dialog_concluded)
+                    .setPositiveButton(R.string.messaging_dialog_ok) { _, _ ->
+                        //Do nothing
+                    }
+                    .show()
+                findNavController().navigate(ChatFragmentDirections.actionChatToMessaging())
             }
         }
 

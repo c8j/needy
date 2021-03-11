@@ -233,7 +233,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
     public void keepLogin() {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null) {
+        if (firebaseUser != null && firebaseUser.isEmailVerified()) {
             startActivity(new Intent(LogIn.this, MainActivity.class));
             finish();
         }
