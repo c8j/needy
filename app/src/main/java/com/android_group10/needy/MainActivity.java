@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         //this.deleteDatabase("Images.db");
-        //loadImageFromDB();
+
         drawer.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
                 ProfilePictureManager ppManager = new ProfilePictureManager();
-                ppManager.displayProfilePic(thisActivity, profileImage, true);
+                //ppManager.displayProfilePic(thisActivity, profileImage, true);
             }
 
             @Override
@@ -315,6 +315,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     userNameOnHeader.setText("Welcome " + name);
                     userEmailOnHeader.setText(email);
+                    loadImageFromDB();
                 }
             }
 
@@ -349,7 +350,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     //This will open the gallery
-
     public void openImageChooser() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -457,8 +457,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (empty) {
             // if the table in the database is empty so will set back the default image
             profileImage.setImageResource(R.drawable.anonymous_mask);
-        }
-        else {
+        } else {
             new Thread((Runnable) () -> {
                 try {
                     localDatabaseHelper.open();
@@ -504,6 +503,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         shareDialog = new ShareDialog(this);
     }
 
-    public void preventClicks(View view) {}
+    public void preventClicks(View view) {
+    }
 
 }

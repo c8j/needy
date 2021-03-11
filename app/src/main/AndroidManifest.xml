@@ -18,8 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
 
-
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.android_group10.needy.provider"
@@ -34,18 +32,22 @@
 
         <activity
             android:name=".ui.messaging.chat.ChatActivity"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="adjustResize"/>
 
         <activity
 
             android:name=".ui.LogInAndRegistration.Register"
+            android:screenOrientation="portrait"
             android:theme="@style/loginTheme">
 
         </activity>
+
         <activity
 
             android:name=".ui.LogInAndRegistration.LogIn"
+            android:screenOrientation="portrait"
             android:theme="@style/loginTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,13 +59,17 @@
 
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
             android:label="@string/Needy"
             >
         </activity>
+
         <provider android:authorities="com.facebook.app.FacebookContentProvider{138417034808418}"
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true"/>
             android:label="@string/Needy">
+
+
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
