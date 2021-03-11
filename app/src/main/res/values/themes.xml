@@ -38,7 +38,7 @@
     <!--Used to style the dialogs in the messaging section-->
     <style name="ThemeOverlay.Needy.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
         <item name="materialAlertDialogBodyTextStyle">
-            @style/TextAppearance.MaterialComponents.Headline6
+            @style/TextAppearance.MaterialComponents.Body1
         </item>
         <item name="buttonBarNeutralButtonStyle">@style/Alert.Button</item>
         <item name="buttonBarPositiveButtonStyle">@style/Alert.Button</item>

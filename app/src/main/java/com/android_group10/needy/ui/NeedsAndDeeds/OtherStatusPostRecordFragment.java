@@ -221,7 +221,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
                     completePost.setVisibility(View.INVISIBLE);
                     contact.setVisibility(View.INVISIBLE);
                     //Close associated conversation
-                    FirestoreUtil.closeConversationForPost(currentPositioned);
+                    FirestoreUtil.concludeConversationsForPost(currentPositioned);
                     rate.setVisibility(View.VISIBLE);
                 });
 

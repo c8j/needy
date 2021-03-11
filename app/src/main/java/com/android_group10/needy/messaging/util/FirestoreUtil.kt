@@ -108,7 +108,7 @@ object FirestoreUtil {
         //Check if conversation that was not concluded already exists
         doesConversationExist(
             post.postUID,
-            listOf(post.authorUID, currentUserUID),
+            currentUserUID,
             false,
         ) { _conversationAlreadyActive, _ ->
 
@@ -311,16 +311,16 @@ object FirestoreUtil {
 
     private fun doesConversationExist(
         associatedPostUID: String,
-        userUIDs: List<String>,
+        userUID: String,
         shouldBeConcluded: Boolean,
         onComplete: (alreadyExists: Boolean?, querySnapshot: QuerySnapshot?) -> Unit
     ) {
         conversationsCollectionRef.whereEqualTo(
             "associatedPostUID",
             associatedPostUID
-        ).whereArrayContainsAny(
+        ).whereArrayContains(
             "userUIDs",
-            userUIDs
+            userUID
         ).whereEqualTo("concluded", shouldBeConcluded).get().addOnSuccessListener { querySnapshot ->
             if (querySnapshot.isEmpty) {
                 onComplete(false, null)
@@ -342,7 +342,7 @@ object FirestoreUtil {
 
         doesConversationExist(
             requestQueryItem.item.associatedPostUID,
-            listOf(currentUserUID, requestQueryItem.item.senderUID),
+            currentUserUID,
             true,
         ) { _alreadyExists, querySnapshot ->
             _alreadyExists?.let { alreadyExists ->
@@ -418,11 +418,25 @@ object FirestoreUtil {
     }
 
     @JvmStatic
-    fun closeConversationForPost(post: Post) {
-        conversationsCollectionRef.whereEqualTo("associatedPostUID", post.postUID).limit(1).get()
+    fun concludeConversationsForPost(post: Post) {
+        conversationsCollectionRef.whereEqualTo("associatedPostUID", post.postUID).get()
             .addOnSuccessListener { querySnapshot ->
                 if (!querySnapshot.isEmpty) {
-                    updateConversationStatus(querySnapshot.documents[0].id, true) {}
+                    firestoreInstance.runBatch { batch ->
+                        querySnapshot.forEach { queryDocumentSnapshot ->
+                            batch.update(
+                                conversationsCollectionRef.document(queryDocumentSnapshot.id),
+                                "concluded",
+                                true
+                            )
+                        }
+                    }.addOnFailureListener {
+                        Log.e(
+                            FIRESTORE_LOG_TAG,
+                            "Failed to conclude conversations associated with post.",
+                            it
+                        )
+                    }
                 } else {
                     Log.e(FIRESTORE_LOG_TAG, "No conversation was found for selected post.")
                 }

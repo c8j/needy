@@ -124,13 +124,15 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
                 }
                 tvMessagePreview.text = latestMessageText
                 FirebaseUtil.getUserPictureURI(partnerUID) { uri ->
-                    uri?.let {
-                        Glide.with(itemView.context).load(it).apply(
+                    if (uri != null){
+                        Glide.with(itemView.context).load(uri).apply(
                             RequestOptions()
                                 .placeholder(R.drawable.anonymous_mask)
                                 .centerCrop()
                                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                         ).into(ivConversationAvatar)
+                    } else {
+                        ivConversationAvatar.setImageResource(R.drawable.anonymous_mask)
                     }
                 }
             }

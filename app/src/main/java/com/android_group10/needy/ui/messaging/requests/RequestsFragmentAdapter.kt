@@ -99,13 +99,15 @@ class RequestsFragmentAdapter(private val tabCallback: (selectTab: Int) -> Unit)
                 tvAssociatedPostTitle.text = requestQueryItem.item.associatedPostDescription
                 tvContactName.text = requestQueryItem.item.senderFullName
                 FirebaseUtil.getUserPictureURI(requestQueryItem.item.senderUID) { uri ->
-                    uri?.let {
-                        Glide.with(itemView.context).load(it).apply(
+                    if (uri != null){
+                        Glide.with(itemView.context).load(uri).apply(
                             RequestOptions()
                                 .placeholder(R.drawable.anonymous_mask)
                                 .centerCrop()
                                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                         ).into(ivConversationAvatar)
+                    } else {
+                        ivConversationAvatar.setImageResource(R.drawable.anonymous_mask)
                     }
                 }
             }
