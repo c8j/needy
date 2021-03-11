@@ -14,10 +14,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,8 +35,8 @@ public class InNeedFragment extends Fragment {
     private InNeedViewModel inNeedViewModel;
     private View root;
     public static ArrayList<Post> dataList = new ArrayList<>();
-    private PostAdapter myPostAdapter;
     private final FirebaseDatabase db = FirebaseDatabase.getInstance();
+    private RecyclerView recyclerView;
     private TextView textView;
     private Spinner spinner;
     private TextView hiddenText;
@@ -49,7 +47,12 @@ public class InNeedFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ValueEventListener listListener = new ValueEventListener() {
+        /*This adds a listener before onCreateView is called, therefore calling
+          myPostAdapter.notifyDataSetChanged() when myPostAdapter is null => exception
+          Instead, do it in onCreateView after initializing the adapter to ensure that it's not null
+         */
+
+        /*ValueEventListener listListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 addData(snapshot, false);
@@ -60,7 +63,7 @@ public class InNeedFragment extends Fragment {
 
             }
         };
-        db.getReference().child("Posts").addValueEventListener(listListener);
+        db.getReference().child("Posts").addValueEventListener(listListener);*/
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -69,16 +72,16 @@ public class InNeedFragment extends Fragment {
                 new ViewModelProvider(this).get(InNeedViewModel.class);
         root = inflater.inflate(R.layout.fragment_in_need, container, false);
 
-        RecyclerView recycler = root.findViewById(R.id.postRecyclerView_in_need);
+        recyclerView = root.findViewById(R.id.postRecyclerView_in_need);
         textView = root.findViewById(R.id.text_default2);
         filterText = root.findViewById(R.id.address_filter);
         applyFilters = root.findViewById(R.id.btn_set_filter);
         clearFilters = root.findViewById(R.id.btn_clear_filter);
 
-        inNeedViewModel.getList().observe(getViewLifecycleOwner(), new Observer<ArrayList>() {
+        //This never triggers because you never change _list in the view-model
+        /*inNeedViewModel.getList().observe(getViewLifecycleOwner(), new Observer<ArrayList>() {
             @Override
             public void onChanged(@Nullable ArrayList s) {
-                recycler.setHasFixedSize(true);
 
                 myPostAdapter = new PostAdapter(getContext(), dataList, new PostAdapter.OnItemClickListener() {
                     @Override
@@ -91,14 +94,37 @@ public class InNeedFragment extends Fragment {
                     }
                 });
                 recycler.setAdapter(myPostAdapter);
-                recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-                recycler.setItemAnimator(new DefaultItemAnimator());
+
 
                 if (dataList.size() == 0) {
                     textView.setText(inNeedViewModel.getText().getValue());
                 } else textView.setText("");
             }
+        });*/
+
+        /*
+        Move recyclerview initialization outside of the observer callback (why??)
+         */
+
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        PostAdapter myPostAdapter = new PostAdapter(getContext(), dataList, position -> {
+            Post clickedItem = dataList.get(position);
+
+            //Create action (from generated code by safeargs plugin) and navigate using it while passing the clicked post
+            InNeedFragmentDirections.ActionInNeedToOpenPost action = InNeedFragmentDirections.actionInNeedToOpenPost(clickedItem);
+            Navigation.findNavController(root).navigate(action);
         });
+        recyclerView.setAdapter(myPostAdapter);
+
+        //After initialization, dataList is always of size 0
+        /*if (dataList.size() == 0) {
+            textView.setText(inNeedViewModel.getText().getValue());
+        } else textView.setText("");*/
+        textView.setText(inNeedViewModel.getText().getValue()); //using LiveData for constant data??
 
         hiddenText = root.findViewById(R.id.hidden_textView1);
         spinner = root.findViewById(R.id.spinner1);
@@ -120,6 +146,20 @@ public class InNeedFragment extends Fragment {
             }
         });
 
+        //Moved database listener here, read above in onCreate why
+        ValueEventListener listListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                addData(snapshot, false);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        db.getReference().child("Posts").addValueEventListener(listListener);
+
         return root;
     }
 
@@ -131,8 +171,8 @@ public class InNeedFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int selectedServiceType = Integer.parseInt(hiddenText.getText().toString());
-                String addressFilter =  filterText.getText().toString();
-                if(!(addressFilter.isEmpty() && selectedServiceType == 0)){
+                String addressFilter = filterText.getText().toString();
+                if (!(addressFilter.isEmpty() && selectedServiceType == 0)) {
                     ValueEventListener listListener = new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -169,7 +209,7 @@ public class InNeedFragment extends Fragment {
         });
     }
 
-    private void addData(DataSnapshot snapshot, boolean filters){
+    private void addData(DataSnapshot snapshot, boolean filters) {
         if (snapshot.hasChildren()) {
             int count = 0;
             if (snapshot.getChildrenCount() != count) {
@@ -180,11 +220,11 @@ public class InNeedFragment extends Fragment {
                     if (object.getPostStatus() == 1) {
                         object.setAuthorUID(String.valueOf(child.child("author").getValue()));
 
-                        if(!filters) {
+                        if (!filters) {
                             dataList.add(object);
-                        } else{
+                        } else {
                             int selectedServiceType = Integer.parseInt(hiddenText.getText().toString());
-                            String addressFilter =  filterText.getText().toString();
+                            String addressFilter = filterText.getText().toString();
                             if (!addressFilter.isEmpty()) {
                                 if (object.getCity().contains(addressFilter) || object.getZipCode().equals(addressFilter)) {
                                     if (selectedServiceType > 0) {
@@ -206,12 +246,28 @@ public class InNeedFragment extends Fragment {
                     }
                     count++;
                 }
-                myPostAdapter.notifyDataSetChanged();
                 if (dataList.size() != 0) {
                     textView.setText("");
                 } else textView.setText(inNeedViewModel.getText().getValue());
+
+                //Update recyclerview adapter
+                if (recyclerView != null) {
+                    PostAdapter postAdapter = (PostAdapter) recyclerView.getAdapter();
+                    if (postAdapter != null) {
+                        postAdapter.updateData(dataList);
+                    }
+                }
+
+                /*
+                I would also either save the dataList inside the viewModel instead, otherwise there
+                isn't much of a point to the viewModel. You could have something like an init() function
+                in the viewModel that you run in onCreateView which sets up the initial list, maybe adds
+                data from the listener and then set a boolean field inside the viewModel, something like
+                'isInitialised' to true, so that it doesn't run the stuff in init() every time the fragment
+                is re-created. Then, when re-creating the recyclerview, you just pass the viewModel.dataList
+                object and handle the updating in the viewModel
+                 */
             }
         }
     }
-    public void preventClicks(View view) {}
 }

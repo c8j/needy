@@ -1,6 +1,5 @@
 package com.android_group10.needy
 
-import android.app.PendingIntent.getActivity
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,18 +12,17 @@ import com.android_group10.needy.messaging.util.FirebaseUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import java.util.*
 
 class PostAdapter(
-    val context: Context,
-    val detailList: List<Post>,
+    private val context: Context,
+    private var detailList: List<Post>,
     private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
         val lineView1 : TextView = itemView.findViewById(R.id.text_view_1)
         val photoView1 : ImageView = itemView.findViewById(R.id.image_view)
-        //this functionality is work-in-progress. Pushed to show how it will look like
+
         init {
             itemView.setOnClickListener(this)
         }
@@ -70,6 +68,15 @@ class PostAdapter(
         }
 
         //add stars here
+    }
+
+    fun updateData(newList: List<Post>){
+        detailList = newList;
+
+        /*This could be further optimized to only update items that have changed
+        instead of the whole list, take a look at DiffUtil
+         */
+        notifyDataSetChanged();
     }
 
 }

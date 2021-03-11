@@ -1,7 +1,6 @@
 package com.android_group10.needy.ui.NeedsAndDeeds;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,7 +38,10 @@ public class NeedsAndDeedsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int statusNew = 1;
+
+        //Same thing as for the InNeed fragment, read there for more info
+
+        /*int statusNew = 1;
         int statusGone = 100;
         int statusComplete = 3;
         int statusRatedByVolunteer = 5;
@@ -87,7 +87,7 @@ public class NeedsAndDeedsFragment extends Fragment {
 
             }
         };
-        db.getReference().child("Posts").addValueEventListener(listListener);
+        db.getReference().child("Posts").addValueEventListener(listListener);*/
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -96,10 +96,12 @@ public class NeedsAndDeedsFragment extends Fragment {
                 new ViewModelProvider(this).get(NeedsAndDeedsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_needs_and_deeds, container, false);
 
-        final RecyclerView recyclerView = root.findViewById(R.id.postRecyclerView_needs_and_deeds);
+        RecyclerView recyclerView = root.findViewById(R.id.postRecyclerView_needs_and_deeds);
         textView = root.findViewById(R.id.text_default);
 
-        needsAndDeedsViewModel.getList().observe(getViewLifecycleOwner(), new Observer<ArrayList>() {
+        //Same thing as in the InNeed fragment
+
+        /*needsAndDeedsViewModel.getList().observe(getViewLifecycleOwner(), new Observer<ArrayList>() {
             @Override
             public void onChanged(@Nullable ArrayList s) {
                 recyclerView.setHasFixedSize(true);
@@ -121,8 +123,74 @@ public class NeedsAndDeedsFragment extends Fragment {
                     textView.setText(needsAndDeedsViewModel.getText().getValue());
                 } else textView.setText("");
             }
+        });*/
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        myPostAdapter = new PostAdapter(getContext(), dataList2, position -> {
+            Post clickedItem = dataList2.get(position);
+            NeedsAndDeedsFragmentDirections.ActionNeedsAndDeedsToPostStatus action = NeedsAndDeedsFragmentDirections.actionNeedsAndDeedsToPostStatus(clickedItem);
+            Navigation.findNavController(root).navigate(action);
         });
+        recyclerView.setAdapter(myPostAdapter);
+
+        textView.setText(needsAndDeedsViewModel.getText().getValue());
+
+        int statusNew = 1;
+        int statusGone = 100;
+        int statusComplete = 3;
+        int statusRatedByVolunteer = 5;
+        int statusRatedByAuthor = 4;
+
+        ValueEventListener listListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if (snapshot.hasChildren()) {
+                    int count = 0;
+                    if (snapshot.getChildrenCount() != count) {
+                        dataList2.clear();
+                        for (DataSnapshot child : snapshot.getChildren()) {
+                            Post object = child.getValue(Post.class);
+                            assert object != null;
+                            if ((object.getPostStatus() > statusNew) && (object.getPostStatus() < statusGone)) {
+                                object.setAuthorUID(String.valueOf(child.child("author").getValue()));
+
+                                if (object.getAuthorUID().equals(firebaseUser)) {
+                                    if (object.getPostStatus() == statusRatedByVolunteer || object.getPostStatus() <= statusComplete) {
+                                        dataList2.add(object);
+                                    }
+                                } else if (object.getVolunteer().equals(firebaseUser)) {
+                                    if (object.getPostStatus() <= statusRatedByAuthor) {
+                                        dataList2.add(object);
+                                    }
+                                }
+                            }
+                            count++;
+                        }
+
+                        if (dataList2.size() != 0) {
+                            textView.setText("");
+                        }
+
+                        //Update recyclerview adapter
+                        PostAdapter postAdapter = (PostAdapter) recyclerView.getAdapter();
+                        if (postAdapter != null) {
+                            postAdapter.updateData(dataList2);
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        db.getReference().child("Posts").addValueEventListener(listListener);
+
         return root;
     }
-    public void preventClicks(View view) {}
 }
