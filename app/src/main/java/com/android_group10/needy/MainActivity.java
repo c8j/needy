@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onDrawerOpened(@NonNull View drawerView) {
                 ProfilePictureManager ppManager = new ProfilePictureManager();
-                //ppManager.displayProfilePic(thisActivity, profileImage, true);
+                ppManager.displayProfilePic(thisActivity, profileImage, true);
             }
 
             @Override
@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     userNameOnHeader.setText("Welcome " + name);
                     userEmailOnHeader.setText(email);
-                    loadImageFromDB();
+                    //loadImageFromDB();
                 }
             }
 
