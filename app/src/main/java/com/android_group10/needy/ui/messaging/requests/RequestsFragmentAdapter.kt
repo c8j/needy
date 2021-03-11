@@ -15,7 +15,7 @@ import com.android_group10.needy.messaging.util.FirestoreUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class RequestsFragmentAdapter :
     ListAdapter<RequestQueryItem, RequestsFragmentAdapter.RequestsViewHolder>(object :
@@ -46,26 +46,41 @@ class RequestsFragmentAdapter :
                                     true
                                 }
                                 R.id.messaging_request_menu_ignore -> {
-                                    FirestoreUtil.removeRequest(requestQueryItem.id) { _, message ->
-                                        Toast.makeText(
-                                            view.context,
-                                            message,
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    }
+                                    MaterialAlertDialogBuilder(view.context)
+                                        .setMessage(R.string.messaging_dialog_ignore)
+                                        .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
+                                            FirestoreUtil.removeRequest(requestQueryItem.id) { _, message ->
+                                                Toast.makeText(
+                                                    view.context,
+                                                    message,
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                            }
+                                        }
+                                        .setNeutralButton(R.string.messaging_dialog_cancel) { _, _ ->
+                                            //Do nothing
+                                        }
+                                        .show()
                                     true
                                 }
                                 R.id.messaging_request_menu_block -> {
-                                    FirestoreUtil.addToBlockList(
-                                        requestQueryItem.item.associatedPostUID,
-                                        requestQueryItem.item.senderUID
-                                    ) { _, message ->
-                                        Toast.makeText(
-                                            view.context,
-                                            message,
-                                            Toast.LENGTH_LONG
-                                        ).show()
-                                    }
+                                    MaterialAlertDialogBuilder(view.context)
+                                        .setMessage(R.string.messaging_dialog_block_requests)
+                                        .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
+                                            FirestoreUtil.addToBlockList(
+                                                requestQueryItem.item.senderUID
+                                            ) { _, message ->
+                                                Toast.makeText(
+                                                    view.context,
+                                                    message,
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                            }
+                                        }
+                                        .setNeutralButton(R.string.messaging_dialog_cancel) { _, _ ->
+                                            //Do nothing
+                                        }
+                                        .show()
                                     true
                                 }
                                 else -> false

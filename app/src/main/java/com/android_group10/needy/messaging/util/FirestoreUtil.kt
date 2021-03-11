@@ -51,14 +51,12 @@ object FirestoreUtil {
     private fun isOnBlockList(
         userUID: String,
         receiverUID: String,
-        post: Post,
         onComplete: (Boolean?, Exception?) -> Unit
     ) {
         val receiverBlockListRef = firestoreInstance
             .collection("$ROOT_COLLECTION/$receiverUID/$BLOCK_LIST_COLLECTION")
 
-        val query = receiverBlockListRef.whereEqualTo("postUID", post.postUID)
-            .whereEqualTo("userUID", userUID)
+        val query = receiverBlockListRef.whereEqualTo("userUID", userUID)
 
         query.get().addOnSuccessListener {
             if (it.isEmpty) {
@@ -130,8 +128,7 @@ object FirestoreUtil {
                                 //Check if user is on the block list of the receiver
                                 isOnBlockList(
                                     currentUserUID,
-                                    receiverUID,
-                                    post
+                                    receiverUID
                                 ) { _isBlocked, exception ->
 
                                     exception?.let {
@@ -222,7 +219,6 @@ object FirestoreUtil {
     }
 
     fun addToBlockList(
-        associatedPostUID: String,
         userUID: String,
         onComplete: (wasSuccessful: Boolean, message: String) -> Unit
     ) {
@@ -231,7 +227,6 @@ object FirestoreUtil {
             firestoreInstance.collection("$ROOT_COLLECTION/$currentUserUID/$BLOCK_LIST_COLLECTION")
         currentUserBlockListRef.add(
             mutableMapOf(
-                "postUID" to associatedPostUID,
                 "userUID" to userUID
             )
         ).addOnSuccessListener {

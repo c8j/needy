@@ -17,6 +17,7 @@ import com.android_group10.needy.ui.messaging.MessagingFragmentDirections
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ConversationsFragmentAdapter(private val pronoun: String) :
     ListAdapter<ConversationQueryItem, ConversationsFragmentAdapter.ConversationItemViewHolder>(
@@ -46,43 +47,58 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
             }
 
             //Set-up listener to open the popup menu
-            itemView.setOnCreateContextMenuListener { menu, v, _ ->
-                val inflater = MenuInflater(v.context)
+            itemView.setOnCreateContextMenuListener { menu, view, _ ->
+                val inflater = MenuInflater(view.context)
                 inflater.inflate(R.menu.messaging_conversation, menu)
                 menu.getItem(0).setOnMenuItemClickListener {
                     //Archive option
-                    FirestoreUtil.updateConversationStatus(
-                        conversationQueryItem.id,
-                        true
-                    ) { wasSuccessful ->
-                        if (wasSuccessful) {
-                            Toast.makeText(
-                                v.context,
-                                "Conversation archived.",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        } else {
-                            Toast.makeText(
-                                v.context,
-                                "Error occurred when trying to archive conversation.",
-                                Toast.LENGTH_LONG
-                            ).show()
+                    MaterialAlertDialogBuilder(view.context)
+                        .setMessage(R.string.messaging_dialog_archive)
+                        .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
+                            FirestoreUtil.updateConversationStatus(
+                                conversationQueryItem.id,
+                                true
+                            ) { wasSuccessful ->
+                                if (wasSuccessful) {
+                                    Toast.makeText(
+                                        view.context,
+                                        "Conversation archived.",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                } else {
+                                    Toast.makeText(
+                                        view.context,
+                                        "Error occurred when trying to archive conversation.",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            }
                         }
-                    }
+                        .setNeutralButton(R.string.messaging_dialog_cancel) { _, _ ->
+                            //Do nothing
+                        }
+                        .show()
                     true
                 }
                 menu.getItem(1).setOnMenuItemClickListener {
                     //Block option
-                    FirestoreUtil.addToBlockList(
-                        conversationQueryItem.item.associatedPostUID,
-                        partnerUID
-                    ) { _, message ->
-                        Toast.makeText(
-                            v.context,
-                            message,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
+                    MaterialAlertDialogBuilder(view.context)
+                        .setMessage(R.string.messaging_dialog_block_conversations)
+                        .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
+                            FirestoreUtil.addToBlockList(
+                                partnerUID
+                            ) { _, message ->
+                                Toast.makeText(
+                                    view.context,
+                                    message,
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        }
+                        .setNeutralButton(R.string.messaging_dialog_cancel) { _, _ ->
+                            //Do nothing
+                        }
+                        .show()
                     true
                 }
             }
