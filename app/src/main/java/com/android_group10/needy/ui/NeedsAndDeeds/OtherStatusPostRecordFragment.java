@@ -36,7 +36,7 @@ import java.util.Locale;
 
 public class OtherStatusPostRecordFragment extends Fragment {
     View root;
-    private final Post currentPositioned;
+    private Post currentPositioned;
     private ImageView authorPicture;
     private TextView authorName;
     private TextView authorRating;
@@ -63,10 +63,6 @@ public class OtherStatusPostRecordFragment extends Fragment {
     private final int statusGone = 100;
     private int selectedOption;
 
-    public OtherStatusPostRecordFragment(Post currentPositioned) {
-        this.currentPositioned = currentPositioned;
-    }
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -86,120 +82,124 @@ public class OtherStatusPostRecordFragment extends Fragment {
         rate = root.findViewById(R.id.rate);
         textPhone = root.findViewById(R.id.text_phone2);
 
-        String key = currentPositioned.getPostUID();
-        authorUID = currentPositioned.getAuthorUID();
-        if (!currentPositioned.getDescription().isEmpty()) {
-            postDescription.setText(currentPositioned.getDescription());
-        }
-        if (!currentPositioned.getIncentive().isEmpty()) {
-            postIncentive.setText(currentPositioned.getIncentive());
-        } else postIncentive.setText("-");
-
-        if (!currentPositioned.getZipCode().isEmpty()) {
-            postZipCode.setText(currentPositioned.getZipCode());
-        }
-        if (!currentPositioned.getCity().isEmpty()) {
-            postCity.setText(currentPositioned.getCity());
+        //Get clickedPost from previous fragment
+        if (getArguments() != null) {
+            OtherStatusPostRecordFragmentArgs args = OtherStatusPostRecordFragmentArgs.fromBundle(getArguments());
+            currentPositioned = args.getClickedPost();
         }
 
+        if (currentPositioned != null) {
+            String key = currentPositioned.getPostUID();
+            authorUID = currentPositioned.getAuthorUID();
+            if (!currentPositioned.getDescription().isEmpty()) {
+                postDescription.setText(currentPositioned.getDescription());
+            }
+            if (!currentPositioned.getIncentive().isEmpty()) {
+                postIncentive.setText(currentPositioned.getIncentive());
+            } else postIncentive.setText("-");
 
-        if (authorUID.equals(currentUser)){
-            volunteer = false;
-            contact.setText(R.string.button_contact2);
-            report.setText(R.string.button_report2);
-            authorPhone.setVisibility(View.INVISIBLE);
-            textPhone.setVisibility(View.INVISIBLE);
-            rate.setText(R.string.button_rate2);
-            if (currentPositioned.getPostStatus() >= statusComplete) {
-                if (currentPositioned.getPostStatus() == statusRatedByVolunteer || currentPositioned.getPostStatus() == statusComplete)
-                {
-                    rate.setVisibility(View.VISIBLE);
-                } else {
-                    rate.setVisibility(View.INVISIBLE);
-                }
+            if (!currentPositioned.getZipCode().isEmpty()) {
+                postZipCode.setText(currentPositioned.getZipCode());
+            }
+            if (!currentPositioned.getCity().isEmpty()) {
+                postCity.setText(currentPositioned.getCity());
             }
 
-        } else if (currentPositioned.getVolunteer().equals(currentUser)){
-            volunteer = true;
-            contact.setText(R.string.button_contact);
-            report.setText(R.string.button_report1);
-            authorPhone.setVisibility(View.VISIBLE);
-            textPhone.setVisibility(View.VISIBLE);
-            rate.setText(R.string.button_rate1);
-            if (currentPositioned.getPostStatus() >= statusComplete) {
-                if (currentPositioned.getPostStatus() == statusRatedByAuthor|| currentPositioned.getPostStatus() == statusComplete)
-                {
-                    rate.setVisibility(View.VISIBLE);
-                } else {
-                    rate.setVisibility(View.INVISIBLE);
+
+            if (authorUID.equals(currentUser)) {
+                volunteer = false;
+                contact.setText(R.string.button_contact2);
+                report.setText(R.string.button_report2);
+                authorPhone.setVisibility(View.INVISIBLE);
+                textPhone.setVisibility(View.INVISIBLE);
+                rate.setText(R.string.button_rate2);
+                if (currentPositioned.getPostStatus() >= statusComplete) {
+                    if (currentPositioned.getPostStatus() == statusRatedByVolunteer || currentPositioned.getPostStatus() == statusComplete) {
+                        rate.setVisibility(View.VISIBLE);
+                    } else {
+                        rate.setVisibility(View.INVISIBLE);
+                    }
                 }
-            }
-        }
 
-
-        assert authorUID != null;
-        db.getReference().child("Users").child(authorUID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                } else {
-                    HashMap<String, Object> authorObject = (HashMap<String, Object>) task.getResult().getValue();
-                    //authorPicture.setImageURI(); ;
-                    assert authorObject != null;
-                    if (authorObject.get("firstName") != null || authorObject.get("lastName") != null) {
-                        String fullName = String.valueOf(authorObject.get("firstName")).concat(" ").concat(String.valueOf(authorObject.get("lastName")));
-                        authorName.setText(fullName);
-                    }
-                    if (authorObject.get("authorRating") != null) {
-                        authorRating.setText(String.format(Locale.getDefault(), "%s", authorObject.get("authorRating")));
-                    }
-                    if (authorObject.get("phone") != null) {
-                        authorPhone.setText(String.valueOf(authorObject.get("phone")));
+            } else if (currentPositioned.getVolunteer().equals(currentUser)) {
+                volunteer = true;
+                contact.setText(R.string.button_contact);
+                report.setText(R.string.button_report1);
+                authorPhone.setVisibility(View.VISIBLE);
+                textPhone.setVisibility(View.VISIBLE);
+                rate.setText(R.string.button_rate1);
+                if (currentPositioned.getPostStatus() >= statusComplete) {
+                    if (currentPositioned.getPostStatus() == statusRatedByAuthor || currentPositioned.getPostStatus() == statusComplete) {
+                        rate.setVisibility(View.VISIBLE);
+                    } else {
+                        rate.setVisibility(View.INVISIBLE);
                     }
                 }
             }
-        });
 
-        DatabaseReference currentPostRef = db.getReference("Posts").child(key);
-        ValueEventListener postListener1 = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listenerCode(currentPostRef, snapshot);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        };
-
-        currentPostRef.addValueEventListener(postListener1);
-
-        report.setOnClickListener(v -> {
-            String blamedUserUID;
-            if (authorUID.equals(currentUser)){
-                blamedUserUID = currentPositioned.getVolunteer();
-            } else{
-                blamedUserUID = currentPositioned.getAuthorUID();
-            }
-
-            LayoutInflater dialogInflater = LayoutInflater.from(getContext());
-            final View yourCustomView = dialogInflater.inflate(R.layout.report_user, null);
-
-            final TextView etName = (EditText) yourCustomView.findViewById(R.id.report_description);
-            AlertDialog dialog = new AlertDialog.Builder(getContext())
-                    .setTitle("Report")
-                    .setView(yourCustomView)
-                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int whichButton) {
-                            Report complaint = new Report(key, currentUser, blamedUserUID, etName.getText().toString());
-                            DAO saveDB = new DAO();
-                            saveDB.writeReport(complaint);
+            assert authorUID != null;
+            db.getReference().child("Users").child(authorUID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Log.e("firebase", "Error getting data", task.getException());
+                    } else {
+                        HashMap<String, Object> authorObject = (HashMap<String, Object>) task.getResult().getValue();
+                        //authorPicture.setImageURI(); ;
+                        assert authorObject != null;
+                        if (authorObject.get("firstName") != null || authorObject.get("lastName") != null) {
+                            String fullName = String.valueOf(authorObject.get("firstName")).concat(" ").concat(String.valueOf(authorObject.get("lastName")));
+                            authorName.setText(fullName);
                         }
-                    })
-                    .setNegativeButton("Cancel", null).create();
-            dialog.show();
-        });
+                        if (authorObject.get("authorRating") != null) {
+                            authorRating.setText(String.format(Locale.getDefault(), "%s", authorObject.get("authorRating")));
+                        }
+                        if (authorObject.get("phone") != null) {
+                            authorPhone.setText(String.valueOf(authorObject.get("phone")));
+                        }
+                    }
+                }
+            });
+
+            DatabaseReference currentPostRef = db.getReference("Posts").child(key);
+            ValueEventListener postListener1 = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    listenerCode(currentPostRef, snapshot);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            };
+            currentPostRef.addValueEventListener(postListener1);
+
+            report.setOnClickListener(v -> {
+                String blamedUserUID;
+                if (authorUID.equals(currentUser)) {
+                    blamedUserUID = currentPositioned.getVolunteer();
+                } else {
+                    blamedUserUID = currentPositioned.getAuthorUID();
+                }
+
+                LayoutInflater dialogInflater = LayoutInflater.from(getContext());
+                final View yourCustomView = dialogInflater.inflate(R.layout.report_user, null);
+
+                final TextView etName = (EditText) yourCustomView.findViewById(R.id.report_description);
+                AlertDialog dialog = new AlertDialog.Builder(getContext())
+                        .setTitle("Report")
+                        .setView(yourCustomView)
+                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Report complaint = new Report(key, currentUser, blamedUserUID, etName.getText().toString());
+                                DAO saveDB = new DAO();
+                                saveDB.writeReport(complaint);
+                            }
+                        })
+                        .setNegativeButton("Cancel", null).create();
+                dialog.show();
+            });
+        }
 
         return root;
     }
@@ -208,7 +208,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
         Post post = snapshot.getValue(Post.class);
         if (post != null) {
 
-            if(currentPositioned.getPostStatus() == statusInProgress){
+            if (currentPositioned.getPostStatus() == statusInProgress) {
                 completePost.setVisibility(View.VISIBLE);
                 rate.setVisibility(View.INVISIBLE);
 
@@ -240,10 +240,10 @@ public class OtherStatusPostRecordFragment extends Fragment {
                 rate.setOnClickListener(v -> {
                     String ratedUserUID;
                     int ratingType;
-                    if (authorUID.equals(currentUser)){
+                    if (authorUID.equals(currentUser)) {
                         ratedUserUID = currentPositioned.getVolunteer();
                         ratingType = 2;
-                    } else{
+                    } else {
                         ratedUserUID = currentPositioned.getAuthorUID();
                         ratingType = 1;
                     }
@@ -285,24 +285,24 @@ public class OtherStatusPostRecordFragment extends Fragment {
                     });
 
                     dialog2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int whichButton) {
+                        public void onClick(DialogInterface dialog, int whichButton) {
 
-                                    if (selectedOption != 0) {
-                                        if (authorUID.equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByVolunteer)) {
-                                            postStatusUpdate(currentRef, post, statusRatedByAuthor);
-                                            rate.setVisibility(View.INVISIBLE);
-                                        } else if (currentPositioned.getVolunteer().equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByAuthor)) {
-                                            postStatusUpdate(currentRef, post, statusRatedByVolunteer);
-                                            rate.setVisibility(View.INVISIBLE);
-                                        }
-                                       UserRating rating = new UserRating(ratedUserUID, ratingType, selectedOption);
-                                        DAO saveDB = new DAO();
-                                        saveDB.writeRating(rating);
-                                    } else {
-                                       Toast.makeText(getContext(), "You must select one option!", Toast.LENGTH_SHORT).show();
-                                   }
+                            if (selectedOption != 0) {
+                                if (authorUID.equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByVolunteer)) {
+                                    postStatusUpdate(currentRef, post, statusRatedByAuthor);
+                                    rate.setVisibility(View.INVISIBLE);
+                                } else if (currentPositioned.getVolunteer().equals(currentUser) && (post.getPostStatus() == statusComplete || post.getPostStatus() == statusRatedByAuthor)) {
+                                    postStatusUpdate(currentRef, post, statusRatedByVolunteer);
+                                    rate.setVisibility(View.INVISIBLE);
                                 }
-                            });
+                                UserRating rating = new UserRating(ratedUserUID, ratingType, selectedOption);
+                                DAO saveDB = new DAO();
+                                saveDB.writeRating(rating);
+                            } else {
+                                Toast.makeText(getContext(), "You must select one option!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                     dialog2.setNegativeButton("Cancel", null).create();
                     dialog2.create().show();
                 });
@@ -310,7 +310,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
         }
     }
 
-    private void postStatusUpdate(DatabaseReference currentRef, Post post, int newStatus){
+    private void postStatusUpdate(DatabaseReference currentRef, Post post, int newStatus) {
         assert post != null;
         if ((post.getPostStatus() == statusRatedByAuthor && newStatus == statusRatedByVolunteer) || (post.getPostStatus() == statusRatedByVolunteer && newStatus == statusRatedByAuthor)) {
             currentPositioned.setPostStatus(statusGone);
@@ -323,5 +323,4 @@ public class OtherStatusPostRecordFragment extends Fragment {
         }
 
     }
-    public void preventClicks(View view) {}
 }

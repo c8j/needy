@@ -1,15 +1,9 @@
 package com.android_group10.needy.ui.LogInAndRegistration;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.android_group10.needy.MainActivity;
 import com.android_group10.needy.R;
-
 import com.android_group10.needy.User;
 import com.android_group10.needy.ui.SharedPreference;
 import com.facebook.AccessToken;
@@ -29,20 +26,16 @@ import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.firebase.auth.AuthCredential;
-
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
-
-import java.util.HashMap;
-
-import com.facebook.FacebookSdk;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +43,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
+
+import java.util.HashMap;
+import java.util.Objects;
 
 
 public class LogIn extends AppCompatActivity implements View.OnClickListener {
@@ -66,7 +62,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-        getSupportActionBar().setTitle("Log In");
+        //getSupportActionBar().setTitle("Log In"); //Done automatically
         initializeItems();
         keepLogin();
 
@@ -81,7 +77,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         rememberMeCheckBox = findViewById(R.id.remeberMe);
         Button facebookButton = findViewById(R.id.facebook_login_button);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        //FacebookSdk.sdkInitialize(getApplicationContext()); //Deprecated, done automatically now
         callbackManager = CallbackManager.Factory.create();
 
         rememberMe();
@@ -168,17 +164,19 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
                 if (task.isSuccessful()) {
                     firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-                    if (firebaseUser.isEmailVerified()) {
-                        startActivity(new Intent(LogIn.this, MainActivity.class));
-                        finish();
+                    if (firebaseUser != null) {
+                        if (firebaseUser.isEmailVerified()) {
+                            startActivity(new Intent(LogIn.this, MainActivity.class));
+                            finish();
 
-                    } else {
-                        firebaseUser.sendEmailVerification();
-                        createToast("Check your inputEmail to verify your account!");
+                        } else {
+                            firebaseUser.sendEmailVerification();
+                            createToast("Check your inputEmail to verify your account!");
+                        }
                     }
                 } else {
                     try {
-                        throw task.getException();
+                        throw Objects.requireNonNull(task.getException());
                     }
                     // if user enters wrong email.
                     catch (FirebaseAuthInvalidUserException invalidEmail) {
@@ -212,17 +210,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             errorMessage(forgetPasswordEmail, "Please provide valid email");
         }
-        firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
-
-            if (task.isSuccessful()) {
-
-                createToast("Check your email");
-
-            } else {
-
-                createToast("Check your email");
-            }
-        });
+        firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> createToast("Check your email"));
     }
 
     public void rememberMe() {
@@ -291,13 +279,11 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
+
+        //Are these used anywhere??
         FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user != null) {
-                updateUI(user);
-            } else {
-                updateUI(null);
-            }
+            updateUI(user);
         };
         AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
             @Override
@@ -392,27 +378,30 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
 
     public void checkIfFacebookUserExistsInDataBase() {
-        facebookUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference uidRef = rootRef.child("Users").child(facebookUserId);
-        ValueEventListener eventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (!snapshot.exists()) {
-                    register_dialog();
-                } else {
-                    startActivity(new Intent(LogIn.this, MainActivity.class));
-                    finish();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            facebookUserId = user.getUid();
+            DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference uidRef = rootRef.child("Users").child(facebookUserId);
+            ValueEventListener eventListener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (!snapshot.exists()) {
+                        register_dialog();
+                    } else {
+                        startActivity(new Intent(LogIn.this, MainActivity.class));
+                        finish();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
+                }
 
-        };
-        uidRef.addListenerForSingleValueEvent(eventListener);
+            };
+            uidRef.addListenerForSingleValueEvent(eventListener);
+        }
     }
 
 }

@@ -26,9 +26,10 @@
         android:layout_marginLeft="50dp"
         android:layout_marginTop="30dp"
         android:layout_marginRight="50dp"
+        android:autofillHints="username, emailAddress"
         android:ems="10"
-        android:hint="E-mail"
-        android:inputType="textPersonName"
+        android:hint="@string/e_mail"
+        android:inputType="textEmailAddress"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements" />
 
@@ -44,14 +45,15 @@
         android:hint="@string/password"
         android:inputType="textPassword"
         android:textColor="@color/dark_grey_elements"
-        android:textColorHint="@color/dark_grey_elements" />
+        android:textColorHint="@color/dark_grey_elements"
+        android:autofillHints="password" />
 
     <CheckBox
         android:id="@+id/remeberMe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:text="Remember Me"
+        android:text="@string/remember_me"
         android:layout_marginTop="5dp"
         android:textSize="16sp"/>
 
