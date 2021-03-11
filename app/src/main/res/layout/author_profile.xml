@@ -88,7 +88,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="30dp"
-        android:text="@string/author_name"
+        android:text="@string/volunteer_name"
         android:textAlignment="viewStart"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -118,6 +118,7 @@
         app:layout_constraintStart_toEndOf="@+id/authFirstNameTextView"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!--TODO: Rename to volunteer, not author -->
     <RatingBar
         android:id="@+id/authorRatingBar"
         style="?android:attr/ratingBarStyleIndicator"

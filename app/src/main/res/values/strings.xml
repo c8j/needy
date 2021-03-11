@@ -110,7 +110,8 @@
     <string name="messaging_chat_send_description">Send message</string>
     <string name="messaging_conversation_pronoun">You</string>
 
-    <!--author's profile-->
+    <!--volunteer's profile-->
     <string name="open_post_view_profile">View Author\'s details</string>
-    <string name="author_name">Name:</string>
+    <string name="volunteer_name">Name:</string>
+    <string name="admin_log_out">Log out</string>
 </resources>
