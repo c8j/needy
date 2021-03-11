@@ -359,8 +359,7 @@ object FirestoreUtil {
                                         currentUserUID to userFullName,
                                         requestQueryItem.item.senderUID to requestQueryItem.item.senderFullName
                                     ),
-                                    "",
-                                    "",
+                                    ChatMessage(),
                                     false
                                 )
                             )
@@ -477,6 +476,7 @@ object FirestoreUtil {
         val currentUserUID = firebaseAuthInstance.currentUser!!.uid
         val query = conversationsCollectionRef.whereArrayContains("userUIDs", currentUserUID)
             .whereEqualTo("concluded", false)
+            .orderBy("latestMessage.timestamp", Query.Direction.DESCENDING)
         return FirestoreConversationQueryLiveData(query)
     }
 
@@ -489,7 +489,7 @@ object FirestoreUtil {
         val chatMessage = ChatMessage(currentUserUID, messageText, Timestamp.now())
         conversationsCollectionRef.document(conversationUID).collection(MESSAGES_COLLECTION)
             .add(chatMessage).addOnSuccessListener {
-                updateLatestMessage(conversationUID, messageText, currentUserUID)
+                updateLatestMessage(conversationUID, chatMessage)
                 onComplete(null)
             }.addOnFailureListener {
                 Log.e(FIRESTORE_LOG_TAG, "Error when adding message to database.", it)
@@ -499,20 +499,17 @@ object FirestoreUtil {
 
     private fun updateLatestMessage(
         conversationUID: String,
-        messageText: String,
-        senderUID: String
+        chatMessage: ChatMessage
     ) {
         val conversationDocumentRef = conversationsCollectionRef.document(conversationUID)
-        firestoreInstance.runBatch { batch ->
-            batch.update(conversationDocumentRef, "latestMessage", messageText)
-            batch.update(conversationDocumentRef, "latestMessageSenderUID", senderUID)
-        }.addOnFailureListener {
-            Log.e(
-                FIRESTORE_LOG_TAG,
-                "Failed to update latest message for conversation with uid: $conversationUID",
-                it
-            )
-        }
+        conversationDocumentRef.update("latestMessage", chatMessage)
+            .addOnFailureListener {
+                Log.e(
+                    FIRESTORE_LOG_TAG,
+                    "Failed to update latest message for conversation with uid: $conversationUID",
+                    it
+                )
+            }
     }
 
     fun getChatMessagesLiveData(conversationUID: String): LiveData<List<ChatMessageQueryItem>> {

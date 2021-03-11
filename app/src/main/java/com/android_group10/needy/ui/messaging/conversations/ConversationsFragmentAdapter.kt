@@ -116,8 +116,8 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
             binding.apply {
                 tvAssociatedPostTitle.text = conversationQueryItem.item.associatedPostDescription
                 tvContactName.text = conversationQueryItem.item.userNameMap[partnerUID]
-                var latestMessageText = conversationQueryItem.item.latestMessage
-                conversationQueryItem.item.latestMessageSenderUID.let { uid ->
+                var latestMessageText = conversationQueryItem.item.latestMessage.text
+                conversationQueryItem.item.latestMessage.senderUid.let { uid ->
                     if (uid != "" && uid == currentUserUID) {
                         latestMessageText = "$pronoun: $latestMessageText"
                     }
