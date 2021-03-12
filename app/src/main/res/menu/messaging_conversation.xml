@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/messaging.conversation.menu.archive"
+        android:title="@string/messaging_conversation_archive" />
+    <item
+        android:id="@+id/messaging.conversation.menu.block"
+        android:title="@string/messaging_request_block" />
+</menu>

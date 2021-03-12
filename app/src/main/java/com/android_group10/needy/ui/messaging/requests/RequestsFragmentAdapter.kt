@@ -15,8 +15,9 @@ import com.android_group10.needy.messaging.util.FirestoreUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class RequestsFragmentAdapter :
+class RequestsFragmentAdapter(private val tabCallback: (selectTab: Int) -> Unit) :
     ListAdapter<RequestQueryItem, RequestsFragmentAdapter.RequestsViewHolder>(object :
         RequestQueryItemDiffCallback() {}) {
 
@@ -27,6 +28,8 @@ class RequestsFragmentAdapter :
 
         init {
             binding.apply {
+
+                //Set-up the listener to open the popup menu for a request item
                 iBtnChoiceMenu.setOnClickListener { view ->
                     PopupMenu(view.context, view).apply {
                         inflate(R.menu.messaging_request)
@@ -37,19 +40,48 @@ class RequestsFragmentAdapter :
                                         Toast.makeText(
                                             view.context,
                                             message,
-                                            Toast.LENGTH_SHORT
+                                            Toast.LENGTH_LONG
                                         ).show()
+                                        tabCallback(1)
                                     }
                                     true
                                 }
                                 R.id.messaging_request_menu_ignore -> {
-                                    FirestoreUtil.addToIgnoreList(requestQueryItem) { _, message ->
-                                        Toast.makeText(
-                                            view.context,
-                                            message,
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
+                                    MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
+                                        .setMessage(R.string.messaging_dialog_ignore)
+                                        .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
+                                            FirestoreUtil.removeRequest(requestQueryItem.id) { _, message ->
+                                                Toast.makeText(
+                                                    view.context,
+                                                    message,
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                            }
+                                        }
+                                        .setNeutralButton(R.string.messaging_dialog_cancel) { _, _ ->
+                                            //Do nothing
+                                        }
+                                        .show()
+                                    true
+                                }
+                                R.id.messaging_request_menu_block -> {
+                                    MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
+                                        .setMessage(R.string.messaging_dialog_block_requests)
+                                        .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
+                                            FirestoreUtil.addToBlockList(
+                                                requestQueryItem.item.senderUID
+                                            ) { _, message ->
+                                                Toast.makeText(
+                                                    view.context,
+                                                    message,
+                                                    Toast.LENGTH_LONG
+                                                ).show()
+                                            }
+                                        }
+                                        .setNeutralButton(R.string.messaging_dialog_cancel) { _, _ ->
+                                            //Do nothing
+                                        }
+                                        .show()
                                     true
                                 }
                                 else -> false
@@ -67,13 +99,15 @@ class RequestsFragmentAdapter :
                 tvAssociatedPostTitle.text = requestQueryItem.item.associatedPostDescription
                 tvContactName.text = requestQueryItem.item.senderFullName
                 FirebaseUtil.getUserPictureURI(requestQueryItem.item.senderUID) { uri ->
-                    uri?.let {
-                        Glide.with(itemView.context).load(it).apply(
+                    if (uri != null){
+                        Glide.with(itemView.context).load(uri).apply(
                             RequestOptions()
                                 .placeholder(R.drawable.anonymous_mask)
                                 .centerCrop()
                                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                         ).into(ivConversationAvatar)
+                    } else {
+                        ivConversationAvatar.setImageResource(R.drawable.anonymous_mask)
                     }
                 }
             }

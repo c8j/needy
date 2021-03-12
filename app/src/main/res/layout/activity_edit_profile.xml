@@ -15,10 +15,10 @@
         android:text="@string/edit_lastName"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileFirstNameTextView2" />
+        app:layout_constraintTop_toBottomOf="@+id/AuthorNameTextView" />
 
     <TextView
-        android:id="@+id/profileLastNameTextView3"
+        android:id="@+id/labelCityTextView"
         android:layout_width="120dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@+id/profileLastNameTextView2" />
 
     <TextView
-        android:id="@+id/profileLastNameTextView4"
+        android:id="@+id/labelZipcodeTextView"
         android:layout_width="120dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
@@ -37,10 +37,10 @@
         android:text="@string/profile_zipcode"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileLastNameTextView3" />
+        app:layout_constraintTop_toBottomOf="@+id/labelCityTextView" />
 
     <TextView
-        android:id="@+id/profileLastNameTextView5"
+        android:id="@+id/labelPhoneNumberTextView"
         android:layout_width="120dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
@@ -48,10 +48,10 @@
         android:text="@string/profile_phone_number"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileLastNameTextView4" />
+        app:layout_constraintTop_toBottomOf="@+id/labelZipcodeTextView" />
 
     <TextView
-        android:id="@+id/profileFirstNameTextView2"
+        android:id="@+id/AuthorNameTextView"
         android:layout_width="120dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
@@ -63,14 +63,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/editFirstNameTextView"
+        android:id="@+id/authFirstNameTextView"
         android:layout_width="170dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="30dp"
         android:textAlignment="viewStart"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/profileFirstNameTextView2"
+        app:layout_constraintStart_toEndOf="@+id/AuthorNameTextView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
@@ -81,8 +81,8 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintStart_toEndOf="@+id/profileLastNameTextView3"
-        app:layout_constraintTop_toBottomOf="@+id/editLastNameTextView" />
+        app:layout_constraintStart_toEndOf="@+id/labelCityTextView"
+        app:layout_constraintTop_toBottomOf="@+id/authLastNameTextView" />
 
     <EditText
         android:id="@+id/zipEditText"
@@ -92,7 +92,7 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintStart_toEndOf="@+id/profileLastNameTextView4"
+        app:layout_constraintStart_toEndOf="@+id/labelZipcodeTextView"
         app:layout_constraintTop_toBottomOf="@+id/cityEditText" />
 
     <TextView
@@ -103,11 +103,11 @@
         android:layout_marginTop="8dp"
         android:textAlignment="viewStart"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/profileLastNameTextView5"
+        app:layout_constraintStart_toEndOf="@+id/labelPhoneNumberTextView"
         app:layout_constraintTop_toBottomOf="@+id/zipEditText" />
 
     <TextView
-        android:id="@+id/editLastNameTextView"
+        android:id="@+id/authLastNameTextView"
         android:layout_width="170dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
@@ -115,7 +115,7 @@
         android:textAlignment="viewStart"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/profileLastNameTextView2"
-        app:layout_constraintTop_toBottomOf="@+id/editFirstNameTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/authFirstNameTextView" />
 
     <Button
         android:id="@+id/updateButton"
@@ -130,7 +130,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileLastNameTextView5"
+        app:layout_constraintTop_toBottomOf="@+id/labelPhoneNumberTextView"
         app:layout_constraintVertical_bias="0.081" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

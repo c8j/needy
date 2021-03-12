@@ -7,5 +7,5 @@ data class ChatMessage(
     val text: String,
     val timestamp: Timestamp
 ) {
-    constructor() : this("", "", Timestamp(0, 0))
+    constructor() : this("", "", Timestamp.now())
 }

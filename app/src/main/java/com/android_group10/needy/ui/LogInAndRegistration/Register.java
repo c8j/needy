@@ -111,8 +111,8 @@ public class Register extends AppCompatActivity {
                                     if (task1.isSuccessful()) {
                                         createToast("User has been registered successfully");
                                         Intent intent = new Intent(this, LogIn.class);
-                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                         startActivity(intent);
+                                        finish();
                                     } else {
 
                                         createToast("Failed to register! Try again");
@@ -130,8 +130,8 @@ public class Register extends AppCompatActivity {
 
                                 createToast("This Email already exist");
                                 Intent intent = new Intent(this, LogIn.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
+                                finish();
 
                             } catch (Exception e) {
                                 createToast("Failed to register! Try again");

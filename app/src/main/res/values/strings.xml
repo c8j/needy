@@ -65,27 +65,25 @@
     <string name="facebook_app_id">138417034808418</string>
     <string name="fb_login_protocol_scheme">fb138417034808418</string>
 
-
+    <!--Profile related-->
     <string name="your_profile">Your profile</string>
     <string name="profile_firstName">First Name</string>
-    <string name="profile_address">City</string>
-    <string name="profile_zipcode">Zipcode</string>
+    <string name="profile_address">City:</string>
+    <string name="profile_zipcode">Zipcode:</string>
     <string name="profile_phone_number">Phone number: </string>
     <string name="profile_email">Email id</string>
     <string name="profile_edit">Edit profile</string>
-
     <string name="profile_lastName">LastName</string>
     <string name="confirm">Confirm</string>
     <string name="zip_code">Zip_Code</string>
     <string name="city">City</string>
     <string name="please_complete_your_profile_information">Please complete your profile information</string>
-
     <string name="edit_picture">Edit picture</string>
     <string name="profile_update">Update</string>
     <string name="edit_firstName">First Name: </string>
     <string name="edit_lastName">Last Name: </string>
-    <string name="share_us_of_facebook">Share us on Facebook</string>
 
+    <string name="share_us_of_facebook">Share us on Facebook</string>
 
     <string name="btn1">Horrible experience!</string>
     <string name="btn2">Bad</string>
@@ -108,7 +106,23 @@
     <string name="messaging_request_imageDescription">Request menu</string>
     <string name="messaging_request_accept">Accept request</string>
     <string name="messaging_request_ignore">Ignore request</string>
+    <string name="messaging_request_block">Block user</string>
     <string name="messaging_chat_hint">Type message here…</string>
     <string name="messaging_chat_send_description">Send message</string>
     <string name="messaging_conversation_pronoun">You</string>
+    <string name="messaging_conversation_archive">Archive</string>
+    <string name="messaging_conversation_block">Block user</string>
+    <string name="messaging_dialog_cancel">Cancel</string>
+    <string name="messaging_dialog_confirm">Confirm</string>
+    <string name="messaging_dialog_ok">OK</string>
+    <string name="messaging_dialog_ignore">This will remove the request from your list. Proceed?</string>
+    <string name="messaging_dialog_block_requests">Warning: This will prevent this user from sending further messaging requests to you. Proceed?</string>
+    <string name="messaging_dialog_block_conversations">Warning: This will conclude any conversations with this user and prevent them from sending further messaging requests to you. Proceed?</string>
+    <string name="messaging_dialog_archive">This will conclude the conversation for both participants. Proceed?</string>
+    <string name="messaging_dialog_concluded">Conversation was concluded by other user.</string>
+
+    <!--volunteer's profile-->
+    <string name="open_post_view_profile">View Author\'s details</string>
+    <string name="volunteer_name">Name:</string>
+    <string name="admin_log_out">Log out</string>
 </resources>

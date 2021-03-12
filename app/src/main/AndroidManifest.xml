@@ -3,22 +3,22 @@
     package="com.android_group10.needy">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-feature android:name="android.hardware.camera"
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_needy"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
-
-
+        <activity android:name=".AdminActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -27,21 +27,14 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths">
-            </meta-data>
-
+                android:resource="@xml/file_paths" />
         </provider>
 
         <activity
-
             android:name=".ui.LogInAndRegistration.Register"
             android:screenOrientation="portrait"
-            android:theme="@style/loginTheme">
-
-        </activity>
-
+            android:theme="@style/loginTheme" />
         <activity
-
             android:name=".ui.LogInAndRegistration.LogIn"
             android:screenOrientation="portrait"
             android:theme="@style/loginTheme">
@@ -51,18 +44,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
         <activity
             android:name=".MainActivity"
-            android:screenOrientation="portrait"
             android:label="@string/Needy"
-            >
-        </activity>
+            android:screenOrientation="portrait" />
 
-        <provider android:authorities="com.facebook.app.FacebookContentProvider{138417034808418}"
+        <provider
             android:name="com.facebook.FacebookContentProvider"
-            android:exported="true"/>
+            android:authorities="com.facebook.app.FacebookContentProvider{138417034808418}"
+            android:exported="true" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

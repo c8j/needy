@@ -11,7 +11,7 @@ import com.android_group10.needy.R
 import com.android_group10.needy.databinding.FragmentMessagingRequestsBinding
 import com.android_group10.needy.messaging.MessagingFragmentViewModel
 
-class RequestsFragment : Fragment() {
+class RequestsFragment(private val tabCallback: (selectTab: Int) -> Unit) : Fragment() {
 
     private var _binding: FragmentMessagingRequestsBinding? = null
     private val binding get() = _binding!!
@@ -41,7 +41,7 @@ class RequestsFragment : Fragment() {
     private fun initRecyclerView() {
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            val listAdapter = RequestsFragmentAdapter()
+            val listAdapter = RequestsFragmentAdapter(tabCallback)
             val requestsLiveData = viewModel.getRequests()
             requestsLiveData.observe(viewLifecycleOwner) { requestQueryItemList ->
                 if (requestQueryItemList != null) {
