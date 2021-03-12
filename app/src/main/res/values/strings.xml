@@ -45,7 +45,7 @@
     <string name="address_text">Specify a ZIP code and a city if they differ from the ones in your Profile: </string>
     <string name="description_text">I would like to get help with the following: </string>
     <string name="description_text1">What is it you need to get help with? </string>
-    <string name="description_text2">Task: </string>
+    <string name="description_text2">Task details </string>
     <string name="motivation_text">If you would like to motivate a volunteer, how would you do it? </string>
     <string name="warning">Attention! Reporting a user might lead to that user being blocked in our system and/or police being informed.
         Please, consider giving the user low rating instead</string>
@@ -122,7 +122,9 @@
     <string name="messaging_dialog_concluded">Conversation was concluded by other user.</string>
 
     <!--volunteer's profile-->
-    <string name="open_post_view_profile">View Author\'s details</string>
+    <string name="open_post_view_profile">View volunteer\'s details</string>
     <string name="volunteer_name">Name:</string>
     <string name="admin_log_out">Log out</string>
+    <string name="help_offered_by">Help offered by:</string>
+    <string name="help_needed_by">Help needed by:</string>
 </resources>
