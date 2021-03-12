@@ -75,7 +75,7 @@ public class OpenPostRecordFragment extends Fragment {
 
         String key = null;
         String authorUID = null;
-        
+
         if (currentPositioned != null) {
             key = currentPositioned.getPostUID();
             authorUID = currentPositioned.getAuthorUID();
