@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.navGraphViewModels
 import com.android_group10.needy.R
 import com.android_group10.needy.databinding.FragmentMessagingBinding
-import com.android_group10.needy.messaging.MessagingFragmentViewModel
+import com.android_group10.needy.ui.messaging.conversations.ConversationsFragment
+import com.android_group10.needy.ui.messaging.requests.RequestsFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 
@@ -17,16 +17,13 @@ class MessagingFragment : Fragment() {
     private var _binding: FragmentMessagingBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel by navGraphViewModels<MessagingFragmentViewModel>(R.id.main_graph)
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentMessagingBinding.inflate(inflater, container, false)
-        viewModel.setupTabCallback(this::changeTab)
-        binding.viewPager.adapter = MessagingPagerAdapter(viewModel.pagerFragments, this)
+        binding.viewPager.adapter = MessagingPagerAdapter(listOf(RequestsFragment(this::changeTab), ConversationsFragment()), this)
 
         //TODO: implement badges for incoming requests/unread messages
         TabLayoutMediator(
@@ -47,6 +44,10 @@ class MessagingFragment : Fragment() {
     }
 
     private fun changeTab(tabIndex: Int){
-        binding.viewPager.currentItem = tabIndex
+        binding.viewPager.apply {
+            if (!isDetached && currentItem == 0){
+                currentItem = tabIndex
+            }
+        }
     }
 }
