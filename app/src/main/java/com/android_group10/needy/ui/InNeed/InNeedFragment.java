@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class InNeedFragment extends Fragment {
     private InNeedViewModel inNeedViewModel;
@@ -111,7 +112,7 @@ public class InNeedFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        PostAdapter myPostAdapter = new PostAdapter(getContext(), dataList, position -> {
+        PostAdapter myPostAdapter = new PostAdapter(requireContext(), dataList, position -> {
             Post clickedItem = dataList.get(position);
 
             //Create action (from generated code by safeargs plugin) and navigate using it while passing the clicked post

@@ -66,21 +66,16 @@ public class OpenPostRecordFragment extends Fragment {
         textPhone = root.findViewById(R.id.text_phone);
 
         ProfilePictureManager ppManager = new ProfilePictureManager();
-/*
-        String key = currentPositioned.getPostUID();
-        String authorUID = currentPositioned.getAuthorUID();
-        if (!currentPositioned.getDescription().isEmpty()) {
-            postDescription.setText(currentPositioned.getDescription());
-=======*/
+
         //Get clickedPost from previous fragment
         if (getArguments() != null) {
             OpenPostRecordFragmentArgs args = OpenPostRecordFragmentArgs.fromBundle(getArguments());
             currentPositioned = args.getClickedPost();
-
         }
 
         String key = null;
         String authorUID = null;
+        
         if (currentPositioned != null) {
             key = currentPositioned.getPostUID();
             authorUID = currentPositioned.getAuthorUID();
@@ -97,6 +92,7 @@ public class OpenPostRecordFragment extends Fragment {
             if (!currentPositioned.getCity().isEmpty()) {
                 postCity.setText(currentPositioned.getCity());
             }
+            ppManager.displayProfilePic(getActivity(), authorPicture, false, authorUID);
         }
 
         assert authorUID != null;
@@ -120,7 +116,6 @@ public class OpenPostRecordFragment extends Fragment {
                     if (authorObject.get("phone") != null) {
                         authorPhone.setText(String.valueOf(authorObject.get("phone")));
                     }
-                    ppManager.displayProfilePic(getActivity(), authorPicture, false, finalAuthorUID);
                 }
             }
         });
