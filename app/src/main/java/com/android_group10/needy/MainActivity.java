@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     File photoFile = null;
     private Uri selectedImageUri;
     private LocalDatabaseHelper localDatabaseHelper;
-    //  private ProfilePictureManager ppManager;
+  //  private ProfilePictureManager ppManager;
 
     private static final int SELECT_PICTURE = 100;
     private static final int CAMERA_REQUEST = 1;
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         localDatabaseHelper = new LocalDatabaseHelper(this);
-        //       ppManager = new ProfilePictureManager();
+ //       ppManager = new ProfilePictureManager();
         initialization();
         updateHeader();
         facebookSDKInitialize();
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }*/
 
         //This way the back stack behaves normally, TODO: find a way to also implement double tap exit
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
