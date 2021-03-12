@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android_group10.needy.AdminActivity;
 import com.android_group10.needy.MainActivity;
 import com.android_group10.needy.R;
 import com.android_group10.needy.User;
@@ -168,6 +169,9 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
                         if (firebaseUser.isEmailVerified()) {
                             startActivity(new Intent(LogIn.this, MainActivity.class));
                             finish();
+                            if(firebaseUser.getEmail().equals("needy2021@gmail.com")){
+                                startActivity(new Intent(LogIn.this, AdminActivity.class));
+                            }
 
                         } else {
                             firebaseUser.sendEmailVerification();
@@ -229,7 +233,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
     public void keepLogin() {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null) {
+        if (firebaseUser != null && firebaseUser.isEmailVerified()) {
             startActivity(new Intent(LogIn.this, MainActivity.class));
             finish();
         }

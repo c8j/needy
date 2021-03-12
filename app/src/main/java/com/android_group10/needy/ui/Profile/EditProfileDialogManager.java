@@ -1,38 +1,23 @@
 package com.android_group10.needy.ui.Profile;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android_group10.needy.ProfilePictureManager;
 import com.android_group10.needy.R;
 import com.android_group10.needy.User;
-import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.Map;
 
@@ -55,8 +40,8 @@ public class EditProfileDialogManager extends AppCompatActivity {
 
     //protected void onCreate(Bundle savedInstanceState)
     protected void onCreateDialog(View view) {
-        firstNameText = view.findViewById(R.id.editFirstNameTextView);
-        lastNameText = view.findViewById(R.id.editLastNameTextView);
+        firstNameText = view.findViewById(R.id.authFirstNameTextView);
+        lastNameText = view.findViewById(R.id.authLastNameTextView);
         cityText = view.findViewById(R.id.cityEditText);
         zipcodeText = view.findViewById(R.id.zipEditText);
         phNumText = view.findViewById(R.id.editPhoneTextView);

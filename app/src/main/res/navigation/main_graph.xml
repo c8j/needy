@@ -74,6 +74,11 @@
         <argument
             android:name="partnerFullName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_chat_to_messaging"
+            app:destination="@id/messaging"
+            app:popUpTo="@id/messaging"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>

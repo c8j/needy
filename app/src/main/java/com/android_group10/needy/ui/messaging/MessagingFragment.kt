@@ -25,6 +25,7 @@ class MessagingFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentMessagingBinding.inflate(inflater, container, false)
+        viewModel.setupTabCallback(this::changeTab)
         binding.viewPager.adapter = MessagingPagerAdapter(viewModel.pagerFragments, this)
 
         //TODO: implement badges for incoming requests/unread messages
@@ -43,5 +44,9 @@ class MessagingFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun changeTab(tabIndex: Int){
+        binding.viewPager.currentItem = tabIndex
     }
 }
