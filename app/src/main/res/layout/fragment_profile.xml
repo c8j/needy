@@ -58,7 +58,7 @@
 
     <TextView
         android:id="@+id/profileCityTextView"
-        android:layout_width="143dp"
+        android:layout_width="190dp"
         android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="40dp"
@@ -79,7 +79,7 @@
 
     <TextView
         android:id="@+id/profilePhoneNumTextView"
-        android:layout_width="143dp"
+        android:layout_width="170dp"
         android:layout_height="23dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
@@ -90,7 +90,7 @@
 
     <TextView
         android:id="@+id/profileEmailTextView"
-        android:layout_width="143dp"
+        android:layout_width="226dp"
         android:layout_height="23dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"

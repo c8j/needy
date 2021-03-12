@@ -22,7 +22,7 @@
         android:layout_width="128dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:text="@string/profile_zipcode"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
         android:layout_width="128dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="4dp"
         android:text="@string/profile_phone_number"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,8 @@
         android:layout_width="110dp"
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/rating_text"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -67,7 +68,7 @@
         android:layout_width="128dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="4dp"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/labelZipcodeTextView"
         app:layout_constraintTop_toBottomOf="@+id/authCityTextView" />
@@ -77,7 +78,7 @@
         android:layout_width="128dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="4dp"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/labelPhoneNumberTextView"
         app:layout_constraintTop_toBottomOf="@+id/authZipTextView" />
@@ -119,15 +120,19 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <!--TODO: Rename to volunteer, not author -->
+
     <RatingBar
         android:id="@+id/authorRatingBar2"
         style="?android:attr/ratingBarStyleIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/labelRatingTextView"
-        app:layout_constraintTop_toBottomOf="@+id/authPhoneTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/authPhoneTextView"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/imageView"

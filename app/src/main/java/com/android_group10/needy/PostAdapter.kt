@@ -1,11 +1,13 @@
 package com.android_group10.needy
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.android_group10.needy.messaging.util.FirebaseUtil
@@ -22,7 +24,6 @@ class PostAdapter(
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
         val lineView1 : TextView = itemView.findViewById(R.id.text_view_1)
         val photoView1 : ImageView = itemView.findViewById(R.id.image_view)
-
         init {
             itemView.setOnClickListener(this)
         }
@@ -40,13 +41,13 @@ class PostAdapter(
         fun onItemClick(position: Int)
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(
             R.layout.post_details,
             parent,
             false
         )
-
         return PostViewHolder(itemView)
     }
 

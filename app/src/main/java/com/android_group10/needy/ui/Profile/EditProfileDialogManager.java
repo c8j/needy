@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +27,7 @@ public class EditProfileDialogManager extends AppCompatActivity {
     private TextView lastNameText;
     private EditText cityText;
     private EditText zipcodeText;
-    private TextView phNumText;
+    private EditText phNumEditText;
     private Button updateButton;
     private String uid;
     private DatabaseReference userRef;
@@ -38,13 +39,12 @@ public class EditProfileDialogManager extends AppCompatActivity {
         thisActivity = activity;
     }
 
-    //protected void onCreate(Bundle savedInstanceState)
     protected void onCreateDialog(View view) {
         firstNameText = view.findViewById(R.id.authFirstNameTextView);
         lastNameText = view.findViewById(R.id.authLastNameTextView);
         cityText = view.findViewById(R.id.cityEditText);
         zipcodeText = view.findViewById(R.id.zipEditText);
-        phNumText = view.findViewById(R.id.editPhoneTextView);
+        phNumEditText = view.findViewById(R.id.phoneEditText);
         updateButton = view.findViewById(R.id.updateButton);
 
         uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -61,7 +61,7 @@ public class EditProfileDialogManager extends AppCompatActivity {
                 lastNameText.setText(snapshot.child("lastName").getValue(String.class));
                 int zipCode = snapshot.child("zipCode").getValue(Integer.class);
                 zipcodeText.setText(Integer.toString(zipCode));
-                phNumText.setText(snapshot.child("phone").getValue(String.class));
+                phNumEditText.setText(snapshot.child("phone").getValue(String.class));
                 cityText.setText(snapshot.child("city").getValue(String.class));
             }
 
@@ -81,8 +81,12 @@ public class EditProfileDialogManager extends AppCompatActivity {
 
     private void updateProfile(){
         String newCity = cityText.getText().toString();
-        String newZip = zipcodeText.getText().toString();
         currentUser[0].setCity(newCity);
+
+        String newPhone = phNumEditText.getText().toString();
+        currentUser[0].setPhone(newPhone);
+
+        String newZip = zipcodeText.getText().toString();
         if(!newZip.matches("\\d{5}"))
             Toast.makeText(thisActivity, "Please provide a valid Zip-code", Toast.LENGTH_SHORT).show();
         else{
@@ -90,7 +94,6 @@ public class EditProfileDialogManager extends AppCompatActivity {
             Map<String, Object> postValues = currentUser[0].toMap();
             userRef.updateChildren(postValues);
             Toast.makeText(thisActivity, "Profile updated successfully", Toast.LENGTH_SHORT).show();
-            updateButton.setEnabled(true);
         }
     }
 }
