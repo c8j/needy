@@ -19,7 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android_group10.needy.AdminActivity;
+import com.android_group10.needy.ui.Admin.AdminActivity;
 import com.android_group10.needy.MainActivity;
 import com.android_group10.needy.R;
 import com.android_group10.needy.User;

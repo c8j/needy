@@ -127,4 +127,12 @@
     <string name="admin_log_out">Log out</string>
     <string name="help_offered_by">Help offered by:</string>
     <string name="help_needed_by">Help needed by:</string>
+
+    <!--admin layout-->
+    <string name="admin_reported_uid">Reported UID:</string>
+    <string name="admin_reported_by">Reported by:</string>
+    <string name="admin_report_descr">Report description: </string>
+    <string name="admin_post_uid">Post UID:</string>
+    <string name="admin_remove_user">Remove user</string>
+
 </resources>
