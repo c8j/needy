@@ -38,9 +38,9 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ReportsV
         if(reports.size() == 0){
             holder.reportedUid.setText(R.string.admin_no_reports);
             holder.deleteUserButton.setVisibility(View.GONE);
-            holder.reportAuthorUid.setVisibility(View.GONE);
-            holder.description.setVisibility(View.GONE);
-            holder.postUid.setVisibility(View.GONE);
+            holder.reportAuthorUid.setText(" - ");
+            holder.description.setText(" - ");
+            holder.postUid.setText(" - ");
         }
         /*
         holder.reportedUid.setText(R.string.admin_reported_uid + reports.get(position).getBlamedUserUID());
@@ -48,6 +48,11 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ReportsV
         holder.description.setText(reports.get(position).getDescription());
         holder.postUid.setText(reports.get(position).getPostUID());
          */
+    }
+
+    public void setReports(ArrayList<Report> reports){
+        this.reports = reports;
+        notifyDataSetChanged();  //TODO: Use better methods for this
     }
 
     @Override

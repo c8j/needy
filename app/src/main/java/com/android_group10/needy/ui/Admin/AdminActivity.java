@@ -2,6 +2,8 @@ package com.android_group10.needy.ui.Admin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +26,7 @@ public class AdminActivity extends AppCompatActivity {
     private static final String TAG = "AdminActivity";
     private Activity thisActivity = this;
     private RecyclerView reportsRecyclerView;
+    private AdminViewModel adminViewModel;
     private ArrayList<Report> reports = new ArrayList<>(10);
 
     @Override
@@ -31,20 +34,18 @@ public class AdminActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
         reportsRecyclerView = findViewById(R.id.reportsRecyclerView);
+        reportsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //ArrayList<String> blamedUsers = new ArrayList<>(10);
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Reports");
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot postSnapshot: snapshot.getChildren()){
-                    //String key = postSnapshot.getKey();
-                    //blamedUsers.add(key);
                     for (DataSnapshot reportSnapshot: postSnapshot.getChildren()){
                         Report report = reportSnapshot.getValue(Report.class);
                         assert report != null;
                         Log.i(TAG, "Reason: " + report.getDescription());
-                        reports.add(report); //<--------------NOT GETTING ADDED
+                        reports.add(report); //<--------------SIZE IS ALWAYS 0
                     }
                 }
             }
@@ -54,13 +55,13 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
 
+
+        ReportsAdapter reportsAdapter = new ReportsAdapter(this, reports);
+        reportsRecyclerView.setAdapter(reportsAdapter);
+
         Log.i(TAG, "reports size = " + reports.size());
         for (Report report: reports){
             Log.i(TAG, "Report uid: " + report.getBlamedUserUID());
         }
-
-        ReportsAdapter reportsAdapter = new ReportsAdapter(this, reports);
-        reportsRecyclerView.setAdapter(reportsAdapter);
-        reportsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 }

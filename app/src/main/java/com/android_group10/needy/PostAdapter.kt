@@ -63,10 +63,13 @@ class PostAdapter(
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val currentItem = detailList[position]
         holder.lineView1.text = currentItem.description
+
+        //Setting the background of author's post:
         val currentUID = Firebase.auth.currentUser?.uid
         if(currentItem.authorUID == currentUID){
-            holder.postContainerLayout.setBackgroundColor(0xFFf5fae0.toInt()) 
+            holder.postContainerLayout.setBackgroundColor(0xFFf5fae0.toInt())
         }
+        
         FirebaseUtil.getUserPictureURI(currentItem.authorUID) { uri ->
             uri?.let {
                 Glide.with(context).load(it).apply(
@@ -77,8 +80,6 @@ class PostAdapter(
                 ).into(holder.photoView1)
             }
         }
-
-        //add stars here
     }
 
     fun updateData(newList: List<Post>){
