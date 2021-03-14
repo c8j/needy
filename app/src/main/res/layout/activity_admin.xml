@@ -8,7 +8,7 @@
     tools:context=".ui.Admin.AdminActivity">
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/admin_log_out_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

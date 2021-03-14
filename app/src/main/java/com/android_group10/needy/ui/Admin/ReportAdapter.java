@@ -16,10 +16,10 @@ import com.android_group10.needy.Report;
 
 import java.util.ArrayList;
 
-public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ReportsViewHolder> {
+public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportsViewHolder> {
     Context context;
     ArrayList<Report> reports;
-    public ReportsAdapter(Context context, ArrayList<Report> reports){
+    public ReportAdapter(Context context, ArrayList<Report> reports){
         this.context = context;
         this.reports = reports;
     }
@@ -42,15 +42,15 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ReportsV
             holder.description.setText(" - ");
             holder.postUid.setText(" - ");
         }
-        /*
-        holder.reportedUid.setText(R.string.admin_reported_uid + reports.get(position).getBlamedUserUID());
-        holder.reportAuthorUid.setText(reports.get(position).getReportAuthorUID() );
-        holder.description.setText(reports.get(position).getDescription());
-        holder.postUid.setText(reports.get(position).getPostUID());
-         */
+        else {
+            holder.reportedUid.setText(R.string.admin_reported_uid + reports.get(position).getBlamedUserUID());
+            holder.reportAuthorUid.setText(reports.get(position).getReportAuthorUID() );
+            holder.description.setText(reports.get(position).getDescription());
+            holder.postUid.setText(reports.get(position).getPostUID());
+        }
     }
 
-    public void setReports(ArrayList<Report> reports){
+    public void updateReports(ArrayList<Report> reports){
         this.reports = reports;
         notifyDataSetChanged();  //TODO: Use better methods for this
     }
@@ -63,7 +63,7 @@ public class ReportsAdapter extends RecyclerView.Adapter<ReportsAdapter.ReportsV
         return count;
     }
 
-    public class ReportsViewHolder extends RecyclerView.ViewHolder{
+    public static class ReportsViewHolder extends RecyclerView.ViewHolder{
         TextView reportedUid;
         TextView reportAuthorUid;
         TextView description;
