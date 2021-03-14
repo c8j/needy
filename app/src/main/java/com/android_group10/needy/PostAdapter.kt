@@ -2,6 +2,7 @@ package com.android_group10.needy
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,10 @@ import com.android_group10.needy.messaging.util.FirebaseUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class PostAdapter(
     private val context: Context,
@@ -24,6 +29,7 @@ class PostAdapter(
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
         val lineView1 : TextView = itemView.findViewById(R.id.text_view_1)
         val photoView1 : ImageView = itemView.findViewById(R.id.image_view)
+        val postContainerLayout : RelativeLayout = itemView.findViewById(R.id.postItemRelativeLayout)
         init {
             itemView.setOnClickListener(this)
         }
@@ -53,10 +59,14 @@ class PostAdapter(
 
     override fun getItemCount() = detailList.size
 
+    @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val currentItem = detailList[position]
         holder.lineView1.text = currentItem.description
-
+        val currentUID = Firebase.auth.currentUser?.uid
+        if(currentItem.authorUID == currentUID){
+            holder.postContainerLayout.setBackgroundColor(0xFFf5fae0.toInt()) 
+        }
         FirebaseUtil.getUserPictureURI(currentItem.authorUID) { uri ->
             uri?.let {
                 Glide.with(context).load(it).apply(

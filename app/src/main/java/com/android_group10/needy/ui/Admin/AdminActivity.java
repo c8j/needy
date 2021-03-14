@@ -24,7 +24,7 @@ public class AdminActivity extends AppCompatActivity {
     private static final String TAG = "AdminActivity";
     private Activity thisActivity = this;
     private RecyclerView reportsRecyclerView;
-    private ArrayList<Report> reports;
+    private ArrayList<Report> reports = new ArrayList<>(10);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,6 @@ public class AdminActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin);
         reportsRecyclerView = findViewById(R.id.reportsRecyclerView);
 
-        reports = new ArrayList<Report>(10);
         //ArrayList<String> blamedUsers = new ArrayList<>(10);
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Reports");
         userRef.addValueEventListener(new ValueEventListener() {
@@ -55,12 +54,10 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
 
-        /*
         Log.i(TAG, "reports size = " + reports.size());
         for (Report report: reports){
             Log.i(TAG, "Report uid: " + report.getBlamedUserUID());
         }
-         */
 
         ReportsAdapter reportsAdapter = new ReportsAdapter(this, reports);
         reportsRecyclerView.setAdapter(reportsAdapter);
