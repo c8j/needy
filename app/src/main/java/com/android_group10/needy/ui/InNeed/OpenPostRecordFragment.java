@@ -176,15 +176,4 @@ public class OpenPostRecordFragment extends Fragment {
             }
         }
     }
-
-    private void openAuthorDetails(){
-        LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-        View view = layoutInflater.inflate(R.layout.author_profile, null);
-        //EditProfileDialogManager editmanager = new EditProfileDialogManager(getActivity());
-        //editmanager.onCreateDialog(view);
-        final AlertDialog alertD = new AlertDialog.Builder(getContext()).create();
-        alertD.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        alertD.setView(view);
-        alertD.show();
-    }
 }

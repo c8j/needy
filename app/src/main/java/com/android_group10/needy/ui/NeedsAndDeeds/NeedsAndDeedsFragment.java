@@ -1,9 +1,12 @@
 package com.android_group10.needy.ui.NeedsAndDeeds;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,6 +37,7 @@ public class NeedsAndDeedsFragment extends Fragment {
     private FirebaseDatabase db = FirebaseDatabase.getInstance();
     private final String firebaseUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private TextView textView;
+    private RelativeLayout postLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -90,6 +94,7 @@ public class NeedsAndDeedsFragment extends Fragment {
         db.getReference().child("Posts").addValueEventListener(listListener);*/
     }
 
+    @SuppressLint("ResourceAsColor")
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         needsAndDeedsViewModel =
@@ -130,6 +135,7 @@ public class NeedsAndDeedsFragment extends Fragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         myPostAdapter = new PostAdapter(getContext(), dataList2, position -> {
             Post clickedItem = dataList2.get(position);
+
             NeedsAndDeedsFragmentDirections.ActionNeedsAndDeedsToPostStatus action = NeedsAndDeedsFragmentDirections.actionNeedsAndDeedsToPostStatus(clickedItem);
             Navigation.findNavController(root).navigate(action);
         });

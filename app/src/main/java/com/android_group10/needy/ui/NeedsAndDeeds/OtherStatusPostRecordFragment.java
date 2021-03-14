@@ -2,6 +2,8 @@ package com.android_group10.needy.ui.NeedsAndDeeds;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +39,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class OtherStatusPostRecordFragment extends Fragment {
+    private static final String TAG = "OtherStatusPostRecordFragment";
     View root;
     private Post currentPositioned;
     private ImageView authorPicture;
@@ -53,6 +56,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
     private Button contact;
     private Button report;
     private Button rate;
+    private TextView whosDetailsTextView;
 
     private final FirebaseDatabase db = FirebaseDatabase.getInstance();
     private final String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -85,6 +89,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
         report = root.findViewById(R.id.reportButton);
         rate = root.findViewById(R.id.rate);
         textPhone = root.findViewById(R.id.text_phone2);
+        whosDetailsTextView = root.findViewById(R.id.whos_details_textView);
 
         ProfilePictureManager ppManager = new ProfilePictureManager();
 
@@ -104,20 +109,23 @@ public class OtherStatusPostRecordFragment extends Fragment {
             if (!currentPositioned.getIncentive().isEmpty()) {
                 postIncentive.setText(currentPositioned.getIncentive());
             } else postIncentive.setText("-");
-
+/*
             if (!currentPositioned.getZipCode().isEmpty()) {
                 postZipCode.setText(currentPositioned.getZipCode());
             }
             if (!currentPositioned.getCity().isEmpty()) {
                 postCity.setText(currentPositioned.getCity());
             }
-            ppManager.displayProfilePic(getActivity(), authorPicture, false, authorUID);
+ */
+            //ppManager.displayProfilePic(getActivity(), authorPicture, false, authorUID);
 
 
             if (authorUID.equals(currentUser)) {
                 volunteer = false;
+                whosDetailsTextView.setText(R.string.help_offered_by);
                 contact.setText(R.string.button_contact2);
                 report.setText(R.string.button_report2);
+                String volunteerUID = currentPositioned.getVolunteer();
                 authorPhone.setVisibility(View.INVISIBLE);
                 textPhone.setVisibility(View.INVISIBLE);
                 rate.setText(R.string.button_rate2);
@@ -128,9 +136,12 @@ public class OtherStatusPostRecordFragment extends Fragment {
                         rate.setVisibility(View.INVISIBLE);
                     }
                 }
+                ppManager.displayProfilePic(getActivity(), authorPicture, false, volunteerUID);
+                getUserDetails(volunteerUID);
 
             } else if (currentPositioned.getVolunteer().equals(currentUser)) {
                 volunteer = true;
+                whosDetailsTextView.setText(R.string.help_needed_by);
                 contact.setText(R.string.button_contact);
                 report.setText(R.string.button_report1);
                 authorPhone.setVisibility(View.VISIBLE);
@@ -143,32 +154,10 @@ public class OtherStatusPostRecordFragment extends Fragment {
                         rate.setVisibility(View.INVISIBLE);
                     }
                 }
+                assert authorUID != null;
+                getUserDetails(authorUID);
+                ppManager.displayProfilePic(getActivity(), authorPicture, false, authorUID);
             }
-
-            assert authorUID != null;
-            db.getReference().child("Users").child(authorUID).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DataSnapshot> task) {
-                    if (!task.isSuccessful()) {
-                        Log.e("firebase", "Error getting data", task.getException());
-                    } else {
-                        HashMap<String, Object> authorObject = (HashMap<String, Object>) task.getResult().getValue();
-                        assert authorObject != null;
-                        if (authorObject.get("firstName") != null || authorObject.get("lastName") != null) {
-                            String fullName = String.valueOf(authorObject.get("firstName")).concat(" ").concat(String.valueOf(authorObject.get("lastName")));
-                            authorName.setText(fullName);
-                        }
-                        if (authorObject.get("authorRating") != null) {
-                            String rating = String.format(Locale.getDefault(), "%s", authorObject.get("authorRating"));
-                            //authorRating.setText(rating);
-                            authorRatingBar.setRating(Float.parseFloat(rating));
-                        }
-                        if (authorObject.get("phone") != null) {
-                            authorPhone.setText(String.valueOf(authorObject.get("phone")));
-                        }
-                    }
-                }
-            });
 
             DatabaseReference currentPostRef = db.getReference("Posts").child(key);
             ValueEventListener postListener1 = new ValueEventListener() {
@@ -211,6 +200,37 @@ public class OtherStatusPostRecordFragment extends Fragment {
         }
 
         return root;
+    }
+
+    private void getUserDetails(String uid){
+        db.getReference().child("Users").child(uid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                } else {
+                    HashMap<String, Object> authorObject = (HashMap<String, Object>) task.getResult().getValue();
+                    assert authorObject != null;
+                    if (authorObject.get("firstName") != null || authorObject.get("lastName") != null) {
+                        String fullName = String.valueOf(authorObject.get("firstName")).concat(" ").concat(String.valueOf(authorObject.get("lastName")));
+                        authorName.setText(fullName);
+                    }
+                    if (authorObject.get("authorRating") != null) {
+                        String rating = String.format(Locale.getDefault(), "%s", authorObject.get("authorRating"));
+                        authorRatingBar.setRating(Float.parseFloat(rating));
+                    }
+                    if (authorObject.get("phone") != null) {
+                        authorPhone.setText(String.valueOf(authorObject.get("phone")));
+                    }
+                    if (authorObject.get("city") != null) {
+                        postCity.setText(String.valueOf(authorObject.get("city")));
+                    }
+                    if (authorObject.get("zipCode") != null) {
+                        postZipCode.setText(String.format(Locale.getDefault(), "%s", authorObject.get("zipCode")));
+                    }
+                }
+            }
+        });
     }
 
     private void listenerCode(DatabaseReference currentRef, DataSnapshot snapshot) {

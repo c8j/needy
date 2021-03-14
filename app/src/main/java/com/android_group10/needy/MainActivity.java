@@ -36,6 +36,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.android_group10.needy.LocalDatabase.DbBitmapUtility;
 import com.android_group10.needy.LocalDatabase.LocalDatabaseHelper;
 import com.android_group10.needy.ui.InNeed.InNeedFragmentDirections;
+import com.android_group10.needy.ui.LogInAndRegistration.FacebookLogin;
 import com.android_group10.needy.ui.LogInAndRegistration.LogIn;
 import com.bumptech.glide.Glide;
 import com.facebook.CallbackManager;
@@ -119,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         });
 
         //this.deleteDatabase("Images.db");
-
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -129,7 +129,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
             public void onDrawerOpened(@NonNull View drawerView) {
                 ProfilePictureManager ppManager = new ProfilePictureManager();
                 ppManager.displayProfilePic(MainActivity.this, profileImage, true, userId);
-
             }
 
             @Override
@@ -393,10 +392,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         int itemId = item.getItemId();
         if (itemId == R.id.change_image) {//This will open the gallery
             openImageChooser();
-            return true;
-        } else if (itemId == R.id.delete_image) {
-            localDatabaseHelper.deleteImage(userId);
-            profileImage.setImageResource(R.drawable.anonymous_mask);
             return true;
         } else if (itemId == R.id.take_image) {
             openCamera();

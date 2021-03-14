@@ -24,8 +24,11 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="10dp"
+        android:layout_marginBottom="50dp"
         android:text="Needy is a bridge between people to enable them to communicate with each other, to help each other and facilitate the process of communication between the needy help and the person who is able to provide assistance "
         android:textColor="@color/primaryTextColor"
+
+        android:background="@drawable/text_view_background"
         android:textSize="18sp"
         android:textStyle="bold" />
 

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darker_yellow"
+    android:background="@drawable/gradient_list"
+    android:id="@+id/login_layout"
     android:orientation="vertical"
     tools:context=".ui.LogInAndRegistration.LogIn">
 

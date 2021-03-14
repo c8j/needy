@@ -2,6 +2,7 @@ package com.android_group10.needy.ui.LogInAndRegistration;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,18 +19,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android_group10.needy.AdminActivity;
+import com.android_group10.needy.ui.Admin.AdminActivity;
 import com.android_group10.needy.MainActivity;
 import com.android_group10.needy.R;
 import com.android_group10.needy.User;
 import com.android_group10.needy.ui.SharedPreference;
 import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.firebase.auth.AuthCredential;
@@ -43,8 +42,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONException;
-
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -58,17 +55,25 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     public String id, email, firstName, lastName;
     private String facebookUserId;
     private long pressedTime;
+    private boolean isLoggedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
         //getSupportActionBar().setTitle("Log In"); //Done automatically
+        animatedBackGround();
         initializeItems();
         keepLogin();
-
     }
 
+    public void animatedBackGround(){
+        LinearLayout linearLayout = findViewById(R.id.login_layout);
+        AnimationDrawable animationDrawable = (AnimationDrawable) linearLayout.getBackground();
+        animationDrawable.setEnterFadeDuration(2000);
+        animationDrawable.setExitFadeDuration(4000);
+        animationDrawable.start();
+    }
     public void initializeItems() {
         Button logInButton = findViewById(R.id.logInButton);
         logInPassword = findViewById(R.id.logInPassword);
@@ -141,6 +146,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         alertD.show();
     }
 
+    //Log in with email and password.
     public void loginAction() {
         String inputEmail = logInEmail.getText().toString().trim();
         String inputPassword = logInPassword.getText().toString().trim();
@@ -169,7 +175,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
                         if (firebaseUser.isEmailVerified()) {
                             startActivity(new Intent(LogIn.this, MainActivity.class));
                             finish();
-                            if(firebaseUser.getEmail().equals("needy2021@gmail.com")){
+                            if (firebaseUser.getEmail().equals("needy2021@gmail.com")) {
                                 startActivity(new Intent(LogIn.this, AdminActivity.class));
                             }
 
@@ -217,6 +223,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> createToast("Check your email"));
     }
 
+    //Remember the user's information /Email and the password.
     public void rememberMe() {
         SharedPreference mySharedPreference = new SharedPreference(LogIn.this, SharedPreference.SESSION_REMEMBERME);
         if (mySharedPreference.checkRememberMe()) {
@@ -231,18 +238,19 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         Toast.makeText(LogIn.this, text, Toast.LENGTH_LONG).show();
     }
 
+
     public void keepLogin() {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null && firebaseUser.isEmailVerified()) {
             startActivity(new Intent(LogIn.this, MainActivity.class));
             finish();
+        } else {
+            keepUserLoginWithFacebook();
         }
     }
 
 
     // Facebook Methods
-
-
     private void handleFacebookAccessToken(AccessToken token) {
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         firebaseAuth.signInWithCredential(credential)
@@ -270,36 +278,28 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 handleFacebookAccessToken(loginResult.getAccessToken());
-
             }
 
             @Override
             public void onCancel() {
-
             }
 
             @Override
             public void onError(FacebookException error) {
-
             }
         });
 
-        //Are these used anywhere??
-        FirebaseAuth.AuthStateListener authStateListener = firebaseAuth -> {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            updateUI(user);
-        };
-        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-                if (currentAccessToken == null) {
-                    firebaseAuth.signOut();
-                } else {
-                    loadUserProfile(currentAccessToken);
-                }
-            }
-        };
+    }
 
+    //Check if the user login with Facebook, So keep it.
+    public void keepUserLoginWithFacebook() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+        if (isLoggedIn) {
+            startActivity(new Intent(LogIn.this, MainActivity.class));
+            finish();
+        }
     }
 
     @Override
@@ -308,26 +308,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void loadUserProfile(AccessToken newAccessToken) {
-        GraphRequest graphRequest = GraphRequest.newMeRequest(newAccessToken, ((object, response) -> {
-            if (object != null) {
-                try {
-                    email = object.getString("email");
-                    id = object.getString("id");
-                    firstName = object.getString("first_name");
-                    lastName = object.getString("last_name");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }));
-        Bundle params = new Bundle();
-        params.putString("fields", "email,id,first_name,last_name");
-        graphRequest.setParameters(params);
-        graphRequest.executeAsync();
-    }
-
+    // If the user try to login with Facebook,ao it need to complete his profile to save all information in the Database
     public void register_dialog() {
         EditText phoneNumber_editText, zipCode_editText, city_editText;
         LayoutInflater layoutInflater = LayoutInflater.from(getApplicationContext());
@@ -380,7 +361,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
     }
 
-
+    //Check if the user has an an account in the Database or not.
     public void checkIfFacebookUserExistsInDataBase() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
