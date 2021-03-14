@@ -76,15 +76,9 @@ public class AdminActivity extends AppCompatActivity {
 
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     for (DataSnapshot report : userSnapshot.getChildren()) {
-                        HashMap<String, Object> authorObject = (HashMap<String, Object>) report.getValue();
-                        Report object = new Report();
-                        assert authorObject != null;
-                        object.setPostUID((String) authorObject.get("postUID"));
-                        object.setReacted((Boolean) authorObject.get("reacted"));
-                        object.setDescription((String) authorObject.get("description"));
-                        object.setReportAuthorUID((String) authorObject.get("reportAuthorUID"));
-                        object.setBlamedUserUID((String) authorObject.get("blamedUserUID"));
-                       // Log.i(TAG, "Reason: " + object.toString());
+                        Report object = report.getValue(Report.class);
+                        assert object != null;
+                        Log.i(TAG, "Reason: " + object.toString());
                         _reports.add(object);
                         System.out.println(_reports.size() + "   - inside");
                     }
