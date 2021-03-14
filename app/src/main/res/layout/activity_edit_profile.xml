@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="380dp"
-    android:background="@color/darker_yellow">
+    android:background="@color/light_yello_background">
 
     <TextView
         android:id="@+id/profileLastNameTextView2"
@@ -12,8 +12,11 @@
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
         android:text="@string/edit_lastName"
-        android:textSize="18sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AuthorNameTextView" />
 
@@ -23,8 +26,11 @@
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
         android:text="@string/profile_address"
-        android:textSize="18sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileLastNameTextView2" />
 
@@ -34,8 +40,11 @@
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
         android:text="@string/profile_zipcode"
-        android:textSize="18sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelCityTextView" />
 
@@ -45,8 +54,11 @@
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
         android:text="@string/profile_phone_number"
-        android:textSize="18sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/labelZipcodeTextView" />
 
@@ -56,9 +68,12 @@
         android:layout_height="40dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="30dp"
+        android:gravity="center"
         android:text="@string/edit_firstName"
         android:textAlignment="viewStart"
-        android:textSize="18sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,8 +83,10 @@
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="30dp"
+        android:gravity="center"
         android:textAlignment="viewStart"
-        android:textSize="18sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/AuthorNameTextView"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -80,7 +97,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:gravity="bottom"
         android:inputType="textPersonName"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/labelCityTextView"
         app:layout_constraintTop_toBottomOf="@+id/authLastNameTextView" />
 
@@ -91,7 +111,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:gravity="bottom"
         android:inputType="textPersonName"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/labelZipcodeTextView"
         app:layout_constraintTop_toBottomOf="@+id/cityEditText" />
 
@@ -102,7 +125,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:gravity="bottom"
         android:inputType="textPersonName|phone"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/labelPhoneNumberTextView"
         app:layout_constraintTop_toBottomOf="@+id/zipEditText" />
 
@@ -112,25 +138,27 @@
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
         android:textAlignment="viewStart"
-        android:textSize="18sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/profileLastNameTextView2"
         app:layout_constraintTop_toBottomOf="@+id/authFirstNameTextView" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/updateButton"
-        android:layout_width="match_parent"
+        android:layout_width="160dp"
         android:layout_height="49dp"
-        android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_design"
         android:text="@string/profile_update"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/labelPhoneNumberTextView"
-        app:layout_constraintVertical_bias="0.081" />
+        app:layout_constraintTop_toBottomOf="@+id/labelPhoneNumberTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

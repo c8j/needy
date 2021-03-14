@@ -15,7 +15,8 @@
         android:layout_marginTop="24dp"
         android:text="@string/your_profile"
         android:textAlignment="center"
-        android:textColor="@color/darker_grey_elements"
+        android:textColor="@color/dark_grey_elements"
+        android:textStyle="bold"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -27,8 +28,9 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="64dp"
         android:text="@string/profile_lastName"
-        android:textColor="@color/darker_grey_elements"
-        android:textSize="14sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/profileFirstNameTextView"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -40,62 +42,75 @@
         android:layout_marginTop="64dp"
         android:text="@string/profile_firstName"
         android:textAlignment="viewEnd"
-        android:textColor="@color/darker_grey_elements"
-        android:textSize="14sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/profileZipcodeTextView"
-        android:layout_width="70dp"
+        android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:text="@string/profile_zipcode"
-        android:textSize="14sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileEmailTextView" />
 
     <TextView
         android:id="@+id/profileCityTextView"
-        android:layout_width="190dp"
+        android:layout_width="wrap_content"
         android:layout_height="24dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="40dp"
         android:text="@string/profile_address"
-        android:textSize="14sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileEmailTextView" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/profileEditButton"
         android:layout_width="160dp"
         android:layout_height="49dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="32dp"
         android:text="@string/profile_edit"
+        android:background="@drawable/button_design"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileCityTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/profilePicimageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/profilePhoneNumTextView"
-        android:layout_width="170dp"
+        android:layout_width="wrap_content"
         android:layout_height="23dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="@string/profile_phone_number"
-        android:textSize="14sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileFirstNameTextView" />
 
     <TextView
         android:id="@+id/profileEmailTextView"
-        android:layout_width="226dp"
+        android:layout_width="wrap_content"
         android:layout_height="23dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="8dp"
         android:text="@string/profile_email"
-        android:textSize="14sp"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profilePhoneNumTextView" />
 
