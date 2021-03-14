@@ -15,6 +15,7 @@ import com.android_group10.needy.R;
 import com.android_group10.needy.Report;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportsViewHolder> {
     Context context;

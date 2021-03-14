@@ -75,4 +75,15 @@ public class Report implements Serializable {
         result.put("blamedUserUID", blamedUserUID);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Report{" +
+                "postUID='" + postUID + '\'' +
+                ", reacted=" + reacted +
+                ", reportAuthorUID='" + reportAuthorUID + '\'' +
+                ", blamedUserUID='" + blamedUserUID + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
