@@ -116,7 +116,6 @@ public class OpenPostRecordFragment extends Fragment {
                     }
                     if (authorObject.get("authorRating") != null) {
                         String authRating = String.format(Locale.getDefault(), "%s", authorObject.get("authorRating"));
-                        //authorRating.setText(authRating);
                         authorratingStars.setRating(Float.parseFloat(authRating));
                     }
                     if (authorObject.get("phone") != null) {

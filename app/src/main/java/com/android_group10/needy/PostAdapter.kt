@@ -2,12 +2,12 @@ package com.android_group10.needy
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -15,10 +15,10 @@ import com.android_group10.needy.messaging.util.FirebaseUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import java.util.*
 
 class PostAdapter(
     private val context: Context,
@@ -29,6 +29,7 @@ class PostAdapter(
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener{
         val lineView1 : TextView = itemView.findViewById(R.id.text_view_1)
         val photoView1 : ImageView = itemView.findViewById(R.id.image_view)
+        val starsView : RatingBar = itemView.findViewById(R.id.rating_star)
         val postContainerLayout : RelativeLayout = itemView.findViewById(R.id.postItemRelativeLayout)
         init {
             itemView.setOnClickListener(this)
@@ -78,6 +79,20 @@ class PostAdapter(
                         .centerCrop()
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 ).into(holder.photoView1)
+            }
+        }
+        FirebaseDatabase.getInstance().getReference().child("Users").child(currentItem.authorUID).get().addOnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.e("firebase", "Error getting data", task.exception)
+            } else {
+                @Suppress("UNCHECKED_CAST") val authorObject =
+                    (task.result?.value as HashMap<*, *>)
+                if (authorObject["authorRating"] != null) {
+                    val authRating = String.format(
+                        Locale.getDefault(), "%s",
+                        authorObject["authorRating"])
+                    holder.starsView.rating = authRating.toFloat()
+                }
             }
         }
     }
