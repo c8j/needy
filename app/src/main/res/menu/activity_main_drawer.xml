@@ -19,7 +19,7 @@
 
         <item
             android:id="@+id/messaging"
-            android:icon="@drawable/ic_to_do"
+            android:icon="@drawable/ic_messaging"
             android:title="@string/title_messaging" />
     </group>
 

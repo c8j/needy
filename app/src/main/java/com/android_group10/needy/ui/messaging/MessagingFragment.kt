@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.navGraphViewModels
 import com.android_group10.needy.R
 import com.android_group10.needy.databinding.FragmentMessagingBinding
+import com.android_group10.needy.messaging.MessagingFragmentViewModel
 import com.android_group10.needy.ui.messaging.conversations.ConversationsFragment
 import com.android_group10.needy.ui.messaging.requests.RequestsFragment
+import com.google.android.material.color.MaterialColors
 import com.google.android.material.tabs.TabLayoutMediator
 
 
@@ -16,6 +19,8 @@ class MessagingFragment : Fragment() {
 
     private var _binding: FragmentMessagingBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel by navGraphViewModels<MessagingFragmentViewModel>(R.id.main_graph)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,8 +36,28 @@ class MessagingFragment : Fragment() {
             binding.viewPager
         ) { tab, position ->
             when (position) {
-                0 -> tab.text = getString(R.string.messaging_tab_label_requests)
-                1 -> tab.text = getString(R.string.messaging_tab_label_messages)
+                0 -> {
+                    tab.text = getString(R.string.messaging_tab_label_requests)
+                    tab.setIcon(R.drawable.ic_messaging_requests)
+                    tab.orCreateBadge.apply {
+                        backgroundColor = MaterialColors.getColor(binding.root, R.attr.colorAccent)
+                        viewModel.requestsCounter.observe(viewLifecycleOwner){ counter ->
+                            if (counter == 0){
+                                isVisible = false
+                            } else {
+                                number = counter
+                                isVisible = true
+                            }
+                        }
+                    }
+                }
+                1 -> {
+                    tab.text = getString(R.string.messaging_tab_label_messages)
+                    tab.setIcon(R.drawable.ic_messaging_chat)
+                    tab.orCreateBadge.apply {
+                        backgroundColor = MaterialColors.getColor(binding.root, R.attr.colorAccent)
+                    }
+                }
             }
         }.attach()
         return binding.root

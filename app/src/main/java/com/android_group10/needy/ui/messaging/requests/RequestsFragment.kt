@@ -46,6 +46,7 @@ class RequestsFragment(private val tabCallback: (selectTab: Int) -> Unit) : Frag
             requestsLiveData.observe(viewLifecycleOwner) { requestQueryItemList ->
                 if (requestQueryItemList != null) {
                     listAdapter.submitList(requestQueryItemList)
+                    viewModel.requestsCounter.value = requestQueryItemList.size
                 }
             }
             adapter = listAdapter
