@@ -47,11 +47,42 @@ public class AdminActivity extends AppCompatActivity {
         reportsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
+
         //Update recyclerview adapter
-        ReportAdapter reportAdapter = new ReportAdapter(this, getReportsFromDb());
+        ReportAdapter reportAdapter = new ReportAdapter(this, reports);
         reportsRecyclerView.setAdapter(reportAdapter);
-        reports = getReportsFromDb();
-        reportAdapter.updateReports(reports);
+      //  reports = getReportsFromDb();
+    //    reportAdapter.updateReports(reports);
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Reports");
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                ArrayList<Report> _reports = new ArrayList<>();
+
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    for (DataSnapshot report : userSnapshot.getChildren()) {
+                        Report object = report.getValue(Report.class);
+                        assert object != null;
+                        Log.i(TAG, "Reason: " + object.toString());
+                        _reports.add(object);
+                        System.out.println(_reports.size() + "   - inside");
+                    }
+                }
+
+                reports = _reports;
+                System.out.println(reports.size() + "   - outside for-loop");
+                reportAdapter.updateReports(reports);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(thisActivity, "Could not fetch reported users", Toast.LENGTH_SHORT).show();
+            }
+        });
+        System.out.println(reports.size() + "   - outside listener");
+      //  reportAdapter.updateReports(reports);
+
+
 
         Log.i(TAG, "reports size = " + reports.size());
         for (Report report : reports) {
