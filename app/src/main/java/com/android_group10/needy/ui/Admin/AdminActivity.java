@@ -46,8 +46,6 @@ public class AdminActivity extends AppCompatActivity {
         reportsRecyclerView = findViewById(R.id.reportsRecyclerView);
         reportsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
-
         //Update recyclerview adapter
         ReportAdapter reportAdapter = new ReportAdapter(this, reports);
         reportsRecyclerView.setAdapter(reportAdapter);
@@ -96,45 +94,6 @@ public class AdminActivity extends AppCompatActivity {
                 logOut();
             }
         });
-    }
-
-    private ArrayList<Report> getReportsFromDb() {
-        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Reports");
-        userRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ArrayList<Report> _reports = new ArrayList<>();
-
-                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    for (DataSnapshot report : userSnapshot.getChildren()) {
-                        Report object = report.getValue(Report.class);
-                        assert object != null;
-                        Log.i(TAG, "Reason: " + object.toString());
-                        _reports.add(object);
-                        System.out.println(_reports.size() + "   - inside");
-                    }
-                }
-
-                reports = _reports;
-                System.out.println(reports.size() + "   - outside for-loop");
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(thisActivity, "Could not fetch reported users", Toast.LENGTH_SHORT).show();
-            }
-        });
-        System.out.println(reports.size() + "   - outside listener");
-
-
-        if (reportsRecyclerView != null) {
-            ReportAdapter reportAdapter = (ReportAdapter) reportsRecyclerView.getAdapter();
-            if (reportAdapter != null) {
-                reportAdapter.updateReports(reports);
-            }
-        }
-
-        return reports;
     }
 
     private void logOut() {

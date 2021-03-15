@@ -49,6 +49,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:hint="report author UID"
+                android:textColor="#000000"
                 android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/reported_by_label_TextView"
                 app:layout_constraintTop_toBottomOf="@+id/reported_uid_textView" />
@@ -60,6 +61,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:hint="Report Description"
+                android:textColor="#000000"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description_label_textView" />
@@ -71,6 +73,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:hint="post UID"
+                android:textColor="#000000"
                 android:textSize="14sp"
                 app:layout_constraintStart_toEndOf="@+id/post_uid_label_textView"
                 app:layout_constraintTop_toBottomOf="@+id/admin_rep_description_textView" />
