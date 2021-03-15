@@ -20,7 +20,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class ConversationsFragmentAdapter(private val pronoun: String) :
+class ConversationsFragmentAdapter(private val progressBarVisibility: (isVisible: Boolean) -> Unit, private val pronoun: String) :
     ListAdapter<ConversationQueryItem, ConversationsFragmentAdapter.ConversationItemViewHolder>(
         object :
             ConversationQueryItemDiffCallback() {}) {
@@ -56,10 +56,12 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
                     MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
                         .setMessage(R.string.messaging_dialog_archive)
                         .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
+                            progressBarVisibility(true)
                             FirestoreUtil.updateConversationStatus(
                                 conversationQueryItem.id,
                                 true
                             ) { wasSuccessful ->
+                                progressBarVisibility(false)
                                 if (wasSuccessful) {
                                     Toast.makeText(
                                         view.context,
@@ -86,9 +88,11 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
                     MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
                         .setMessage(R.string.messaging_dialog_block_conversations)
                         .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
+                            progressBarVisibility(true)
                             FirestoreUtil.addToBlockList(
                                 partnerUID
                             ) { _, message ->
+                                progressBarVisibility(false)
                                 Toast.makeText(
                                     view.context,
                                     message,

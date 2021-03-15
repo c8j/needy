@@ -17,7 +17,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class RequestsFragmentAdapter(private val tabCallback: (selectTab: Int) -> Unit) :
+class RequestsFragmentAdapter(private val progressBarVisibility: (isVisible: Boolean) -> Unit, private val tabCallback: (selectTab: Int) -> Unit) :
     ListAdapter<RequestQueryItem, RequestsFragmentAdapter.RequestsViewHolder>(object :
         RequestQueryItemDiffCallback() {}) {
 
@@ -36,7 +36,9 @@ class RequestsFragmentAdapter(private val tabCallback: (selectTab: Int) -> Unit)
                         setOnMenuItemClickListener { menuItem ->
                             when (menuItem.itemId) {
                                 R.id.messaging_request_menu_accept -> {
+                                    progressBarVisibility(true)
                                     FirestoreUtil.acceptRequest(requestQueryItem) { _, message ->
+                                        progressBarVisibility(false)
                                         Toast.makeText(
                                             view.context,
                                             message,
@@ -50,7 +52,9 @@ class RequestsFragmentAdapter(private val tabCallback: (selectTab: Int) -> Unit)
                                     MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
                                         .setMessage(R.string.messaging_dialog_ignore)
                                         .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
+                                            progressBarVisibility(true)
                                             FirestoreUtil.removeRequest(requestQueryItem.id) { _, message ->
+                                                progressBarVisibility(false)
                                                 Toast.makeText(
                                                     view.context,
                                                     message,
@@ -68,9 +72,11 @@ class RequestsFragmentAdapter(private val tabCallback: (selectTab: Int) -> Unit)
                                     MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
                                         .setMessage(R.string.messaging_dialog_block_requests)
                                         .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
+                                            progressBarVisibility(true)
                                             FirestoreUtil.addToBlockList(
                                                 requestQueryItem.item.senderUID
                                             ) { _, message ->
+                                                progressBarVisibility(false)
                                                 Toast.makeText(
                                                     view.context,
                                                     message,

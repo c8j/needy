@@ -1,7 +1,5 @@
 package com.android_group10.needy.ui.InNeed;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,14 +12,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+
 import com.android_group10.needy.Post;
 import com.android_group10.needy.ProfilePictureManager;
 import com.android_group10.needy.R;
 import com.android_group10.needy.messaging.util.FirestoreUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -157,17 +156,22 @@ public class OpenPostRecordFragment extends Fragment {
                 });
 
                 //Create conversation request associated with this post
-                contactAuthor.setOnClickListener(v ->
-                        FirestoreUtil.createRequest(
-                                currentPositioned,
-                                true,
-                                (wasSuccessful, message) ->
+                CircularProgressIndicator progressIndicator = root.findViewById(R.id.cpiInNeedRequest);
+                contactAuthor.setOnClickListener(v -> {
+                            progressIndicator.show();
+                            FirestoreUtil.createRequest(
+                                    currentPositioned,
+                                    true,
+                                    (wasSuccessful, message) -> {
+                                        progressIndicator.hide();
                                         Toast.makeText(
                                                 getContext(),
                                                 message,
                                                 Toast.LENGTH_SHORT
-                                        ).show()
-                        )
+                                        ).show();
+                                    }
+                            );
+                        }
                 );
             } else {
                 acceptPost.setVisibility(View.INVISIBLE);

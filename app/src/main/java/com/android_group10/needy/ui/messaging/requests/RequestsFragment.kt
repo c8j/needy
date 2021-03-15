@@ -26,6 +26,7 @@ class RequestsFragment(private val tabCallback: (selectTab: Int) -> Unit) : Frag
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMessagingRequestsBinding.inflate(inflater, container, false)
+        binding.lpiRequests.setVisibilityAfterHide(View.GONE)
         if (shouldInitRecyclerView) {
             initRecyclerView()
         }
@@ -38,10 +39,20 @@ class RequestsFragment(private val tabCallback: (selectTab: Int) -> Unit) : Frag
         _binding = null
     }
 
+    private fun progressBarVisibility(isVisible: Boolean){
+        binding.lpiRequests.apply {
+            if (isVisible){
+                show()
+            } else {
+                hide()
+            }
+        }
+    }
+
     private fun initRecyclerView() {
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            val listAdapter = RequestsFragmentAdapter(tabCallback)
+            val listAdapter = RequestsFragmentAdapter(this@RequestsFragment::progressBarVisibility, tabCallback)
             val requestsLiveData = viewModel.requests
             requestsLiveData.observe(viewLifecycleOwner) { requestQueryItemList ->
                 if (requestQueryItemList != null) {
