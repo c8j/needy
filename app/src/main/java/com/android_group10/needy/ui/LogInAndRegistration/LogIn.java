@@ -26,6 +26,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.firebase.auth.AuthCredential;
@@ -50,7 +51,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     private FirebaseUser firebaseUser;
     private CheckBox rememberMeCheckBox;
     private CallbackManager callbackManager;
-    public String id, email, firstName, lastName;
+    public String id, facebook_email, facebook_first_name, facebook_last_name;
     private String facebookUserId;
     private long pressedTime;
     private boolean isLoggedIn;
@@ -61,6 +62,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_log_in);
         //getSupportActionBar().setTitle("Log In"); //Done automatically
         initializeItems();
+
         keepLogin();
     }
 
@@ -242,6 +244,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
     // Facebook Methods
     private void handleFacebookAccessToken(AccessToken token) {
+        getFbDetails();
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
@@ -262,7 +265,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     public void logInWithFacebook() {
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = findViewById(R.id.facebook_login_button);
-        loginButton.setPermissions( "public_profile","email", "user_birthday");
+        loginButton.setPermissions("public_profile", "email", "user_birthday");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
             @Override
@@ -331,7 +334,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
                 String city = city_editText.getText().toString().trim();
 
                 String password = "1111";
-                registerNewFacebookUser(email, password, firstName, lastName, phoneNumber, city, zipCode);
+                registerNewFacebookUser(facebook_email, password, facebook_first_name, facebook_last_name, phoneNumber, city, zipCode);
 
 
                 alertD.dismiss();
@@ -341,14 +344,33 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
     }
 
-    public void registerNewFacebookUser(String email, String password, String firstName, String lastName, String phone, String city,
+    public void registerNewFacebookUser(String facebook_email, String password, String facebook_first_name, String facebook_last_name, String phone, String city,
                                         int zipCode) {
-        User user = new User(email, password, firstName, lastName, phone, city, zipCode);
+        User user = new User(facebook_email, password, facebook_first_name, facebook_last_name, phone, city, zipCode);
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child("Users").child(facebookUserId).setValue(user);
 
         startActivity(new Intent(LogIn.this, MainActivity.class));
         finish();
+
+    }
+
+    private void getFbDetails() {
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                (object, response) -> {
+
+                    if (object != null) {
+                        facebook_first_name = object.optString("first_name");
+                        facebook_email = object.optString("email");
+                        facebook_last_name = object.optString("last_name");
+
+                    }
+
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,first_name, last_name, email,link");
+        request.setParameters(parameters);
+        request.executeAsync();
 
     }
 

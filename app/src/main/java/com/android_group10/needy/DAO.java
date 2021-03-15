@@ -40,7 +40,7 @@ public class DAO {
         db.getReference().updateChildren(childUpdates);
     }
 
-    public void writeReport(Report report){
+    public void writeReport(Report report) {
         String key = db.getReference().child("Reports").child(report.getBlamedUserUID()).push().getKey();
         Map<String, Object> postValues = report.toMap();
 
@@ -50,7 +50,7 @@ public class DAO {
     }
 
     //this will save a rating into the Ratings tree, calculate average and update a value of a User
-    public void writeRating(UserRating rating){
+    public void writeRating(UserRating rating) {
         DatabaseReference currentUserRatingRef = db.getReference().child("Ratings").child(rating.getUserUID()).child(String.valueOf(rating.getRatingType()));
         String key = currentUserRatingRef.push().getKey();
         Map<String, Integer> ratingValue = rating.toMap();
@@ -61,32 +61,33 @@ public class DAO {
 
         ValueEventListener postListener = new ValueEventListener() {
             double averageRating;
+
             @SuppressWarnings("unchecked")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.hasChildren()){
-                        int count = 1;
-                        int sum = 0;
+                if (snapshot.hasChildren()) {
+                    int count = 1;
+                    int sum = 0;
 
-                        for (DataSnapshot child : snapshot.getChildren()) {
-                            if (child.hasChildren()) {
-                                try {
-                                    HashMap<String, Object> map = (HashMap<String, Object>) child.getValue();
-                                    assert map != null;
-                                    Object[] keys = map.keySet().toArray();
-                                    // there will only be one child so we only take [0]
-                                    Object value = Objects.requireNonNull(map.get(keys[0]));
+                    for (DataSnapshot child : snapshot.getChildren()) {
+                        if (child.hasChildren()) {
+                            try {
+                                HashMap<String, Object> map = (HashMap<String, Object>) child.getValue();
+                                assert map != null;
+                                Object[] keys = map.keySet().toArray();
+                                // there will only be one child so we only take [0]
+                                Object value = Objects.requireNonNull(map.get(keys[0]));
 
-                                    sum = sum + Integer.parseInt(value.toString());
-                                    count = count + keys.length;
+                                sum = sum + Integer.parseInt(value.toString());
+                                count = count + keys.length;
 
-                                } catch (Exception ex){
-                                    ex.printStackTrace();
-                                }
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
                             }
                         }
+                    }
 
-                        averageRating = (double) sum/(count-1);
+                    averageRating = (double) sum / (count - 1);
 
                     DatabaseReference ratedUserRef = db.getReference("Users").child(rating.getUserUID());
                     ValueEventListener userListener = new ValueEventListener() {
@@ -102,7 +103,7 @@ public class DAO {
 
                     ratedUserRef.addValueEventListener(userListener);
 
-                } else  {
+                } else {
                     Log.e("Rating FireBase DB table", "something went wrong and the rating hasn't been saved");
                 }
 
@@ -117,20 +118,20 @@ public class DAO {
 
     private void listenerCode(DatabaseReference currentRef, DataSnapshot snapshot, UserRating rating, double newValue) {
         int newInt = 1;
-        if (newValue < 2.5 && newValue >= 1.5){
+        if (newValue < 2.5 && newValue >= 1.5) {
             newInt = 2;
-        } else if (newValue <3.5){
+        } else if (newValue < 3.5) {
             newInt = 3;
-        } else if (newValue < 4.5){
+        } else if (newValue < 4.5) {
             newInt = 4;
-        } else if(newValue >= 4.5){
+        } else if (newValue >= 4.5) {
             newInt = 5;
         }
 
         User user = snapshot.getValue(User.class);
         if (user != null) {
             if (rating.getRatingType() == 1) {
-                user.setAuthorRating(newInt );
+                user.setAuthorRating(newInt);
                 currentRef.child("authorRating").setValue(newInt);
             } else {
                 user.setVolunteerRating(newInt);

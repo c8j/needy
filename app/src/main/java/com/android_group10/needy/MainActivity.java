@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     TextView userEmailOnHeader;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -332,7 +331,8 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                         if (userInfo.getProviderId().equals("facebook.com")) {
                             userNameOnHeader.setText(first_name_from_Facebook);
                             userEmailOnHeader.setText(user_email_from_Facebook);
-                        } else {
+                        }
+                        if (!userInfo.getProviderId().equals("facebook.com")) {
                             userNameOnHeader.setText(name);
                             userEmailOnHeader.setText(email);
                         }
