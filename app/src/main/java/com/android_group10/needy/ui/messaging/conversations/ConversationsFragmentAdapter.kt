@@ -1,5 +1,6 @@
 package com.android_group10.needy.ui.messaging.conversations
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.ViewGroup
@@ -19,7 +20,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class ConversationsFragmentAdapter(private val pronoun: String) :
+class ConversationsFragmentAdapter(private val progressBarVisibility: (isVisible: Boolean) -> Unit, private val pronoun: String) :
     ListAdapter<ConversationQueryItem, ConversationsFragmentAdapter.ConversationItemViewHolder>(
         object :
             ConversationQueryItemDiffCallback() {}) {
@@ -55,10 +56,12 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
                     MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
                         .setMessage(R.string.messaging_dialog_archive)
                         .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
+                            progressBarVisibility(true)
                             FirestoreUtil.updateConversationStatus(
                                 conversationQueryItem.id,
                                 true
                             ) { wasSuccessful ->
+                                progressBarVisibility(false)
                                 if (wasSuccessful) {
                                     Toast.makeText(
                                         view.context,
@@ -85,9 +88,11 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
                     MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
                         .setMessage(R.string.messaging_dialog_block_conversations)
                         .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
+                            progressBarVisibility(true)
                             FirestoreUtil.addToBlockList(
                                 partnerUID
                             ) { _, message ->
+                                progressBarVisibility(false)
                                 Toast.makeText(
                                     view.context,
                                     message,
@@ -117,12 +122,27 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
                 tvAssociatedPostTitle.text = conversationQueryItem.item.associatedPostDescription
                 tvContactName.text = conversationQueryItem.item.userNameMap[partnerUID]
                 var latestMessageText = conversationQueryItem.item.latestMessage.text
-                conversationQueryItem.item.latestMessage.senderUid.let { uid ->
-                    if (uid != "" && uid == currentUserUID) {
-                        latestMessageText = "$pronoun: $latestMessageText"
+                conversationQueryItem.item.apply {
+                    this.latestMessage.senderUid.let { uid ->
+                        if (uid != "") {
+                            if (uid == currentUserUID) {
+                                latestMessageText = "$pronoun: $latestMessageText"
+                            } else {
+                                if (unread){
+                                    tvMessagePreview.apply {
+                                        setTypeface(typeface, Typeface.BOLD)
+                                    }
+                                } else {
+                                    tvMessagePreview.apply {
+                                        setTypeface(typeface, Typeface.NORMAL)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 tvMessagePreview.text = latestMessageText
+
                 FirebaseUtil.getUserPictureURI(partnerUID) { uri ->
                     if (uri != null){
                         Glide.with(itemView.context).load(uri).apply(
@@ -145,7 +165,7 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationsFragmentAdapter.ConversationItemViewHolder {
         val binding = ItemMessagingConversationBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -161,4 +181,5 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
     override fun onViewRecycled(holder: ConversationItemViewHolder) {
         holder.clearImageView()
     }
+
 }

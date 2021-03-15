@@ -81,12 +81,24 @@ object FirestoreUtil {
             .whereEqualTo("senderUID", senderUID)
             .get().addOnSuccessListener { querySnapshot ->
                 if (querySnapshot.isEmpty) {
-                    onComplete(false)
+                    firestoreInstance.collection("$ROOT_COLLECTION/$senderUID/$REQUESTS_COLLECTION")
+                        .whereEqualTo("associatedPostUID", associatedPostUID)
+                        .whereEqualTo("senderUID", receiverUID)
+                        .get().addOnSuccessListener {
+                            if (it.isEmpty) {
+                                onComplete(false)
+                            } else {
+                                onComplete(true)
+                            }
+                        }.addOnFailureListener {
+                            Log.e(FIRESTORE_LOG_TAG, "Failed to query database for existing requests.", it)
+                            onComplete(null)
+                        }
                 } else {
                     onComplete(true)
                 }
             }.addOnFailureListener {
-                Log.e(FIRESTORE_LOG_TAG, "Failed to query database for requests.", it)
+                Log.e(FIRESTORE_LOG_TAG, "Failed to query database for existing requests.", it)
                 onComplete(null)
             }
     }
@@ -360,7 +372,8 @@ object FirestoreUtil {
                                         requestQueryItem.item.senderUID to requestQueryItem.item.senderFullName
                                     ),
                                     ChatMessage(),
-                                    false
+                                    unread = false,
+                                    concluded = false
                                 )
                             )
                                 .addOnSuccessListener {
@@ -494,6 +507,18 @@ object FirestoreUtil {
         return FirestoreConversationQueryLiveData(query)
     }
 
+    fun updateConversationReadStatus(conversationUID: String, isUnread: Boolean) {
+        val conversationDocumentRef = conversationsCollectionRef.document(conversationUID)
+        conversationDocumentRef.update("unread", isUnread)
+            .addOnFailureListener {
+                Log.e(
+                    FIRESTORE_LOG_TAG,
+                    "Failed to update latest message for conversation with uid: $conversationUID",
+                    it
+                )
+            }
+    }
+
     /*
     Messages
      */
@@ -516,7 +541,10 @@ object FirestoreUtil {
         chatMessage: ChatMessage
     ) {
         val conversationDocumentRef = conversationsCollectionRef.document(conversationUID)
-        conversationDocumentRef.update("latestMessage", chatMessage)
+        firestoreInstance.runBatch { batch ->
+            batch.update(conversationDocumentRef, "latestMessage", chatMessage)
+            batch.update(conversationDocumentRef, "unread", true)
+        }
             .addOnFailureListener {
                 Log.e(
                     FIRESTORE_LOG_TAG,

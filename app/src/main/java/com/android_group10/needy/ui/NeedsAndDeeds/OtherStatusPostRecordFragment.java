@@ -2,8 +2,6 @@ package com.android_group10.needy.ui.NeedsAndDeeds;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,6 +26,7 @@ import com.android_group10.needy.UserRating;
 import com.android_group10.needy.messaging.util.FirestoreUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -202,7 +201,7 @@ public class OtherStatusPostRecordFragment extends Fragment {
         return root;
     }
 
-    private void getUserDetails(String uid){
+    private void getUserDetails(String uid) {
         db.getReference().child("Users").child(uid).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
@@ -250,17 +249,22 @@ public class OtherStatusPostRecordFragment extends Fragment {
                     rate.setVisibility(View.VISIBLE);
                 });
 
-                contact.setOnClickListener(v ->
-                        //Create conversation request associated with this post
-                        FirestoreUtil.createRequest(
-                                currentPositioned,
-                                volunteer,
-                                (wasSuccessful, message) ->
+                CircularProgressIndicator progressIndicator = root.findViewById(R.id.cpiNeedsAndDeedsRequest);
+                contact.setOnClickListener(v -> {
+                            //Create conversation request associated with this post
+                            progressIndicator.show();
+                            FirestoreUtil.createRequest(
+                                    currentPositioned,
+                                    volunteer,
+                                    (wasSuccessful, message) -> {
+                                        progressIndicator.hide();
                                         Toast.makeText(getContext(),
                                                 message,
                                                 Toast.LENGTH_SHORT
-                                        ).show()
-                        )
+                                        ).show();
+                                    }
+                            );
+                        }
                 );
             } else {
                 completePost.setVisibility(View.INVISIBLE);

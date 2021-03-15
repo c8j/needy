@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/light_yello_background"
     tools:context=".ui.InNeed.OpenPostRecordFragment"
     android:padding="10dp">
@@ -194,6 +195,18 @@
         android:textColor="@color/dark_grey_elements"
         android:textSize="16sp"
         android:textStyle="bold" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/cpiInNeedRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="invisible"
+        app:hideAnimationBehavior="inward"
+        app:showAnimationBehavior="outward"
+        android:layout_below="@id/contact_author"
+        android:layout_alignStart="@id/contact_author"
+        android:layout_marginStart="50dp"/>
 
     <RatingBar
         android:id="@+id/authorRatingBar2"

@@ -10,37 +10,39 @@
         android:id="@+id/postItemRelativeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp">
+        android:padding="4dp">
 
         <ImageView
             android:id="@+id/image_view"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_marginStart="12dp"
             android:layout_marginEnd="1dp"
-            android:contentDescription="this place is for user's avatar"
+            android:contentDescription=""
             android:src="@drawable/anonymous_mask" />
 
         <TextView
             android:id="@+id/text_view_1"
             android:layout_width="341dp"
-            android:layout_height="61dp"
+            android:layout_height="68dp"
             android:layout_alignParentTop="true"
             android:layout_marginStart="1dp"
-            android:layout_toEndOf="@id/image_view"
+            android:layout_toEndOf="@id/rating_star"
             android:text="Line 1"
             android:textColor="@android:color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <ImageView
-            android:id="@+id/image_star"
-            android:layout_width="50dp"
-            android:layout_height="10dp"
+        <RatingBar
+            android:id="@+id/rating_star"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/image_view"
             android:layout_marginTop="1dp"
             android:layout_marginEnd="1dp"
-            android:contentDescription="here will be our rating stars. to be changed in the code"
-            android:src="@drawable/ic_profile" />
+            android:contentDescription=""
+            android:paddingStart="-3dp" />
 
 
     </RelativeLayout>

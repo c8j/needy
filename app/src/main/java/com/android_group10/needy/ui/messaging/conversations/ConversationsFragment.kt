@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android_group10.needy.R
 import com.android_group10.needy.databinding.FragmentMessagingConversationsBinding
 import com.android_group10.needy.messaging.MessagingFragmentViewModel
+import com.android_group10.needy.messaging.util.FirestoreUtil
 
 class ConversationsFragment : Fragment() {
 
@@ -26,6 +27,7 @@ class ConversationsFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentMessagingConversationsBinding.inflate(inflater, container, false)
+        binding.lpiConversations.setVisibilityAfterHide(View.GONE)
         if (shouldInitRecyclerView) {
             initRecyclerView()
         }
@@ -38,12 +40,22 @@ class ConversationsFragment : Fragment() {
         _binding = null
     }
 
+    private fun progressBarVisibility(isVisible: Boolean){
+        binding.lpiConversations.apply {
+            if (isVisible){
+                show()
+            } else {
+                hide()
+            }
+        }
+    }
+
     private fun initRecyclerView() {
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             val listAdapter =
-                ConversationsFragmentAdapter(resources.getString(R.string.messaging_conversation_pronoun))
-            viewModel.getConversations().observe(viewLifecycleOwner) { conversationQueryItemList ->
+                ConversationsFragmentAdapter(this@ConversationsFragment::progressBarVisibility, resources.getString(R.string.messaging_conversation_pronoun))
+            viewModel.conversations.observe(viewLifecycleOwner) { conversationQueryItemList ->
                 if (conversationQueryItemList != null) {
                     listAdapter.submitList(conversationQueryItemList)
                 }

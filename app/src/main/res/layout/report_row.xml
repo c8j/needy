@@ -27,6 +27,7 @@
                 android:background="@color/darker_yellow"
                 android:text="@string/admin_reported_uid"
                 android:textSize="24sp"
+                android:textColor="@color/dark_grey_elements"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -39,6 +40,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/admin_reported_by"
                 android:textSize="14sp"
+                android:textColor="@color/dark_grey_elements"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/reported_uid_textView" />
 
@@ -51,6 +53,7 @@
                 android:hint="report author UID"
                 android:textColor="#000000"
                 android:textSize="14sp"
+                android:textColor="@color/dark_grey_elements"
                 app:layout_constraintStart_toEndOf="@+id/reported_by_label_TextView"
                 app:layout_constraintTop_toBottomOf="@+id/reported_uid_textView" />
 
@@ -63,6 +66,7 @@
                 android:hint="Report Description"
                 android:textColor="#000000"
                 android:textSize="14sp"
+                android:textColor="@color/dark_grey_elements"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/description_label_textView" />
 
@@ -75,6 +79,7 @@
                 android:hint="post UID"
                 android:textColor="#000000"
                 android:textSize="14sp"
+                android:textColor="@color/dark_grey_elements"
                 app:layout_constraintStart_toEndOf="@+id/post_uid_label_textView"
                 app:layout_constraintTop_toBottomOf="@+id/admin_rep_description_textView" />
 
@@ -85,6 +90,7 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/admin_report_descr"
+                android:textColor="@color/dark_grey_elements"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/reported_by_label_TextView" />
 
@@ -95,19 +101,21 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/admin_post_uid"
+                android:textColor="@color/dark_grey_elements"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/admin_rep_description_textView" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/remove_user_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:background="@drawable/button_design"
+                android:layout_width="160dp"
+                android:layout_height="49dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="24dp"
                 android:layout_marginBottom="8dp"
                 android:text="@string/admin_remove_user"
-                android:textSize="12sp"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/dark_grey_elements"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
