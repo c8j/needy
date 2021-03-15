@@ -2,7 +2,6 @@ package com.android_group10.needy.ui.LogInAndRegistration;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -11,7 +10,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -264,12 +262,13 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     public void logInWithFacebook() {
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = findViewById(R.id.facebook_login_button);
-        loginButton.setPermissions("email", "public_profile", "user_birthday");
+        loginButton.setPermissions( "public_profile","email", "user_birthday");
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
             @Override
             public void onSuccess(LoginResult loginResult) {
                 handleFacebookAccessToken(loginResult.getAccessToken());
+
             }
 
             @Override

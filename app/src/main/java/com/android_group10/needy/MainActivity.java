@@ -2,7 +2,6 @@ package com.android_group10.needy;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -36,19 +35,19 @@ import androidx.navigation.ui.NavigationUI;
 import com.android_group10.needy.LocalDatabase.DbBitmapUtility;
 import com.android_group10.needy.LocalDatabase.LocalDatabaseHelper;
 import com.android_group10.needy.ui.InNeed.InNeedFragmentDirections;
-import com.android_group10.needy.ui.LogInAndRegistration.FacebookLogin;
 import com.android_group10.needy.ui.LogInAndRegistration.LogIn;
 import com.bumptech.glide.Glide;
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
 import com.facebook.login.LoginManager;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -65,7 +64,7 @@ import java.util.Locale;
 
 
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, NavController.OnDestinationChangedListener {
-
+    private String first_name_from_Facebook, user_email_from_Facebook;
     private DrawerLayout drawerLayout;
     AppBarConfiguration appBarConfiguration;
     private NavController navController;
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     File photoFile = null;
     private Uri selectedImageUri;
     private LocalDatabaseHelper localDatabaseHelper;
-  //  private ProfilePictureManager ppManager;
+    //  private ProfilePictureManager ppManager;
 
     private static final int SELECT_PICTURE = 100;
     private static final int CAMERA_REQUEST = 1;
@@ -88,14 +87,19 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     private static final String TAG = "StoreImageActivity";
     ShareDialog shareDialog;
     CallbackManager callbackManager;
+    TextView userNameOnHeader;
+    TextView userEmailOnHeader;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         localDatabaseHelper = new LocalDatabaseHelper(this);
- //       ppManager = new ProfilePictureManager();
+        //       ppManager = new ProfilePictureManager();
         initialization();
+        getFbDetails();
         updateHeader();
         facebookSDKInitialize();
 
@@ -237,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }*/
 
         //This way the back stack behaves normally, TODO: find a way to also implement double tap exit
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
@@ -303,13 +307,13 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         headerView = navigationView.getHeaderView(0);
         profileImage = headerView.findViewById(R.id.profileImageHeader);
 
+        userNameOnHeader = headerView.findViewById(R.id.user_name);
+        userEmailOnHeader = headerView.findViewById(R.id.user_email_header);
     }
 
 
     //Update the User name and User email in the Header.
     public void updateHeader() {
-        TextView userNameOnHeader = headerView.findViewById(R.id.user_name);
-        TextView userEmailOnHeader = headerView.findViewById(R.id.user_email_header);
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Users");
@@ -321,13 +325,21 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 User user = snapshot.getValue(User.class);
 
                 if (user != null) {
+
                     String name = "Welcome " + user.getFirstName();
                     String email = user.getEmail();
+                    for (UserInfo userInfo : FirebaseAuth.getInstance().getCurrentUser().getProviderData()) {
+                        if (userInfo.getProviderId().equals("facebook.com")) {
+                            userNameOnHeader.setText(first_name_from_Facebook);
+                            userEmailOnHeader.setText(user_email_from_Facebook);
+                        } else {
+                            userNameOnHeader.setText(name);
+                            userEmailOnHeader.setText(email);
+                        }
+                    }
 
-                    userNameOnHeader.setText(name);
-                    userEmailOnHeader.setText(email);
-                    //loadImageFromDB();
                 }
+
             }
 
             @Override
@@ -335,6 +347,24 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
                 Toast.makeText(MainActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void getFbDetails() {
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
+                (object, response) -> {
+
+                    if (object != null) {
+                        first_name_from_Facebook = object.optString("first_name");
+                        user_email_from_Facebook = object.optString("email");
+
+                    }
+
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,first_name, last_name, email,link");
+        request.setParameters(parameters);
+        request.executeAsync();
+
     }
 
     // About us Dialog
