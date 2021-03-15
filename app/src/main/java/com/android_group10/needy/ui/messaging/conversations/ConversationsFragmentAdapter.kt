@@ -1,5 +1,6 @@
 package com.android_group10.needy.ui.messaging.conversations
 
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.ViewGroup
@@ -117,12 +118,27 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
                 tvAssociatedPostTitle.text = conversationQueryItem.item.associatedPostDescription
                 tvContactName.text = conversationQueryItem.item.userNameMap[partnerUID]
                 var latestMessageText = conversationQueryItem.item.latestMessage.text
-                conversationQueryItem.item.latestMessage.senderUid.let { uid ->
-                    if (uid != "" && uid == currentUserUID) {
-                        latestMessageText = "$pronoun: $latestMessageText"
+                conversationQueryItem.item.apply {
+                    this.latestMessage.senderUid.let { uid ->
+                        if (uid != "") {
+                            if (uid == currentUserUID) {
+                                latestMessageText = "$pronoun: $latestMessageText"
+                            } else {
+                                if (unread){
+                                    tvMessagePreview.apply {
+                                        setTypeface(typeface, Typeface.BOLD)
+                                    }
+                                } else {
+                                    tvMessagePreview.apply {
+                                        setTypeface(typeface, Typeface.NORMAL)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 tvMessagePreview.text = latestMessageText
+
                 FirebaseUtil.getUserPictureURI(partnerUID) { uri ->
                     if (uri != null){
                         Glide.with(itemView.context).load(uri).apply(
@@ -145,7 +161,7 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationsFragmentAdapter.ConversationItemViewHolder {
         val binding = ItemMessagingConversationBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -161,4 +177,5 @@ class ConversationsFragmentAdapter(private val pronoun: String) :
     override fun onViewRecycled(holder: ConversationItemViewHolder) {
         holder.clearImageView()
     }
+
 }

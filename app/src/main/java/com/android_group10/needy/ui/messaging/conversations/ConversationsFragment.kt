@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android_group10.needy.R
 import com.android_group10.needy.databinding.FragmentMessagingConversationsBinding
 import com.android_group10.needy.messaging.MessagingFragmentViewModel
+import com.android_group10.needy.messaging.util.FirestoreUtil
 
 class ConversationsFragment : Fragment() {
 
@@ -43,7 +44,7 @@ class ConversationsFragment : Fragment() {
             layoutManager = LinearLayoutManager(requireContext())
             val listAdapter =
                 ConversationsFragmentAdapter(resources.getString(R.string.messaging_conversation_pronoun))
-            viewModel.getConversations().observe(viewLifecycleOwner) { conversationQueryItemList ->
+            viewModel.conversations.observe(viewLifecycleOwner) { conversationQueryItemList ->
                 if (conversationQueryItemList != null) {
                     listAdapter.submitList(conversationQueryItemList)
                 }

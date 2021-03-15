@@ -22,15 +22,20 @@ class MessagingFragment : Fragment() {
 
     private val viewModel by navGraphViewModels<MessagingFragmentViewModel>(R.id.main_graph)
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentMessagingBinding.inflate(inflater, container, false)
-        binding.viewPager.adapter = MessagingPagerAdapter(listOf(RequestsFragment(this::changeTab), ConversationsFragment()), this)
+        binding.viewPager.adapter = MessagingPagerAdapter(
+            listOf(
+                RequestsFragment(this::changeTab),
+                ConversationsFragment()
+            ), this
+        )
 
-        //TODO: implement badges for incoming requests/unread messages
         TabLayoutMediator(
             binding.tabLayout,
             binding.viewPager
@@ -40,9 +45,11 @@ class MessagingFragment : Fragment() {
                     tab.text = getString(R.string.messaging_tab_label_requests)
                     tab.setIcon(R.drawable.ic_messaging_requests)
                     tab.orCreateBadge.apply {
+                        isVisible = false
                         backgroundColor = MaterialColors.getColor(binding.root, R.attr.colorAccent)
-                        viewModel.requestsCounter.observe(viewLifecycleOwner){ counter ->
-                            if (counter == 0){
+                        maxCharacterCount = 2
+                        viewModel.requestsCounter.observe(viewLifecycleOwner) { counter ->
+                            if (counter == 0) {
                                 isVisible = false
                             } else {
                                 number = counter
@@ -55,7 +62,17 @@ class MessagingFragment : Fragment() {
                     tab.text = getString(R.string.messaging_tab_label_messages)
                     tab.setIcon(R.drawable.ic_messaging_chat)
                     tab.orCreateBadge.apply {
+                        isVisible = false
                         backgroundColor = MaterialColors.getColor(binding.root, R.attr.colorAccent)
+                        maxCharacterCount = 2
+                        viewModel.unreadConversationsCounter.observe(viewLifecycleOwner) { counter ->
+                            if (counter == 0) {
+                                isVisible = false
+                            } else {
+                                number = counter
+                                isVisible = true
+                            }
+                        }
                     }
                 }
             }
@@ -68,9 +85,9 @@ class MessagingFragment : Fragment() {
         _binding = null
     }
 
-    private fun changeTab(tabIndex: Int){
+    private fun changeTab(tabIndex: Int) {
         binding.viewPager.apply {
-            if (!isDetached && currentItem == 0){
+            if (!isDetached && currentItem == 0) {
                 currentItem = tabIndex
             }
         }

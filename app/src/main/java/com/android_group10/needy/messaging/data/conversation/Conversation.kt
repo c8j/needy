@@ -8,6 +8,7 @@ data class Conversation(
     val userUIDs: List<String>,
     val userNameMap: MutableMap<String, String>,
     val latestMessage: ChatMessage,
+    val unread: Boolean,
     val concluded: Boolean
 ) {
     constructor() :
@@ -17,6 +18,7 @@ data class Conversation(
                 listOf(),
                 mutableMapOf(),
                 ChatMessage(),
+                false,
                 false
             )
 }

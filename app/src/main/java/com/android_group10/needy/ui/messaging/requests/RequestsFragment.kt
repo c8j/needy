@@ -42,11 +42,10 @@ class RequestsFragment(private val tabCallback: (selectTab: Int) -> Unit) : Frag
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(requireContext())
             val listAdapter = RequestsFragmentAdapter(tabCallback)
-            val requestsLiveData = viewModel.getRequests()
+            val requestsLiveData = viewModel.requests
             requestsLiveData.observe(viewLifecycleOwner) { requestQueryItemList ->
                 if (requestQueryItemList != null) {
                     listAdapter.submitList(requestQueryItemList)
-                    viewModel.requestsCounter.value = requestQueryItemList.size
                 }
             }
             adapter = listAdapter

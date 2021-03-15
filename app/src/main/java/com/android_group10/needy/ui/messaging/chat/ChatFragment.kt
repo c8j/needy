@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.android_group10.needy.R
 import com.android_group10.needy.databinding.FragmentChatBinding
 import com.android_group10.needy.messaging.MessagingFragmentViewModel
+import com.android_group10.needy.messaging.util.FirestoreUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 
@@ -99,10 +100,15 @@ class ChatFragment : Fragment() {
             (layoutManager as LinearLayoutManager).stackFromEnd = true
             val listAdapter = ChatMessageAdapter()
             viewModel.retrieveMessages().observe(viewLifecycleOwner) { chatMessageQueryList ->
-                if (chatMessageQueryList != null) {
+                if (chatMessageQueryList.isNotEmpty()) {
                     listAdapter.submitList(
                         chatMessageQueryList,
                         kotlinx.coroutines.Runnable { this.smoothScrollToPosition(0) })
+                    FirestoreUtil.firebaseAuthInstance.currentUser?.let {
+                        if (it.uid != chatMessageQueryList[0].item.senderUid){
+                            viewModel.markMessageAsRead()
+                        }
+                    }
                 }
             }
             adapter = listAdapter
