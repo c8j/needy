@@ -81,12 +81,24 @@ object FirestoreUtil {
             .whereEqualTo("senderUID", senderUID)
             .get().addOnSuccessListener { querySnapshot ->
                 if (querySnapshot.isEmpty) {
-                    onComplete(false)
+                    firestoreInstance.collection("$ROOT_COLLECTION/$senderUID/$REQUESTS_COLLECTION")
+                        .whereEqualTo("associatedPostUID", associatedPostUID)
+                        .whereEqualTo("senderUID", receiverUID)
+                        .get().addOnSuccessListener {
+                            if (it.isEmpty) {
+                                onComplete(false)
+                            } else {
+                                onComplete(true)
+                            }
+                        }.addOnFailureListener {
+                            Log.e(FIRESTORE_LOG_TAG, "Failed to query database for existing requests.", it)
+                            onComplete(null)
+                        }
                 } else {
                     onComplete(true)
                 }
             }.addOnFailureListener {
-                Log.e(FIRESTORE_LOG_TAG, "Failed to query database for requests.", it)
+                Log.e(FIRESTORE_LOG_TAG, "Failed to query database for existing requests.", it)
                 onComplete(null)
             }
     }
