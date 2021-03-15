@@ -62,18 +62,10 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
         //getSupportActionBar().setTitle("Log In"); //Done automatically
-        animatedBackGround();
         initializeItems();
         keepLogin();
     }
 
-    public void animatedBackGround(){
-        LinearLayout linearLayout = findViewById(R.id.login_layout);
-        AnimationDrawable animationDrawable = (AnimationDrawable) linearLayout.getBackground();
-        animationDrawable.setEnterFadeDuration(2000);
-        animationDrawable.setExitFadeDuration(4000);
-        animationDrawable.start();
-    }
     public void initializeItems() {
         Button logInButton = findViewById(R.id.logInButton);
         logInPassword = findViewById(R.id.logInPassword);
