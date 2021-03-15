@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/darker_yellow"
+    android:background="@color/light_yello_background"
     android:orientation="vertical"
     tools:context=".ui.LogInAndRegistration.Register">
 
@@ -120,11 +120,12 @@
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/registerButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="70dp"
+        android:layout_width="160dp"
+        android:layout_height="49dp"
+
+        android:layout_gravity="center_horizontal"
+
         android:layout_marginTop="20dp"
-        android:layout_marginRight="70dp"
         android:background="@drawable/button_design"
         android:text="Register"
         android:textColor="@color/dark_grey_elements"
