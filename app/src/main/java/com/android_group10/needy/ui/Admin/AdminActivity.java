@@ -46,11 +46,8 @@ public class AdminActivity extends AppCompatActivity {
         reportsRecyclerView = findViewById(R.id.reportsRecyclerView);
         reportsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        //Update recyclerview adapter
         ReportAdapter reportAdapter = new ReportAdapter(this, reports);
         reportsRecyclerView.setAdapter(reportAdapter);
-      //  reports = getReportsFromDb();
-    //    reportAdapter.updateReports(reports);
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Reports");
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -78,20 +75,20 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
         System.out.println(reports.size() + "   - outside listener");
-      //  reportAdapter.updateReports(reports);
-
-
-
-        Log.i(TAG, "reports size = " + reports.size());
-        for (Report report : reports) {
-            Log.i(TAG, "Report uid: " + report.getBlamedUserUID());
-        }
 
         Button logOutButton = findViewById(R.id.admin_log_out_button);
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 logOut();
+            }
+        });
+
+        Button disableAccountButton = findViewById(R.id.remove_user_button);
+        disableAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
             }
         });
     }
