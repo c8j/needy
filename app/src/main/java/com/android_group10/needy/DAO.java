@@ -30,9 +30,6 @@ public class DAO {
     private DataSnapshot snapshot;
 
     public void writeNewPost(Post post) {
-        // Create new post at /user-posts/$userid/$postid and at
-        // /posts/$postid simultaneously and at
-        // /services/$serviceType simultaneously, etc..
         String key = db.getReference().child("Posts").push().getKey();
 
         Map<String, Object> postValues = post.toMap();
@@ -40,12 +37,6 @@ public class DAO {
 
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("/Posts/" + key, postValues);
-        //  temporarily commented
-  //      childUpdates.put("/User-posts/" + post.getAuthorUID() + "/" + key, postValues);
-  //      childUpdates.put("/Services/" + post.getServiceType() + "/" + key, postValues);
-  //      childUpdates.put("/Zip-codes/" + post.getZipCode() + "/" + key, postValues);
-  //      childUpdates.put("/Cities/" + post.getCity() + "/" + key, postValues);
-
         db.getReference().updateChildren(childUpdates);
     }
 
