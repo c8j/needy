@@ -29,6 +29,7 @@
     <string name="user_email_user_email_com">user_email@.user_email.com</string>
     <string name="user_name">User_name</string>
     <string name="about_needy">About Needy</string>
+    <string name="about_needy_text">Needy is a bridge between people to enable them to communicate with each other, to help each other and facilitate the process of communication between the needy help and the person who is able to provide assistance </string>
 
     <string name="button_accept">offer help</string>
     <string name="button_save">save</string>
