@@ -1,10 +1,13 @@
 package com.android_group10.needy.ui.messaging.chat
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -68,7 +71,10 @@ class ChatFragment : Fragment() {
         //Check if conversation got concluded while chatting
         viewModel.getConversation().observe(viewLifecycleOwner) {
             if (it.concluded) {
-                MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Needy_MaterialAlertDialog)
+                MaterialAlertDialogBuilder(
+                    requireContext(),
+                    R.style.ThemeOverlay_Needy_MaterialAlertDialog
+                )
                     .setMessage(R.string.messaging_dialog_concluded)
                     .setPositiveButton(R.string.messaging_dialog_ok) { _, _ ->
                         //Do nothing
@@ -84,6 +90,11 @@ class ChatFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         shouldInitRecyclerView = true
+        val inputManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(
+            requireActivity().currentFocus?.windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
+        )
         _binding = null
     }
 
