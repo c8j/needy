@@ -14,7 +14,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/light_yello_background">
 
             <TextView
@@ -26,8 +26,8 @@
                 android:layout_marginEnd="2dp"
                 android:background="@color/darker_yellow"
                 android:text="@string/admin_reported_uid"
-                android:textSize="24sp"
                 android:textColor="@color/dark_grey_elements"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -39,8 +39,8 @@
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
                 android:text="@string/admin_reported_by"
-                android:textSize="14sp"
                 android:textColor="@color/dark_grey_elements"
+                android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/reported_uid_textView" />
 
@@ -97,26 +97,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="24dp"
                 android:text="@string/admin_post_uid"
                 android:textColor="@color/dark_grey_elements"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/admin_rep_description_textView" />
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/disabled_user_button"
-                android:background="@drawable/button_design"
-                android:layout_width="160dp"
-                android:layout_height="49dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/admin_remove_user"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/dark_grey_elements"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/post_uid_label_textView" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

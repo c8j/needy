@@ -21,22 +21,18 @@ import com.android_group10.needy.Report;
 import com.android_group10.needy.ui.LogInAndRegistration.LogIn;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.core.Repo;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class AdminActivity extends AppCompatActivity {
     private static final String TAG = "AdminActivity";
     private final Activity thisActivity = this;
     private RecyclerView reportsRecyclerView;
-    private AdminViewModel adminViewModel;
     private ArrayList<Report> reports = new ArrayList<>(10);
 
     @Override
@@ -48,7 +44,6 @@ public class AdminActivity extends AppCompatActivity {
 
         ReportAdapter reportAdapter = new ReportAdapter(this, reports);
         reportsRecyclerView.setAdapter(reportAdapter);
-        boolean dealtWith = false;
 
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Reports");
         userRef.addValueEventListener(new ValueEventListener() {
@@ -59,14 +54,10 @@ public class AdminActivity extends AppCompatActivity {
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     for (DataSnapshot report : userSnapshot.getChildren()) {
                         Report object = report.getValue(Report.class);
-                        if(dealtWith)
-                            object.setReacted(true);
-                        else {
-                            assert object != null;
-                            Log.i(TAG, "Reason: " + object.toString());
+                        assert object != null;
+                        if(!object.isReacted())
                             _reports.add(object);
-                            System.out.println(_reports.size() + "   - inside");
-                        }
+                        System.out.println(_reports.size() + "   - inside");
                     }
                 }
 
@@ -80,6 +71,7 @@ public class AdminActivity extends AppCompatActivity {
                 Toast.makeText(thisActivity, "Could not fetch reported users", Toast.LENGTH_SHORT).show();
             }
         });
+
         System.out.println(reports.size() + "   - outside listener");
 
         Button logOutButton = findViewById(R.id.admin_log_out_button);
