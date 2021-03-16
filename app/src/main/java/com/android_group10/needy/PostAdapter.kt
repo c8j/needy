@@ -37,7 +37,7 @@ class PostAdapter(
 
         override fun onClick(v: View?) {
             val position = adapterPosition
-            Log.d("PostAdapter", "$position")
+
             if (position != RecyclerView.NO_POSITION) {
                 listener.onItemClick(position)
             }
