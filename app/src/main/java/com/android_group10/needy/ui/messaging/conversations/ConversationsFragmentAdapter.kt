@@ -4,8 +4,8 @@ import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import android.widget.Toast
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.android_group10.needy.R
@@ -20,7 +20,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
-class ConversationsFragmentAdapter(private val progressBarVisibility: (isVisible: Boolean) -> Unit, private val pronoun: String) :
+class ConversationsFragmentAdapter(
+    private val progressBarVisibility: (isVisible: Boolean) -> Unit,
+    private val pronoun: String
+) :
     ListAdapter<ConversationQueryItem, ConversationsFragmentAdapter.ConversationItemViewHolder>(
         object :
             ConversationQueryItemDiffCallback() {}) {
@@ -53,7 +56,10 @@ class ConversationsFragmentAdapter(private val progressBarVisibility: (isVisible
                 inflater.inflate(R.menu.messaging_conversation, menu)
                 menu.getItem(0).setOnMenuItemClickListener {
                     //Archive option
-                    MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
+                    MaterialAlertDialogBuilder(
+                        view.context,
+                        R.style.ThemeOverlay_Needy_MaterialAlertDialog
+                    )
                         .setMessage(R.string.messaging_dialog_archive)
                         .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
                             progressBarVisibility(true)
@@ -85,7 +91,10 @@ class ConversationsFragmentAdapter(private val progressBarVisibility: (isVisible
                 }
                 menu.getItem(1).setOnMenuItemClickListener {
                     //Block option
-                    MaterialAlertDialogBuilder(view.context, R.style.ThemeOverlay_Needy_MaterialAlertDialog)
+                    MaterialAlertDialogBuilder(
+                        view.context,
+                        R.style.ThemeOverlay_Needy_MaterialAlertDialog
+                    )
                         .setMessage(R.string.messaging_dialog_block_conversations)
                         .setPositiveButton(R.string.messaging_dialog_confirm) { _, _ ->
                             progressBarVisibility(true)
@@ -125,26 +134,26 @@ class ConversationsFragmentAdapter(private val progressBarVisibility: (isVisible
                 conversationQueryItem.item.apply {
                     this.latestMessage.senderUid.let { uid ->
                         if (uid != "") {
-                            if (uid == currentUserUID) {
-                                latestMessageText = "$pronoun: $latestMessageText"
+                            if (unread && uid != currentUserUID) {
+                                tvMessagePreview.apply {
+                                    setTypeface(typeface, Typeface.BOLD)
+                                }
                             } else {
-                                if (unread){
-                                    tvMessagePreview.apply {
-                                        setTypeface(typeface, Typeface.BOLD)
-                                    }
-                                } else {
-                                    tvMessagePreview.apply {
-                                        setTypeface(typeface, Typeface.NORMAL)
-                                    }
+                                if (uid == currentUserUID) {
+                                    latestMessageText = "$pronoun: $latestMessageText"
+                                }
+                                tvMessagePreview.apply {
+                                    setTypeface(typeface, Typeface.NORMAL)
                                 }
                             }
+
                         }
                     }
                 }
                 tvMessagePreview.text = latestMessageText
 
                 FirebaseUtil.getUserPictureURI(partnerUID) { uri ->
-                    if (uri != null){
+                    if (uri != null) {
                         Glide.with(itemView.context).load(uri).apply(
                             RequestOptions()
                                 .placeholder(R.drawable.anonymous_mask)
@@ -165,7 +174,10 @@ class ConversationsFragmentAdapter(private val progressBarVisibility: (isVisible
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConversationsFragmentAdapter.ConversationItemViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ConversationsFragmentAdapter.ConversationItemViewHolder {
         val binding = ItemMessagingConversationBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
