@@ -13,10 +13,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import com.android_group10.needy.DAO;
 import com.android_group10.needy.Post;
 import com.android_group10.needy.ProfilePictureManager;
@@ -33,7 +31,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -108,16 +105,6 @@ public class OtherStatusPostRecordFragment extends Fragment {
             if (!currentPositioned.getIncentive().isEmpty()) {
                 postIncentive.setText(currentPositioned.getIncentive());
             } else postIncentive.setText("-");
-/*
-            if (!currentPositioned.getZipCode().isEmpty()) {
-                postZipCode.setText(currentPositioned.getZipCode());
-            }
-            if (!currentPositioned.getCity().isEmpty()) {
-                postCity.setText(currentPositioned.getCity());
-            }
- */
-            //ppManager.displayProfilePic(getActivity(), authorPicture, false, authorUID);
-
 
             if (authorUID.equals(currentUser)) {
                 volunteer = false;

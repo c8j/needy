@@ -21,9 +21,7 @@ public class UserRating {
         this.ratingValue = ratingValue; // values 1-5
     }
 
-    public UserRating(){
-
-    }
+    public UserRating(){}
 
     public String getUserUID() {
         return userUID;
