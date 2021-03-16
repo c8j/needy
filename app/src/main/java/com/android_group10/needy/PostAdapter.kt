@@ -69,6 +69,8 @@ class PostAdapter(
         val currentUID = Firebase.auth.currentUser?.uid
         if(currentItem.authorUID == currentUID){
             holder.postContainerLayout.setBackgroundColor(0xFFf5fae0.toInt())
+        } else{
+            holder.postContainerLayout.setBackgroundColor(0xFFffffff.toInt())
         }
         
         FirebaseUtil.getUserPictureURI(currentItem.authorUID) { uri ->
