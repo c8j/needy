@@ -37,7 +37,6 @@ public class OpenPostRecordFragment extends Fragment {
     private Post currentPositioned;
     private ImageView authorPicture;
     private TextView authorName;
-    private TextView authorRating;
     private TextView postDescription;
     private TextView postZipCode;
     private TextView postCity;
@@ -46,7 +45,7 @@ public class OpenPostRecordFragment extends Fragment {
     private TextView textPhone;
     private Button acceptPost;
     private Button contactAuthor;
-    private RatingBar authorratingStars;
+    private RatingBar authorRatingStars;
     private final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
     private final FirebaseDatabase db = FirebaseDatabase.getInstance();
 
@@ -57,7 +56,6 @@ public class OpenPostRecordFragment extends Fragment {
 
         authorPicture = root.findViewById(R.id.author_image);
         authorName = root.findViewById(R.id.author_name);
-        authorRating = root.findViewById(R.id.author_rating);
         authorPhone = root.findViewById(R.id.author_phone);
         postDescription = root.findViewById(R.id.post_description);
         postZipCode = root.findViewById(R.id.post_zip);
@@ -66,7 +64,7 @@ public class OpenPostRecordFragment extends Fragment {
         acceptPost = root.findViewById(R.id.accept);
         contactAuthor = root.findViewById(R.id.contact_author);
         textPhone = root.findViewById(R.id.text_phone);
-        authorratingStars = root.findViewById(R.id.authorRatingBar2);
+        authorRatingStars = root.findViewById(R.id.authorRatingBar2);
 
         ProfilePictureManager ppManager = new ProfilePictureManager();
 
@@ -115,7 +113,7 @@ public class OpenPostRecordFragment extends Fragment {
                     }
                     if (authorObject.get("authorRating") != null) {
                         String authRating = String.format(Locale.getDefault(), "%s", authorObject.get("authorRating"));
-                        authorratingStars.setRating(Float.parseFloat(authRating));
+                        authorRatingStars.setRating(Float.parseFloat(authRating));
                     }
                     if (authorObject.get("phone") != null) {
                         authorPhone.setText(String.valueOf(authorObject.get("phone")));

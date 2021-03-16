@@ -99,10 +99,6 @@ class PostAdapter(
 
     fun updateData(newList: List<Post>){
         detailList = newList;
-
-        /*This could be further optimized to only update items that have changed
-        instead of the whole list, take a look at DiffUtil
-         */
         notifyDataSetChanged();
     }
 
