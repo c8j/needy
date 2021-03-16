@@ -3,7 +3,9 @@ package com.android_group10.needy.ui.LogInAndRegistration;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.widget.Button;
@@ -11,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android_group10.needy.MainActivity;
+import com.android_group10.needy.ProfilePictureManager;
 import com.android_group10.needy.R;
 import com.android_group10.needy.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -110,6 +113,10 @@ public class Register extends AppCompatActivity {
                                     .setValue(user).addOnCompleteListener(task1 -> {
                                     if (task1.isSuccessful()) {
                                         createToast("User has been registered successfully");
+                                        ProfilePictureManager pp = new ProfilePictureManager();
+                                        pp.uploadPicToRemote(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
+                                                "://" + getResources().getResourcePackageName(R.drawable.anonymous_mask)
+                                                + '/' + getResources().getResourceTypeName(R.drawable.anonymous_mask) + '/' + getResources().getResourceEntryName(R.drawable.anonymous_mask) ), fUser.getUid(), this);
                                         Intent intent = new Intent(this, LogIn.class);
                                         startActivity(intent);
                                         finish();
@@ -128,7 +135,7 @@ public class Register extends AppCompatActivity {
 
                             } catch (FirebaseAuthUserCollisionException existEmail) {
 
-                                createToast("This Email already exist");
+                                createToast("This Email already exists");
                                 Intent intent = new Intent(this, LogIn.class);
                                 startActivity(intent);
                                 finish();
@@ -140,6 +147,7 @@ public class Register extends AppCompatActivity {
                         }
                     });
         }
+
     }
 
     public void createToast(String text) {
