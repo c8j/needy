@@ -13,9 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android_group10.needy.R;
 import com.android_group10.needy.Report;
+import com.android_group10.needy.User;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportsViewHolder> {
     Context context;
@@ -37,18 +42,46 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportsVie
     @Override
     public void onBindViewHolder(@NonNull ReportsViewHolder holder, int position) {
         if(reports.size() == 0){
-            holder.reportedUid.setText(R.string.admin_no_reports);
-            holder.deleteUserButton.setVisibility(View.GONE);
+            holder.reportedEmail.setText(R.string.admin_no_reports);
+            holder.disabledUserButton.setVisibility(View.GONE);
             holder.reportAuthorUid.setText(" - ");
             holder.description.setText(" - ");
             holder.postUid.setText(" - ");
         }
         else {
-            holder.deleteUserButton.setVisibility(View.VISIBLE);
-            holder.reportedUid.setText("Reported UID: " + reports.get(position).getBlamedUserUID()); //R.string.admin_reported_uid
+            holder.disabledUserButton.setVisibility(View.VISIBLE);
+            //getBlamedEmailID();
+            final String[] blamedEmail = new String[1];
+            final User[] blamedUser = new User[1];
+            String blamedUID = reports.get(position).getBlamedUserUID();
+            DatabaseReference blamedUserRef = FirebaseDatabase.getInstance().getReference("Users").child(blamedUID);
+            blamedUserRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    blamedUser[0] = snapshot.getValue(User.class);
+                    assert blamedUser[0] != null;
+                    holder.reportedEmail.setText("Reported user: " + blamedUser[0].getEmail());
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
             holder.reportAuthorUid.setText(reports.get(position).getReportAuthorUID() );
             holder.description.setText(reports.get(position).getDescription());
             holder.postUid.setText(reports.get(position).getPostUID());
+
+            holder.disabledUserButton.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("ResourceAsColor")
+                @Override
+                public void onClick(View v) {
+                    //TODO: Set reacted to true in realtimeDb
+                    //reports.get(position).setReacted(true);
+                    holder.disabledUserButton.setEnabled(false);
+                    holder.disabledUserButton.setBackgroundColor(0xFFf5fae0);
+                }
+            });
         }
     }
 
@@ -66,18 +99,18 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportsVie
     }
 
     public static class ReportsViewHolder extends RecyclerView.ViewHolder{
-        TextView reportedUid;
+        TextView reportedEmail;
         TextView reportAuthorUid;
         TextView description;
         TextView postUid;
-        Button deleteUserButton;
+        Button disabledUserButton;
         public ReportsViewHolder(@NonNull View itemView) {
             super(itemView);
-            reportedUid = itemView.findViewById(R.id.reported_uid_textView);
+            reportedEmail = itemView.findViewById(R.id.reported_uid_textView);
             reportAuthorUid = itemView.findViewById(R.id.reported_by_uid_textView);
             description = itemView.findViewById(R.id.admin_rep_description_textView);
             postUid = itemView.findViewById(R.id.admin_post_UID_textView);
-            deleteUserButton = itemView.findViewById(R.id.remove_user_button);
+            disabledUserButton = itemView.findViewById(R.id.disabled_user_button);
         }
     }
 }

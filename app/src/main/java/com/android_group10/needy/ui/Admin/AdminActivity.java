@@ -48,6 +48,8 @@ public class AdminActivity extends AppCompatActivity {
 
         ReportAdapter reportAdapter = new ReportAdapter(this, reports);
         reportsRecyclerView.setAdapter(reportAdapter);
+        boolean dealtWith = false;
+
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Reports");
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -57,10 +59,14 @@ public class AdminActivity extends AppCompatActivity {
                 for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                     for (DataSnapshot report : userSnapshot.getChildren()) {
                         Report object = report.getValue(Report.class);
-                        assert object != null;
-                        Log.i(TAG, "Reason: " + object.toString());
-                        _reports.add(object);
-                        System.out.println(_reports.size() + "   - inside");
+                        if(dealtWith)
+                            object.setReacted(true);
+                        else {
+                            assert object != null;
+                            Log.i(TAG, "Reason: " + object.toString());
+                            _reports.add(object);
+                            System.out.println(_reports.size() + "   - inside");
+                        }
                     }
                 }
 
@@ -84,13 +90,6 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
 
-        Button disableAccountButton = findViewById(R.id.remove_user_button);
-        disableAccountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Users");
-            }
-        });
     }
 
     private void logOut() {
