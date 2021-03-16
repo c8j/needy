@@ -21,7 +21,7 @@
         android:layout_below="@id/whos_details_textView"
         android:layout_marginTop="5dp"
         android:contentDescription="author's picture"
-        android:src="@drawable/anonymous_mask" />
+        />
 
     <TextView
         android:id="@+id/author_name2"

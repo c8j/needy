@@ -16,7 +16,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginStart="10dp"
         android:contentDescription="author's picture"
-        android:src="@drawable/anonymous_mask" />
+        />
 
     <TextView
         android:id="@+id/author_name"

@@ -119,7 +119,7 @@
         android:background="@drawable/rectangle_image_border"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileLastNameTextView"
-        app:srcCompat="@drawable/anonymous_mask" />
+        />
 
     <ImageButton
         android:id="@+id/editPicImageButton"
