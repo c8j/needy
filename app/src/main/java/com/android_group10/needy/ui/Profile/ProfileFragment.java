@@ -1,5 +1,6 @@
 package com.android_group10.needy.ui.Profile;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -74,6 +75,7 @@ public class ProfileFragment extends Fragment {
 
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
         userRef.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
               //  currentUser[0] = snapshot.getValue(User.class);
@@ -82,7 +84,7 @@ public class ProfileFragment extends Fragment {
                 lastNameText.setText(snapshot.child("lastName").getValue(String.class));
                 zipcodeText.setText(Integer.toString(snapshot.child("zipCode").getValue(Integer.class)));
                 emailIdText.setText(snapshot.child("email").getValue(String.class));
-                phNumText.setText(snapshot.child("phone").getValue(String.class));
+                phNumText.setText("+46 " + snapshot.child("phone").getValue(String.class));
                 cityText.setText(snapshot.child("city").getValue(String.class));
             }
 

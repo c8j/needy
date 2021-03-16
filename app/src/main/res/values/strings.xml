@@ -136,7 +136,7 @@
     <string name="admin_reported_by">Reported by:</string>
     <string name="admin_report_descr">Report description: </string>
     <string name="admin_post_uid">Post UID:</string>
-    <string name="admin_remove_user">Remove user</string>
+    <string name="admin_remove_user">Account disabled</string>
     <string name="admin_no_reports">No new reported users</string>
 
 </resources>
