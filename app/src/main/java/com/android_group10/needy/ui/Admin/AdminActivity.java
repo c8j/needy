@@ -1,21 +1,15 @@
 package com.android_group10.needy.ui.Admin;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
-import com.android_group10.needy.Post;
-import com.android_group10.needy.PostAdapter;
 import com.android_group10.needy.R;
 import com.android_group10.needy.Report;
 import com.android_group10.needy.ui.LogInAndRegistration.LogIn;
@@ -26,7 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 
 public class AdminActivity extends AppCompatActivity {
@@ -57,12 +50,10 @@ public class AdminActivity extends AppCompatActivity {
                         assert object != null;
                         if(!object.isReacted())
                             _reports.add(object);
-                        System.out.println(_reports.size() + "   - inside");
                     }
                 }
 
                 reports = _reports;
-                System.out.println(reports.size() + "   - outside for-loop");
                 reportAdapter.updateReports(reports);
             }
 
@@ -71,8 +62,6 @@ public class AdminActivity extends AppCompatActivity {
                 Toast.makeText(thisActivity, "Could not fetch reported users", Toast.LENGTH_SHORT).show();
             }
         });
-
-        System.out.println(reports.size() + "   - outside listener");
 
         Button logOutButton = findViewById(R.id.admin_log_out_button);
         logOutButton.setOnClickListener(new View.OnClickListener() {
