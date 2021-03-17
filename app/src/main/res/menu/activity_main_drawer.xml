@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/menu_group_main"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/in_need"
+            android:icon="@drawable/ic_in_need"
+            android:title="@string/title_in_need" />
+
+        <item
+            android:id="@+id/needs_and_deeds"
+            android:icon="@drawable/ic_needs_and_deeds"
+            android:title="@string/title_needs_and_deeds" />
+
+        <item
+            android:id="@+id/messaging"
+            android:icon="@drawable/ic_messaging"
+            android:title="@string/title_messaging" />
+    </group>
+
+    <group android:id="@+id/menu_group_profile">
+        <item
+            android:id="@+id/profile"
+            android:icon="@drawable/ic_profile"
+            android:title="@string/profile" />
+
+    </group>
+
+    <group android:id="@+id/menu_group_extra">
+        <item
+            android:id="@+id/share"
+            android:icon="@drawable/ic_share"
+            android:title="@string/share_us_of_facebook" />
+        <item
+            android:id="@+id/log_out"
+            android:icon="@drawable/ic_log_out"
+            android:title="@string/menu_log_out" />
+    </group>
+</menu>

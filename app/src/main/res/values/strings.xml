@@ -1,3 +1,142 @@
 <resources>
     <string name="app_name">Needy</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_in_need">In Need</string>
+    <string name="title_needs_and_deeds">Needs and Deeds</string>
+    <string name="title_messaging">Conversations</string>
+    <string name="title_open_post">Post</string>
+    <string name="title_add_post">Add post</string>
+    <string name="title_register">Register</string>
+    <string name="menu_log_out">Log Out</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="e_mail">E-mail</string>
+    <string name="hint_e_mail">Enter your E-mail</string>
+    <string name="username">Username</string>
+    <string name="not_a_member">Not a member?</string>
+    <string name="join_now">Join now</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="password">Password</string>
+    <string name="reset_password">Reset password</string>
+    <string name="need_logo">need.logo</string>
+    <string name="log_in">Log in</string>
+    <string name="profile">Profile</string>
+    <string name="in_need">in_need</string>
+    <string name="needs_and_deeds">needs_and_deeds</string>
+    <string name="to_do">to_do</string>
+    <string name="Needy">Needy</string>
+    <string name="user_email_user_email_com">user_email@.user_email.com</string>
+    <string name="user_name">User_name</string>
+    <string name="about_needy">About Needy</string>
+    <string name="about_needy_text">Needy is a bridge between people to enable them to communicate with each other, to help each other and facilitate the process of communication between the needy help and the person who is able to provide assistance </string>
+
+    <string name="button_accept">offer help</string>
+    <string name="button_save">save</string>
+    <string name="button_send">send</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_report">report</string>
+    <string name="button_rate1">rate author</string>
+    <string name="button_rate2">rate volunteer</string>
+    <string name="button_contact">contact author</string>
+    <string name="phone_text">Contact phone#: </string>
+    <string name="rating_text">User rating: </string>
+    <string name="incentive_text">Offered incentive: </string>
+    <string name="service_type_text">Choose category: </string>
+    <string name="address_text">Specify a ZIP code and a City if they differ from the ones in your Profile: </string>
+    <string name="description_text">I would like to get help with the following: </string>
+    <string name="description_text1">What is it you need to get help with? </string>
+    <string name="description_text2">Task details </string>
+    <string name="motivation_text">If you would like to motivate a volunteer, how would you do it? </string>
+    <string name="warning">Attention! Reporting a user might lead to that user being blocked in our system and/or police being informed.
+        Please, consider giving the user low rating instead</string>
+    <string name="hint_text">Write your complaint here </string>
+    <string name="hint_text1">Filter either by a ZIP code or a City </string>
+    <string name="hint_text2">You can filter by a Service type here </string>
+    <string name="hint_filter_on"> </string>
+    <string name="hint_filter_off"> </string>
+    <string name="button_complete">mark complete </string>
+    <string name="button_contact2">contact volunteer</string>
+    <string name="button_report1">report author</string>
+    <string name="button_report2">report volunteer</string>
+    <string name="button_open_profile">open profile</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="facebook_app_id">138417034808418</string>
+    <string name="fb_login_protocol_scheme">fb138417034808418</string>
+
+    <!--Profile related-->
+    <string name="your_profile">Your profile</string>
+    <string name="profile_firstName">First name</string>
+    <string name="profile_address">City:</string>
+    <string name="profile_zipcode">ZIP code:</string>
+    <string name="profile_phone_number">Phone number: </string>
+    <string name="profile_email">E-mail</string>
+    <string name="profile_edit">Edit profile</string>
+    <string name="profile_lastName">LastName</string>
+    <string name="confirm">Confirm</string>
+    <string name="zip_code">ZIP code</string>
+    <string name="city">City</string>
+    <string name="please_complete_your_profile_information">Please complete your profile information</string>
+    <string name="edit_picture">Edit picture</string>
+    <string name="profile_update">Update</string>
+    <string name="edit_firstName">First Name: </string>
+    <string name="edit_lastName">Last Name: </string>
+
+    <string name="share_us_of_facebook">Share us on Facebook</string>
+
+    <string name="btn1">Horrible experience!</string>
+    <string name="btn2">Bad</string>
+    <string name="btn3">Average</string>
+    <string name="btn4">Good</string>
+    <string name="btn5">It was a pleasure!</string>
+
+    <string-array name="radio">
+        <item>@string/btn1</item>
+        <item>@string/btn2</item>
+        <item>@string/btn3</item>
+        <item>@string/btn4</item>
+        <item>@string/btn5</item>
+    </string-array>
+
+    <!--messaging related-->
+    <string name="messaging_tab_label_requests">Requests</string>
+    <string name="messaging_tab_label_messages">Messages</string>
+    <string name="messaging_conversation_label_post">Post:</string>
+    <string name="messaging_request_imageDescription">Request menu</string>
+    <string name="messaging_request_accept">Accept request</string>
+    <string name="messaging_request_ignore">Ignore request</string>
+    <string name="messaging_request_block">Block user</string>
+    <string name="messaging_chat_hint">Type message here…</string>
+    <string name="messaging_chat_send_description">Send message</string>
+    <string name="messaging_conversation_pronoun">You</string>
+    <string name="messaging_conversation_archive">Archive</string>
+    <string name="messaging_conversation_block">Block user</string>
+    <string name="messaging_dialog_cancel">Cancel</string>
+    <string name="messaging_dialog_confirm">Confirm</string>
+    <string name="messaging_dialog_ok">OK</string>
+    <string name="messaging_dialog_ignore">This will remove the request from your list. Proceed?</string>
+    <string name="messaging_dialog_block_requests">Warning: This will prevent this user from sending further messaging requests to you. Proceed?</string>
+    <string name="messaging_dialog_block_conversations">Warning: This will conclude any conversations with this user and prevent them from sending further messaging requests to you. Proceed?</string>
+    <string name="messaging_dialog_archive">This will conclude the conversation for both participants. Proceed?</string>
+    <string name="messaging_dialog_concluded">Conversation was concluded by other user.</string>
+
+    <!--volunteer's profile-->
+    <string name="open_post_view_profile">View volunteer\'s details</string>
+    <string name="volunteer_name">Name:</string>
+    <string name="admin_log_out">Log out</string>
+    <string name="help_offered_by">Help offered by:</string>
+    <string name="help_needed_by">Help needed by:</string>
+
+    <!--admin layout-->
+    <string name="admin_reported_uid">Reported UID:</string>
+    <string name="admin_reported_by">Reported by:</string>
+    <string name="admin_report_descr">Report description: </string>
+    <string name="admin_post_uid">Post UID:</string>
+    <string name="admin_remove_user">Account disabled</string>
+    <string name="admin_no_reports">No new reported users</string>
+
 </resources>

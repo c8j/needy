@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/in_need">
+    <fragment
+        android:id="@+id/in_need"
+        android:name="com.android_group10.needy.ui.InNeed.InNeedFragment"
+        android:label="@string/title_in_need"
+        tools:layout="@layout/fragment_in_need">
+        <action
+            android:id="@+id/action_in_need_to_add_post"
+            app:destination="@id/add_post" />
+        <action
+            android:id="@+id/action_in_need_to_open_post"
+            app:destination="@id/open_post" />
+    </fragment>
+    <fragment
+        android:id="@+id/needs_and_deeds"
+        android:name="com.android_group10.needy.ui.NeedsAndDeeds.NeedsAndDeedsFragment"
+        android:label="@string/title_needs_and_deeds"
+        tools:layout="@layout/fragment_needs_and_deeds">
+        <action
+            android:id="@+id/action_needs_and_deeds_to_post_status"
+            app:destination="@id/post_status" />
+    </fragment>
+    <fragment
+        android:id="@+id/profile"
+        android:name="com.android_group10.needy.ui.Profile.ProfileFragment"
+        android:label="@string/profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/open_post"
+        android:name="com.android_group10.needy.ui.InNeed.OpenPostRecordFragment"
+        android:label="@string/title_open_post"
+        tools:layout="@layout/open_post">
+        <argument
+            android:name="clickedPost"
+            app:argType="com.android_group10.needy.Post" />
+    </fragment>
+    <fragment
+        android:id="@+id/add_post"
+        android:name="com.android_group10.needy.ui.InNeed.AddPostRecordFragment"
+        android:label="@string/title_add_post"
+        tools:layout="@layout/add_post" />
+    <fragment
+        android:id="@+id/post_status"
+        android:name="com.android_group10.needy.ui.NeedsAndDeeds.OtherStatusPostRecordFragment"
+        android:label="@string/title_open_post"
+        tools:layout="@layout/open_post_status2">
+        <argument
+            android:name="clickedPost"
+            app:argType="com.android_group10.needy.Post" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/messaging"
+        android:name="com.android_group10.needy.ui.messaging.MessagingFragment"
+        android:label="@string/title_messaging"
+        tools:layout="@layout/fragment_messaging" >
+        <action
+            android:id="@+id/action_messaging_to_chat"
+            app:destination="@id/chat" />
+    </fragment>
+    <fragment
+        android:id="@+id/chat"
+        android:name="com.android_group10.needy.ui.messaging.chat.ChatFragment"
+        android:label="{partnerFullName}"
+        tools:layout="@layout/fragment_chat">
+        <argument
+            android:name="conversationUID"
+            app:argType="string" />
+        <argument
+            android:name="partnerFullName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_chat_to_messaging"
+            app:destination="@id/messaging"
+            app:popUpTo="@id/messaging"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+</navigation>

@@ -1,6 +1,51 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.Needy" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+
+
+    <style name="MyTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/dark_grey_elements</item>
+        <item name="colorPrimaryDark">@color/dark_grey_elements</item>
+        <item name="colorPrimaryVariant">@color/darker_grey_elements</item>
+        <item name="colorSecondary">@color/light_yello_background</item>
+        // LA added
+        <item name="colorOnBackground">@color/light_yello_background</item>
+        //LA added
+        <item name="colorAccent">@color/dark_grey_elements</item>
+        <item name="android:navigationBarColor">@color/dark_grey_elements</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
+    </style>
+
+    <style name="loginTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/dark_grey_elements</item>
+        <item name="colorPrimaryDark">@color/dark_grey_elements</item>
+        <item name="colorPrimaryVariant">@color/darker_grey_elements</item>
+        <item name="colorAccent">@color/dark_grey_elements</item>
+        <item name="android:navigationBarColor">@color/dark_grey_elements</item>
+    </style>
+
+    <!--Used to color the text on the toolbar to white-->
+    <style name="Widget.App.Toolbar" parent="Widget.MaterialComponents.Toolbar.Primary">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Toolbar</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Toolbar" parent="">
+        <item name="titleTextColor">@color/white</item>
+        <item name="colorControlNormal">@color/white</item>
+    </style>
+
+    <!--Used to style the dialogs in the messaging section-->
+    <style name="ThemeOverlay.Needy.MaterialAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="materialAlertDialogBodyTextStyle">
+            @style/TextAppearance.MaterialComponents.Body1
+        </item>
+        <item name="buttonBarNeutralButtonStyle">@style/Alert.Button</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Alert.Button</item>
+    </style>
+
+    <!--Not used for now-->
+    <style name="Theme.Needy" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -13,4 +58,5 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
 </resources>

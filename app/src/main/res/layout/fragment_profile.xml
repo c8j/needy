@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_yello_background"
+    tools:context=".ui.Profile.ProfileFragment">
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="366dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:text="@string/your_profile"
+        android:textAlignment="center"
+        android:textColor="@color/dark_grey_elements"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profileLastNameTextView"
+        android:layout_width="170dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="64dp"
+        android:text="@string/profile_lastName"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/profileFirstNameTextView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profileFirstNameTextView"
+        android:layout_width="170dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="64dp"
+        android:text="@string/profile_firstName"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profileZipcodeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/profile_zipcode"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileEmailTextView" />
+
+    <TextView
+        android:id="@+id/profileCityTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="40dp"
+        android:text="@string/profile_address"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileEmailTextView" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/profileEditButton"
+        android:layout_width="160dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/profile_edit"
+        android:background="@drawable/button_design"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilePicimageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/profilePhoneNumTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/profile_phone_number"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileFirstNameTextView" />
+
+    <TextView
+        android:id="@+id/profileEmailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="23dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/profile_email"
+        android:textColor="@color/dark_grey_elements"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilePhoneNumTextView" />
+
+    <ImageView
+        android:id="@+id/profilePicimageView"
+        android:layout_width="127dp"
+        android:layout_height="127dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="28dp"
+        android:background="@drawable/rectangle_image_border"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileLastNameTextView"
+        />
+
+    <ImageButton
+        android:id="@+id/editPicImageButton"
+        android:layout_width="29dp"
+        android:layout_height="29dp"
+        android:background="@color/dark_grey_elements"
+        android:src="@android:drawable/ic_menu_edit"
+        app:layout_constraintBottom_toBottomOf="@+id/profilePicimageView"
+        app:layout_constraintEnd_toEndOf="@+id/profilePicimageView" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="36dp"
+        app:layout_constraintStart_toStartOf="@+id/profilePicimageView"
+        app:layout_constraintTop_toTopOf="@+id/profilePicimageView" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
