@@ -1,7 +1,7 @@
 package com.android_group10.needy.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
-
 import android.content.SharedPreferences;
 
 import java.util.HashMap;
@@ -14,11 +14,7 @@ public class SharedPreference {
     // context pass the reference to another class
     Context context;
 
-    //This is user session variables
-    public static final String KEY_EMAIL = "email";
     public static final String KEY_PASSWORD = "password";
-    public static final String IS_LOGIN = "isLoggedIn";
-    public static final String KEY_USERSESSION = "userLoginSession";
     public static final String SESSION_REMEMBERME = "rememberMe";
 
     //Remember me variables
@@ -27,6 +23,7 @@ public class SharedPreference {
     public static final String KEY_SESSION_PASSWORD = "password";
 
 
+    @SuppressLint("CommitPrefEdits")
     public SharedPreference(Context context, String sessionName) {
         this.context = context;
         usersSession = context.getSharedPreferences(sessionName, Context.MODE_PRIVATE);

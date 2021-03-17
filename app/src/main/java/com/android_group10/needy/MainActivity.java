@@ -66,29 +66,26 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuItemClickListener, NavController.OnDestinationChangedListener {
     private String first_name_from_Facebook, user_email_from_Facebook;
     private DrawerLayout drawerLayout;
-    AppBarConfiguration appBarConfiguration;
+    private AppBarConfiguration appBarConfiguration;
     private NavController navController;
-    FloatingActionButton floatingActionButton;
+    private FloatingActionButton floatingActionButton;
     private String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     private View headerView;
     private ImageView profileImage;
-    private long pressedTime;
+
 
     private String imageFilePath;
-    File photoFile = null;
+    private File photoFile = null;
     private Uri selectedImageUri;
     private LocalDatabaseHelper localDatabaseHelper;
-    //  private ProfilePictureManager ppManager;
 
     private static final int SELECT_PICTURE = 100;
     private static final int CAMERA_REQUEST = 1;
-    //private static final int SHARE_ON_FACEBOOK = 2;
 
     private static final String TAG = "StoreImageActivity";
-    ShareDialog shareDialog;
-    CallbackManager callbackManager;
-    TextView userNameOnHeader;
-    TextView userEmailOnHeader;
+    private ShareDialog shareDialog;
+    private CallbackManager callbackManager;
+    private TextView userNameOnHeader, userEmailOnHeader;
 
 
     @Override
@@ -96,33 +93,15 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         localDatabaseHelper = new LocalDatabaseHelper(this);
-        //       ppManager = new ProfilePictureManager();
         initialization();
         getFbDetails();
         updateHeader();
         facebookSDKInitialize();
 
-        //Don't need this, handled automatically
-        /*ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar
-                , R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.setDrawerIndicatorEnabled(true);
-        toggle.syncState();*/
-
-        //navigationView.setNavigationItemSelectedListener(this);
-
-        /*fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment, new InNeedFragment());
-        fragmentTransaction.commit();*/
-
         profileImage.setOnClickListener(v -> {
-            //drawerLayout.closeDrawer(GravityCompat.START); //What is this meant to do?
             showPopup(profileImage);
-            //drawerLayout.openDrawer(GravityCompat.START); //-^
         });
 
-        //this.deleteDatabase("Images.db");
         drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
@@ -166,54 +145,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         }
     }
 
-    /*@SuppressLint("NonConstantResourceId")
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()) {
-            case R.id.in_need:
-                changeFragment(new InNeedFragment());
-
-                floatingActionButton.show();
-
-                break;
-            case R.id.needs_and_deeds:
-                changeFragment(new NeedsAndDeedsFragment());
-                floatingActionButton.hide();
-                break;
-            case R.id.messaging:
-                changeFragment(new MessagingFragment());
-                floatingActionButton.hide();
-                break;
-            case R.id.profile:
-                changeFragment(new ProfileFragment());
-                floatingActionButton.hide();
-                break;
-            case R.id.log_out:
-                FirebaseAuth.getInstance().signOut();
-                LoginManager.getInstance().logOut();
-                startActivity(new Intent(this, LogIn.class));
-                break;
-            case R.id.share:
-                if (ShareDialog.canShow(ShareLinkContent.class)) {
-                    ShareOnFacebook shareOnFacebook = new ShareOnFacebook();
-                    shareDialog.show(shareOnFacebook.createShare());
-                }
-                break;
-        }
-        //This helps to close the navigation bar after choose an item from it.
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }*/
-
-    /*// Change fragments when press on navigation drawer.
-    public void changeFragment(Fragment fragment) {
-        fragmentManager = getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.nav_host_fragment, fragment);
-        fragmentTransaction.commit();
-    }*/
-
     // Item menu
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -228,17 +159,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     // Can press back button and only close the navigation bar and not the activity
     @Override
     public void onBackPressed() {
-        //This breaks the navigation
-        /*if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else if (pressedTime + 2000 > System.currentTimeMillis()) {
-            super.onBackPressed();
-            finish();
-        } else {
-            Toast.makeText(getBaseContext(), "Press back again to exit", Toast.LENGTH_SHORT).show();
-            pressedTime = System.currentTimeMillis();
-        }*/
-
         //This way the back stack behaves normally, TODO: find a way to also implement double tap exit
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -291,13 +211,6 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
         floatingActionButton.setOnClickListener(view -> Snackbar.make(view, "Click here to add a help request", Snackbar.LENGTH_LONG)
                 .setAction("New Need", v -> {
                     navController.navigate(InNeedFragmentDirections.actionInNeedToAddPost());
-
-                    //Old transaction
-                    /*fragmentManager = getSupportFragmentManager();
-                    fragmentTransaction = fragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.nav_host_fragment, new AddPostRecordFragment());
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();*/
                 }).show());
         floatingActionButton.setImageResource(R.drawable.add_icon);
         //Set listener for fab behaviour based on fragment
@@ -475,6 +388,7 @@ public class MainActivity extends AppCompatActivity implements PopupMenu.OnMenuI
     }
 
     // Retrieve the image from the database.
+    // Will keep this method for future work.
     public void loadImageFromDB() {
         // check first if there is an image in the database(Check if the table is empty or not)
         boolean empty = localDatabaseHelper.checkTableEmpty();

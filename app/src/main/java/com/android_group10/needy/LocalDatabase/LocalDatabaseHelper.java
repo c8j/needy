@@ -10,7 +10,6 @@ import android.util.Log;
 
 public class LocalDatabaseHelper {
     public static long newImage;
-    public static final String IMAGE_ID = "id";
     public static final String IMAGE = "image";
     public static final String USER_ID = "user_id";
     private final Context mContext;
@@ -39,7 +38,6 @@ public class LocalDatabaseHelper {
         }
 
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            //db.execSQL("DROP TABLE IF EXISTS " + CREATE_IMAGES_TABLE);
             onCreate(db);
         }
     }
@@ -89,17 +87,6 @@ public class LocalDatabaseHelper {
         return null;
 
     }
-
-    // Delete an user image with a specific userId
-    public void deleteImage (String userId){
-        SQLiteDatabase sqLiteDatabase = databaseHelper.getWritableDatabase();
-        sqLiteDatabase.delete(
-                IMAGES_TABLE,  // Where to delete
-                USER_ID+" = ?",
-                new String[]{userId});  // What to delete
-        sqLiteDatabase.close();
-    }
-
 
     public boolean checkTableEmpty() {
         boolean flag;

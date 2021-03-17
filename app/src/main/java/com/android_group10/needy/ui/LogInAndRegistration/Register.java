@@ -1,6 +1,5 @@
 package com.android_group10.needy.ui.LogInAndRegistration;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentResolver;
@@ -12,12 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android_group10.needy.MainActivity;
 import com.android_group10.needy.ProfilePictureManager;
 import com.android_group10.needy.R;
 import com.android_group10.needy.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -31,7 +27,6 @@ public class Register extends AppCompatActivity {
     private EditText registerPassword, registerCity, registerPhone, registerFirstName, registerLastName, registerEmail, registerZip;
     private Button registerButton;
     private FirebaseAuth firebaseAuth;
-    private final String TAG = "The Function";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,17 +101,17 @@ public class Register extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             FirebaseUser fUser = FirebaseAuth.getInstance().getCurrentUser();
-                            if (fUser != null){
+                            if (fUser != null) {
                                 User user = new User(email, password, firstName, lastName, phone, city, Integer.parseInt(zipCode));
                                 FirebaseDatabase.getInstance().getReference("Users")
                                         .child(fUser.getUid())
-                                    .setValue(user).addOnCompleteListener(task1 -> {
+                                        .setValue(user).addOnCompleteListener(task1 -> {
                                     if (task1.isSuccessful()) {
                                         createToast("User has been registered successfully");
                                         ProfilePictureManager pp = new ProfilePictureManager();
                                         pp.uploadPicToRemote(Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE +
                                                 "://" + getResources().getResourcePackageName(R.drawable.anonymous_mask)
-                                                + '/' + getResources().getResourceTypeName(R.drawable.anonymous_mask) + '/' + getResources().getResourceEntryName(R.drawable.anonymous_mask) ), fUser.getUid(), this);
+                                                + '/' + getResources().getResourceTypeName(R.drawable.anonymous_mask) + '/' + getResources().getResourceEntryName(R.drawable.anonymous_mask)), fUser.getUid(), this);
                                         Intent intent = new Intent(this, LogIn.class);
                                         startActivity(intent);
                                         finish();

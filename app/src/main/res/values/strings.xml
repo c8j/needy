@@ -13,13 +13,11 @@
     <string name="title_register">Register</string>
     <string name="menu_log_out">Log Out</string>
     <string name="remember_me">Remember Me</string>
-    <string name="e_mail">E-mail</string>
     <string name="hint_e_mail">Enter your E-mail</string>
     <string name="username">Username</string>
     <string name="not_a_member">Not a member?</string>
     <string name="join_now">Join now</string>
     <string name="forget_password">Forget Password?</string>
-    <string name="password">Password</string>
     <string name="reset_password">Reset password</string>
     <string name="need_logo">need.logo</string>
     <string name="log_in">Log in</string>
@@ -79,7 +77,6 @@
     <string name="profile_lastName">LastName</string>
     <string name="confirm">Confirm</string>
     <string name="zip_code">ZIP code</string>
-    <string name="city">City</string>
     <string name="please_complete_your_profile_information">Please complete your profile information</string>
     <string name="edit_picture">Edit picture</string>
     <string name="profile_update">Update</string>
@@ -138,5 +135,15 @@
     <string name="admin_post_uid">Post UID:</string>
     <string name="admin_remove_user">Account disabled</string>
     <string name="admin_no_reports">No new reported users</string>
+    <string name="e_mail">E-mail</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="city">City</string>
+    <string name="zip">Zip</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="update">Update</string>
+    <string name="take_photo">Take photo</string>
 
 </resources>

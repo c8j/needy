@@ -53,14 +53,12 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     private CallbackManager callbackManager;
     public String id, facebook_email, facebook_first_name, facebook_last_name;
     private String facebookUserId;
-    private long pressedTime;
     private boolean isLoggedIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-        //getSupportActionBar().setTitle("Log In"); //Done automatically
         initializeItems();
 
         keepLogin();
@@ -75,7 +73,6 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
         rememberMeCheckBox = findViewById(R.id.remeberMe);
         Button facebookButton = findViewById(R.id.facebook_login_button);
 
-        //FacebookSdk.sdkInitialize(getApplicationContext()); //Deprecated, done automatically now
         callbackManager = CallbackManager.Factory.create();
 
         rememberMe();

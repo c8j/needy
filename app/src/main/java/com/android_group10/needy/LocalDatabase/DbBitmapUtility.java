@@ -8,12 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class DbBitmapUtility {
-    // convert from bitmap to byte array
-    public static byte[] getImageBytes(Bitmap bitmap) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        return stream.toByteArray();
-    }
 
     // convert from byte array to bitmap
     public static Bitmap getImage(byte[] image) {

@@ -27,10 +27,11 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="50dp"
         android:ems="10"
-        android:hint="E-mail"
+        android:hint="@string/e_mail"
         android:inputType="textPersonName"
         android:textColor="@color/dark_grey_elements"
-        android:textColorHint="@color/dark_grey_elements" />
+        android:textColorHint="@color/dark_grey_elements"
+        tools:ignore="TextFields" />
 
     <EditText
         android:id="@+id/registerFirstName"
@@ -41,7 +42,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="50dp"
         android:ems="10"
-        android:hint="First Name"
+        android:hint="@string/first_name"
         android:inputType="textPersonName"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements" />
@@ -55,7 +56,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="50dp"
         android:ems="10"
-        android:hint="Last Name"
+        android:hint="@string/last_name"
         android:inputType="textPersonName"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements" />
@@ -69,7 +70,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="50dp"
         android:ems="10"
-        android:hint="Phone Number"
+        android:hint="@string/phone_number"
         android:inputType="phone"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements" />
@@ -83,7 +84,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="50dp"
         android:ems="10"
-        android:hint="City "
+        android:hint="@string/city"
         android:inputType="textPersonName"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements" />
@@ -97,7 +98,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="50dp"
         android:ems="10"
-        android:hint="Zip"
+        android:hint="@string/zip"
         android:inputType="number"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements" />
@@ -112,7 +113,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginRight="50dp"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/password"
         android:inputType="textPassword"
         android:textColor="@color/dark_grey_elements"
         android:textColorHint="@color/dark_grey_elements" />
@@ -127,7 +128,7 @@
 
         android:layout_marginTop="20dp"
         android:background="@drawable/button_design"
-        android:text="Register"
+        android:text="@string/register"
         android:textColor="@color/dark_grey_elements"
         android:textSize="16sp"
         android:textStyle="bold" />

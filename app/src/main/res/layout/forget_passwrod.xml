@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_background"
@@ -29,7 +30,8 @@
         android:hint="@string/hint_e_mail"
         android:inputType="textEmailAddress"
         android:textColor="@color/dark_grey_elements"
-        android:textColorHint="@color/dark_grey_elements" />
+        android:textColorHint="@color/dark_grey_elements"
+        tools:ignore="TextFields" />
 
 
     <androidx.appcompat.widget.AppCompatButton
