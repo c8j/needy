@@ -32,12 +32,14 @@ public class AdminActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin);
+
+        //Set up recycler view:
         reportsRecyclerView = findViewById(R.id.reportsRecyclerView);
         reportsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         ReportAdapter reportAdapter = new ReportAdapter(this, reports);
         reportsRecyclerView.setAdapter(reportAdapter);
 
+        //Update reports list from remote db:
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Reports");
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -63,6 +65,7 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
 
+        //Log out button:
         Button logOutButton = findViewById(R.id.admin_log_out_button);
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override

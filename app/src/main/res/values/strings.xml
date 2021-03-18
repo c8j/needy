@@ -17,7 +17,7 @@
     <string name="username">Username</string>
     <string name="not_a_member">Not a member?</string>
     <string name="join_now">Join now</string>
-    <string name="forget_password">Forget Password?</string>
+    <string name="forget_password">Forgot Password?</string>
     <string name="reset_password">Reset password</string>
     <string name="need_logo">need.logo</string>
     <string name="log_in">Log in</string>
@@ -29,7 +29,9 @@
     <string name="user_email_user_email_com">user_email@.user_email.com</string>
     <string name="user_name">User_name</string>
     <string name="about_needy">About Needy</string>
-    <string name="about_needy_text">Needy is a bridge between people to enable them to communicate with each other, to help each other and facilitate the process of communication between the needy help and the person who is able to provide assistance </string>
+    <string name="about_needy_text">Needy acts as a bridge between a person who needs help
+        and one looking to provide assistance, by establishing communication between them. Helping each other in small ways makes all our lives better,
+        and Needy is here to facilitate that.  </string>
 
     <string name="button_accept">offer help</string>
     <string name="button_save">save</string>
@@ -55,11 +57,11 @@
     <string name="hint_text2">You can filter by a Service type here </string>
     <string name="hint_filter_on"> </string>
     <string name="hint_filter_off"> </string>
-    <string name="button_complete">mark complete </string>
-    <string name="button_contact2">contact volunteer</string>
-    <string name="button_report1">report author</string>
-    <string name="button_report2">report volunteer</string>
-    <string name="button_open_profile">open profile</string>
+    <string name="button_complete">Mark complete </string>
+    <string name="button_contact2">Contact volunteer</string>
+    <string name="button_report1">Report author</string>
+    <string name="button_report2">Report volunteer</string>
+    <string name="button_open_profile">Open profile</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
@@ -124,7 +126,6 @@
     <!--volunteer's profile-->
     <string name="open_post_view_profile">View volunteer\'s details</string>
     <string name="volunteer_name">Name:</string>
-    <string name="admin_log_out">Log out</string>
     <string name="help_offered_by">Help offered by:</string>
     <string name="help_needed_by">Help needed by:</string>
 
@@ -135,6 +136,9 @@
     <string name="admin_post_uid">Post UID:</string>
     <string name="admin_remove_user">Account disabled</string>
     <string name="admin_no_reports">No new reported users</string>
+    <string name="admin_log_out">Log out</string>
+
+    <!-- -->
     <string name="e_mail">E-mail</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>

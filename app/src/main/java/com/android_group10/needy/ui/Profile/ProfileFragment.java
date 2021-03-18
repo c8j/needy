@@ -26,7 +26,6 @@ import androidx.fragment.app.Fragment;
 
 import com.android_group10.needy.ProfilePictureManager;
 import com.android_group10.needy.R;
-import com.android_group10.needy.User;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,22 +35,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-
-import java.util.HashMap;
 
 public class ProfileFragment extends Fragment {
     private static final String TAG = "ProfileFragment";
-  //  final User[] currentUser = new User[1];
     ImageView profilePictureImageView;
     private ProgressBar progressBar;
     private ImageButton editPic;
     private Uri imageURI;
     private static final int GALLERY_REQ_CODE = 10;
     String uid;
-   // private ProfilePictureManager ppManager = new ProfilePictureManager();
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -78,8 +70,6 @@ public class ProfileFragment extends Fragment {
             @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-              //  currentUser[0] = snapshot.getValue(User.class);
-                //firstNameText.setText(currentUser[0].getFirstName());
                 firstNameText.setText(snapshot.child("firstName").getValue(String.class));
                 lastNameText.setText(snapshot.child("lastName").getValue(String.class));
                 zipcodeText.setText(Integer.toString(snapshot.child("zipCode").getValue(Integer.class)));
@@ -110,6 +100,7 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+    //Opens up dialog box to edit Profile:
     public void editProfileDialog() {
         LayoutInflater layoutInflater = LayoutInflater.from(getContext());
         View view = layoutInflater.inflate(R.layout.activity_edit_profile, null);
@@ -121,6 +112,7 @@ public class ProfileFragment extends Fragment {
         alertD.show();
     }
 
+    //Opens gallery to choose picture:
     public void editImage(View view){
         editPic.setEnabled(false);
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);

@@ -57,16 +57,16 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ReportsVie
             holder.description.setText(reports.get(position).getDescription());
             String postUIdInReport = reports.get(position).getPostUID();
             holder.postUid.setText(postUIdInReport);
-
-
         }
     }
 
+    //Updates report list if it has been changed:
     public void updateReports(ArrayList<Report> reports){
         this.reports = reports;
         notifyDataSetChanged();
     }
 
+    //Get user's email using their UID, and display it in the text view:
     private void showBlamedEmailID(ReportsViewHolder holder, int position){
         final User[] blamedUser = new User[1];
         DatabaseReference blamedUserRef = FirebaseDatabase.getInstance().getReference("Users").child(blamedUID);
